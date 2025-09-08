@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "ts_utc": "2025-09-08T00:00:00Z",
+  "origin": {
+    "repo": "protector-model",
+    "module_key": "protector",
+    "label": "The Protector",
+    "emoji": "🛡️",
+    "pages_url": "https://zbreeden.github.io/protector-model/"
+  },
+  "broadcast": {
+    "key": "protector_core_init",
+    "kind": "module_announce",
+    "message": "Initialized The Protector as a Core System (Guardian). Fire & Safety lens available for demo.",
+    "tags": ["system_security", "fire_security"],
+    "status": "published",
+    "links": [
+      {
+        "label": "Face (index.html)",
+        "url": "https://zbreeden.github.io/protector-model/"
+      },
+      {
+        "label": "README",
+        "url": "https://github.com/zbreeden/protector-model/blob/main/README.md"
+      }
+    ]
+  }
+}
+
