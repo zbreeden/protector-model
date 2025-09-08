@@ -46,7 +46,19 @@
   pages_url: https://zbreeden.github.io/signal-model/
   owners: [zach]
 
+- id: protector_model
+  name: The Protector
+  emoji: "🛡️"
+  orbit: core
+  status: active
+  tags: [integrity, system_security]
+  glyphs: [protector]
+  repo_url: https://github.com/zbreeden/protector-model
+  pages_url: https://zbreeden.github.io/protector-model/
+  owners: [zach]
+
 # ── Delivery & Insight ─────────────────────────────────────────────────────────
+
 - id: evaluator_model
   name: Evaluator Model
   emoji: "🧮"
