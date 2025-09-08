@@ -312,3 +312,21 @@
   kind: governance
   gloss_ref: requirements_lifecycle_management
   deprecated: false
+
+- key: system_security
+  label: "System Security"
+  description: >
+    Hardening and monitoring across the constellation: workflow integrity,
+    secret hygiene, uptime, anomaly detection, and incident response.
+  kind: capability
+  gloss_ref: system_security
+  deprecated: false
+
+- key: fire_security
+  label: "Fire & Security"
+  description: >
+    Optional vertical lens for Fire & Safety analytics (incidents, drills,
+    asset protection). Enabled only for domain-specific demos.
+  kind: vertical
+  gloss_ref: fire_security
+  deprecated: false
