@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Protector — Fire & Safety Lens</title>
+  <meta name="description" content="The Protector (Fire & Safety lens): monitor incidents, readiness, and response." />
+
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#0f1623; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af;
+      --accent:#60a5fa; --good:#10b981; --warn:#f59e0b; --bad:#ef4444; --shadow:0 8px 24px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#0b0f14;color:var(--text);
+      background: radial-gradient(1200px 800px at 20% -10%, #0f172a 0%, #0b0f14 60%, #06080c 100%);}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1080px;margin:0 auto;padding:24px}
+    .topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .back{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0b111b;
+      padding:8px 12px;border-radius:999px;color:var(--text)}
+    .badge{margin-left:auto;color:var(--muted);font-size:.9rem}
+
+    .hero{border:1px solid var(--border);border-radius:16px;padding:24px;background:linear-gradient(180deg, rgba(96,165,250,.12), rgba(96,165,250,.02));box-shadow:var(--shadow)}
+    .hero h1{margin:0 0 6px 0;font-size:1.8rem}
+    .hero p{margin:0;color:var(--muted)}
+    .controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+    .btn{background:var(--accent);color:#08111c;border:none;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    .pill{padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:#0b111b;color:var(--muted);font-size:.85rem}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:16px}
+    .card{grid-column:span 3;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;min-height:116px}
+    .card h3{margin:0 0 6px 0;font-size:1rem}
+    .metric{font-size:1.6rem;font-weight:800}
+    .sub{color:var(--muted);font-size:.9rem}
+    .half{grid-column:span 6}
+    .wide{grid-column:span 12}
+    .list{list-style:none;margin:0;padding:0}
+    .list li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)}
+    .good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+
+    @media (max-width:980px){ .card{grid-column:span 6} .half,.wide{grid-column:span 12} }
+    @media (max-width:640px){ .card{grid-column:span 12} .hero h1{font-size:1.5rem} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a>
+      <span class="badge">🛡️ The Protector • Fire &amp; Safety Lens</span>
+    </div>
+
+    <section class="hero">
+      <h1>🛡️ The Protector — Fire &amp; Safety</h1>
+      <p>Monitor incidents, readiness, and response. This lens is tailored for Fire &amp; Security; cards can be swapped later when you shift this page to a Core-Systems homepage.</p>
+      <div class="controls">
+        <button id="run" class="btn">Run Check</button>
+        <span class="pill">demo mode</span>
+        <span class="pill">v0.1</span>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Fire & Safety KPIs">
+      <div class="card">
+        <h3>Incidents (30d)</h3>
+        <div id="incidents" class="metric">—</div>
+        <div class="sub">Severity-weighted count</div>
+      </div>
+      <div class="card">
+        <h3>High-Severity %</h3>
+        <div id="sevHigh" class="metric">—</div>
+        <div class="sub">High / total incidents</div>
+      </div>
+      <div class="card">
+        <h3>Median Response Time</h3>
+        <div id="response" class="metric">—</div>
+        <div class="sub">Minutes to on-site or remote resolve</div>
+      </div>
+      <div class="card">
+        <h3>Drill Compliance</h3>
+        <div id="drill" class="metric">—</div>
+        <div class="sub">% on schedule</div>
+      </div>
+
+      <div class="card">
+        <h3>Asset Protection Score</h3>
+        <div id="aps" class="metric">—</div>
+        <div class="sub">0–100 model (config + maintenance)</div>
+      </div>
+      <div class="card">
+        <h3>Preventive Health</h3>
+        <div id="preventive" class="metric">—</div>
+        <div class="sub">Overdue maintenance items</div>
+      </div>
+      <div class="card">
+        <h3>False Alarm Rate</h3>
+        <div id="falseRate" class="metric">—</div>
+        <div class="sub">% of triggered events</div>
+      </div>
+      <div class="card">
+        <h3>MTTR</h3>
+        <div id="mttr" class="metric">—</div>
+        <div class="sub">Mean time to recovery</div>
+      </div>
+
+      <div class="card half">
+        <h3>Incident Mix</h3>
+        <ul id="mix" class="list">
+          <li><span>Loading…</span><span class="pill">—</span></li>
+        </ul>
+      </div>
+      <div class="card half">
+        <h3>Top Sites by Risk</h3>
+        <ul id="sites" class="list">
+          <li><span>Loading…</span><span class="pill">—</span></li>
+        </ul>
+      </div>
+
+      <div class="card wide">
+        <h3>Notes</h3>
+        <div class="sub">
+          This face is a **Fire & Safety lens** for interviews. Later you can pivot these tiles to Core-System KPIs
+          (uptime, failed pulses, secrets hygiene) without changing the layout. Add a README to this repo and link it here:
+          <a id="readme" href="#" target="_blank" rel="noopener">README</a> • <a id="readmeRaw" href="#" target="_blank" rel="noopener">raw</a>.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ——— Basic repo links (adjust if your repo/branch differs)
+    const GITHUB_USER = "zbreeden";
+    const REPO        = "protector-model";
+    const BRANCH      = "main";
+    document.getElementById("readme").href    = `https://github.com/${GITHUB_USER}/${REPO}/blob/${BRANCH}/README.md`;
+    document.getElementById("readmeRaw").href = `https://raw.githubusercontent.com/${GITHUB_USER}/${REPO}/refs/heads/${BRANCH}/README.md`;
+
+    // ——— Optional tracker (no-op if not present)
+    const track = (event, params={}) => {
+      try { window.dataLayer = window.dataLayer || []; window.dataLayer.push({event, ts: Date.now(), ...params}); } catch(e){}
+    };
+
+    // ——— Demo population
+    const setMetric = (id, val, mood) => {
+      const el = document.getElementById(id);
+      el.textContent = val;
+      if (mood) el.classList.add(mood);
+    };
+    const setList = (id, items) => {
+      const el = document.getElementById(id);
+      el.innerHTML = "";
+      items.forEach(([label, badge])=>{
+        const li = document.createElement("li");
+        const left = document.createElement("span"); left.textContent = label;
+        const right = document.createElement("span"); right.className = "pill"; right.textContent = badge;
+        li.append(left, right); el.appendChild(li);
+      });
+    };
+
+    document.getElementById("run").addEventListener("click", async ()=>{
+      const btn = document.getElementById("run");
+      btn.disabled = true; btn.textContent = "Checking…";
+      track("protector_fs_check_started");
+
+      // Simulated wait to feel real
+      await new Promise(r=>setTimeout(r, 700));
+
+      // Storytelling values — tweak freely
+      setMetric("incidents",  "27", "warn");
+      setMetric("sevHigh",    "18%", "warn");
+      setMetric("response",   "6.4m", "good");
+      setMetric("drill",      "92%", "good");
+
+      setMetric("aps",        "84", "good");
+      setMetric("preventive", "5 overdue", "warn");
+      setMetric("falseRate",  "7%", "warn");
+      setMetric("mttr",       "42m", "warn");
+
+      setList("mix", [
+        ["Fire alarms",     "9"],
+        ["Intrusion alerts","11"],
+        ["System faults",   "5"],
+        ["Other",           "2"]
+      ]);
+      setList("sites", [
+        ["Plant 3 — west wing",   "risk 72"],
+        ["HQ — basement server",  "risk 68"],
+        ["Warehouse 4",           "risk 63"],
+        ["Retail site #12",       "risk 59"]
+      ]);
+
+      await new Promise(r=>setTimeout(r, 300));
+      btn.disabled = false; btn.textContent = "Re-run Check";
+      track("protector_fs_check_completed");
+    });
+  </script>
+</body>
+</html>
