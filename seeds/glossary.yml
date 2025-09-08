@@ -1234,3 +1234,22 @@
     course: IBM Data Analytics
     module: Module 2 – File Formats
   status: draft
+
+- key: protector
+  term: The Protector
+  definition: >
+    A Core System module that safeguards the constellation by promoting
+    integrity—monitoring workflows, secrets, uptime, anomalies, and recovery
+    metrics. Can enable a Fire & Safety lens for vertical-specific demos.
+  examples:
+    - "Tracking uptime % across constellation Pages"
+    - "Flagging expired secrets or workflow anomalies"
+    - "Demoing incident response time for Fire & Safety"
+  see_also:
+    - launch
+    - archive
+    - signal
+    - system_security
+  orbit: core
+  status: draft
+
