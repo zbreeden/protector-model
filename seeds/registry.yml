@@ -31,3 +31,5 @@ repos:
     name: firm-model
   - owner: zbreeden
     name: catalyst-model
+  - owner: zbreeden
+    name: protector-model
