@@ -128,6 +128,78 @@
   </div>
 
   <script>
+async function loadCSV(url){
+  const t = await fetch(url + '?t=' + Date.now(), {cache:'no-store'}).then(r=>r.text());
+  const [h, ...rows] = t.trim().split('\n');
+  const keys = h.split(','); 
+  return rows.map(r => Object.fromEntries(r.split(',').map((v,i)=>[keys[i], v])));
+}
+
+async function hydrateFS(){
+  const [inc, drills, maint, sites] = await Promise.all([
+    loadCSV('./data/incidents.csv'),
+    loadCSV('./data/drills.csv'),
+    loadCSV('./data/maintenance.csv'),
+    loadCSV('./data/sites.csv')
+  ]);
+
+  // helpers
+  const within30d = (ts) => (Date.now() - new Date(ts).getTime())/86400000 <= 30;
+  const recentInc = inc.filter(x => within30d(x.ts));
+  const num = (x)=>Number(x)||0;
+
+  // KPIs
+  const total = recentInc.length;
+  const high = recentInc.filter(x=>x.severity==='high').length;
+  const responseMins = recentInc.filter(x=>x.response_min).map(x=>num(x.response_min)).sort((a,b)=>a-b);
+  const median = responseMins.length ? responseMins[Math.floor(responseMins.length/2)] : 0;
+
+  const byMonth = drills.reduce((m,x)=>{m[x.month]=m[x.month]||{sched:0,done:0}; m[x.month].sched+=num(x.scheduled); m[x.month].done+=num(x.completed); return m;},{});
+  const latestMonth = Object.keys(byMonth).sort().pop();
+  const drillPct = latestMonth ? Math.round((byMonth[latestMonth].done / Math.max(1,byMonth[latestMonth].sched))*100) : 0;
+
+  const overdue = maint.filter(x => !x.completed_on && new Date(x.check_due) < new Date()).length;
+
+  const falseRate = total ? Math.round(100 * recentInc.filter(x=>x.type==='system_fault' && x.severity==='low').length / total) : 0;
+
+  const mttr = recentInc.filter(x=>x.resolved==='true').map(x=>num(x.response_min));
+  const mttrAvg = mttr.length ? Math.round(mttr.reduce((a,b)=>a+b,0)/mttr.length) : 0;
+
+  // Asset Protection Score: simple 0–100 demo model
+  // base on guards, perimeter, overdue penalties
+  const riskBySite = {};
+  sites.forEach(s => {
+    const guard = Number(s.has_guard) ? 0.85 : 0.65;
+    const perim = Number(s.perimeter_quality || 0.5);
+    const overduePenalty = maint.filter(m => m.site===s.site && !m.completed_on).length * 0.08;
+    const score = Math.max(0, Math.min(1, (guard*0.5 + perim*0.5) - overduePenalty));
+    riskBySite[s.site] = Math.round(score*100);
+  });
+
+  // Paint cards (matching ids from your current face)
+  setMetric("incidents",  String(total), total>20 ? "warn" : "good");
+  setMetric("sevHigh",    `${Math.round(100*high/Math.max(1,total))}%`, high/Math.max(1,total) > 0.15 ? "warn" : "good");
+  setMetric("response",   `${median}m`,  median<=8 ? "good" : "warn");
+  setMetric("drill",      `${drillPct}%`, drillPct>=90 ? "good" : "warn");
+  setMetric("preventive", `${overdue} overdue`, overdue>0 ? "warn" : "good");
+  setMetric("falseRate",  `${falseRate}%`, falseRate<=10 ? "good" : "warn");
+  setMetric("mttr",       `${mttrAvg}m`, mttrAvg<=45 ? "good" : "warn");
+
+  // Mix & Top Sites
+  const mix = ['fire','intrusion','system_fault','other'];
+  const mixCounts = mix.map(k => [labelize(k), recentInc.filter(x=>x.type===k).length]).filter(x=>x[1]>0);
+  setList("mix", mixCounts.map(([k,v]) => [k, String(v)]));
+
+  const topSites = Object.entries(riskBySite).sort((a,b)=>a[1]-b[1]).slice(0,4); // lowest scores = higher risk
+  setList("sites", topSites.map(([site,score]) => [`${site}`, `risk ${100-score}`]));
+
+  function labelize(k){ return k.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase()); }
+}
+// auto-run if Fire & Safety lens is your current page
+hydrateFS().catch(console.error);
+</script>
+
+  <script>
     // ——— Basic repo links (adjust if your repo/branch differs)
     const GITHUB_USER = "zbreeden";
     const REPO        = "protector-model";
