@@ -317,16 +317,18 @@
   label: "System Security"
   description: >
     Hardening and monitoring across the constellation: workflow integrity,
-    secret hygiene, uptime, anomaly detection, and incident response.
+    secret hygiene, auth, uptime, and incident response.
   kind: capability
   gloss_ref: system_security
   deprecated: false
 
+# Keep your vertical hook available for later (optional for now)
 - key: fire_security
   label: "Fire & Security"
   description: >
-    Optional vertical lens for Fire & Safety analytics (incidents, drills,
-    asset protection). Enabled only for domain-specific demos.
+    Vertical analytics lens (fire prevention, security incidents, compliance, response).
+    Use when scoping domain-specific demos.
   kind: vertical
   gloss_ref: fire_security
   deprecated: false
+
