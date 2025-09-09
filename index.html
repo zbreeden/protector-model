@@ -119,7 +119,7 @@
       <div class="card wide">
         <h3>Notes</h3>
         <div class="sub">
-          This face is a **Fire & Safety lens** for interviews. Later you can pivot these tiles to Core-System KPIs
+          This face is a <strong>Fire &amp; Safety lens</strong> for interviews. Later you can pivot these tiles to Core-System KPIs
           (uptime, failed pulses, secrets hygiene) without changing the layout. Add a README to this repo and link it here:
           <a id="readme" href="#" target="_blank" rel="noopener">README</a> • <a id="readmeRaw" href="#" target="_blank" rel="noopener">raw</a>.
         </div>
@@ -127,7 +127,7 @@
     </section>
   </div>
 
-  <script>
+<script>
 async function loadCSV(url){
   const t = await fetch(url + '?t=' + Date.now(), {cache:'no-store'}).then(r=>r.text());
   const [h, ...rows] = t.trim().split('\n');
@@ -143,12 +143,10 @@ async function hydrateFS(){
     loadCSV('./data/sites.csv')
   ]);
 
-  // helpers
   const within30d = (ts) => (Date.now() - new Date(ts).getTime())/86400000 <= 30;
   const recentInc = inc.filter(x => within30d(x.ts));
   const num = (x)=>Number(x)||0;
 
-  // KPIs
   const total = recentInc.length;
   const high = recentInc.filter(x=>x.severity==='high').length;
   const responseMins = recentInc.filter(x=>x.response_min).map(x=>num(x.response_min)).sort((a,b)=>a-b);
@@ -159,14 +157,11 @@ async function hydrateFS(){
   const drillPct = latestMonth ? Math.round((byMonth[latestMonth].done / Math.max(1,byMonth[latestMonth].sched))*100) : 0;
 
   const overdue = maint.filter(x => !x.completed_on && new Date(x.check_due) < new Date()).length;
-
   const falseRate = total ? Math.round(100 * recentInc.filter(x=>x.type==='system_fault' && x.severity==='low').length / total) : 0;
 
   const mttr = recentInc.filter(x=>x.resolved==='true').map(x=>num(x.response_min));
   const mttrAvg = mttr.length ? Math.round(mttr.reduce((a,b)=>a+b,0)/mttr.length) : 0;
 
-  // Asset Protection Score: simple 0–100 demo model
-  // base on guards, perimeter, overdue penalties
   const riskBySite = {};
   sites.forEach(s => {
     const guard = Number(s.has_guard) ? 0.85 : 0.65;
@@ -176,7 +171,6 @@ async function hydrateFS(){
     riskBySite[s.site] = Math.round(score*100);
   });
 
-  // Paint cards (matching ids from your current face)
   setMetric("incidents",  String(total), total>20 ? "warn" : "good");
   setMetric("sevHigh",    `${Math.round(100*high/Math.max(1,total))}%`, high/Math.max(1,total) > 0.15 ? "warn" : "good");
   setMetric("response",   `${median}m`,  median<=8 ? "good" : "warn");
@@ -185,19 +179,53 @@ async function hydrateFS(){
   setMetric("falseRate",  `${falseRate}%`, falseRate<=10 ? "good" : "warn");
   setMetric("mttr",       `${mttrAvg}m`, mttrAvg<=45 ? "good" : "warn");
 
-  // Mix & Top Sites
   const mix = ['fire','intrusion','system_fault','other'];
   const mixCounts = mix.map(k => [labelize(k), recentInc.filter(x=>x.type===k).length]).filter(x=>x[1]>0);
   setList("mix", mixCounts.map(([k,v]) => [k, String(v)]));
 
-  const topSites = Object.entries(riskBySite).sort((a,b)=>a[1]-b[1]).slice(0,4); // lowest scores = higher risk
+  const topSites = Object.entries(riskBySite).sort((a,b)=>a[1]-b[1]).slice(0,4);
   setList("sites", topSites.map(([site,score]) => [`${site}`, `risk ${100-score}`]));
 
   function labelize(k){ return k.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase()); }
 }
-// auto-run if Fire & Safety lens is your current page
+
+// --- UI helpers ---
+function setMetric(id, value, mood) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = value;
+  el.classList.remove('good','warn','bad');
+  if (mood) el.classList.add(mood);
+}
+
+function setList(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = "";
+  items.forEach(([label, status]) => {
+    const li = document.createElement("li");
+    const left = document.createElement("span"); left.textContent = label;
+    const right = document.createElement("span"); right.className = "pill"; right.textContent = status;
+    li.append(left, right);
+    el.appendChild(li);
+  });
+}
+
+// --- Button wiring ---
+const runBtn = document.getElementById("run");
+if (runBtn) {
+  runBtn.addEventListener("click", async () => {
+    runBtn.disabled = true;
+    runBtn.textContent = "Checking…";
+    try { await hydrateFS(); }
+    finally { runBtn.disabled = false; runBtn.textContent = "Re-run Check"; }
+  });
+}
+
+// Auto-run once at page load
 hydrateFS().catch(console.error);
 </script>
+
 
 </body>
 </html>
