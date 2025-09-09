@@ -1253,3 +1253,25 @@
   orbit: core
   status: draft
 
+- key: system_security
+  term: "System Security"
+  definition: >
+    Practices and telemetry that protect the constellation itself:
+    access controls, secrets management, workflow integrity, monitoring, and
+    incident response across modules.
+  examples:
+    - "Scanning repos for leaked secrets and expired tokens"
+    - "Alerting when a scheduled Archive pulse fails"
+  see_also: ["protector", "signal", "archive"]
+
+# (Optional vertical lens; keep if you plan to reference Fire & Security later)
+- key: fire_security
+  term: "Fire & Security"
+  definition: >
+    Domain focused on prevention, detection, and response to safety and security risks.
+    Use as an optional lens within The Protector for industry demos.
+  examples:
+    - "Monthly fire drill compliance rate"
+    - "Response time to security alarms"
+  see_also: ["system_security", "risk_management", "protector"]
+
