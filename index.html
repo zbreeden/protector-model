@@ -36,7 +36,7 @@
     .progress{height:6px;background:#0b1222;border:1px solid #1a2437;border-radius:999px;overflow:hidden}
     .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#34d399)}
 
-    .slides{position:relative;min-height:420px}
+    .slides{position:relative;min-height:460px}
     .slide{display:none;padding:26px 26px 34px}
     .slide.active{display:block}
     .kicker{color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-weight:700;font-size:12px;margin:0 0 8px}
@@ -55,7 +55,6 @@
     .nav{display:flex;justify-content:space-between;align-items:center;padding:14px;border-top:1px solid var(--line);background:#0a1220;border-radius:0 0 18px 18px}
     .nav .hint{color:var(--muted);font-size:13px}
 
-    /* Tiny table styles */
     table{width:100%;border-collapse:collapse}
     th,td{padding:10px;border-bottom:1px dashed #1f2a3a;text-align:left}
     th{color:#93c5fd;font-weight:600}
@@ -65,6 +64,13 @@
     .dot.good{background:var(--good)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
 
     footer{margin-top:22px;display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
+
+    /* Overlay for embedded viz */
+    .overlay{position:fixed;inset:0;background:rgba(3,6,13,.88);backdrop-filter:blur(6px);display:none;z-index:60}
+    .overlay.active{display:flex}
+    .overlay .frame{margin:auto;width:min(1100px,92vw);height:min(700px,84vh);background:#0b1222;border:1px solid var(--line);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.55);display:flex;flex-direction:column}
+    .overlay header{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .overlay iframe{flex:1;border:0;border-top:1px solid #0a1220}
   </style>
   <!-- GTM (replace with your container if different) -->
   <script>
@@ -255,14 +261,42 @@
               </ul>
             </div>
             <div class="card">
-              <h3>Keep in touch</h3>
+              <h3>Take a look</h3>
               <ul class="list">
+                <li><button class="btn small" id="btnEmbedPBI">View embedded Power BI</button></li>
+                <li><button class="btn small" id="btnSummaryViz">Open Summary Stats</button></li>
                 <li><a href="data/talk_track.txt" target="_blank">Download my talk‑track</a></li>
-                <li><a href="https://zbreeden.github.io/FourTwentyAnalytics/" target="_blank">FourTwenty Analytics hub</a></li>
               </ul>
             </div>
           </div>
-          <div class="notes">Thank them; ask how they’re solving false alarms today and where data can accelerate.</div>
+          <div class="notes">Thank them; then either open the PBI embed (modal with back) or jump to Summary Stats slide.</div>
+        </article>
+
+        <!-- 6. Summary Stats (inline viz) -->
+        <article class="slide" data-step="6" data-title="Summary Stats">
+          <p class="kicker">Snapshot</p>
+          <h2>Key metrics from the CSVs</h2>
+          <p class="lead">This page reads the four CSVs directly from <code>/data/</code>, computes the core KPIs, and renders two quick charts.</p>
+          <div class="grid cols-2">
+            <div class="card" id="kpiCards">
+              <h3>KPIs</h3>
+              <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:12px">
+                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Drill Pass %</div><div id="kpiDrill" style="font-size:24px;font-weight:700">—</div></div>
+                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Maint Completion %</div><div id="kpiMaint" style="font-size:24px;font-weight:700">—</div></div>
+                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">False Alarm %</div><div id="kpiFalse" style="font-size:24px;font-weight:700">—</div></div>
+                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Median Real Loss</div><div id="kpiLoss" style="font-size:24px;font-weight:700">—</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Incident mix</h3>
+              <canvas id="chartMix" height="200"></canvas>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <h3>Real incidents by market</h3>
+            <canvas id="chartCity" height="230"></canvas>
+          </div>
+          <div class="notes">Everything here is client‑side: fetch CSV → compute → render. Keep this as a fallback when you can’t share Power BI.</div>
         </article>
       </div>
 
@@ -281,7 +315,28 @@
     </footer>
   </div>
 
+  <!-- Overlay for embedded Power BI (publish-to-web) -->
+  <div class="overlay" id="vizOverlay" aria-hidden="true">
+    <div class="frame">
+      <header>
+        <strong>Power BI — Embedded</strong>
+        <div>
+          <button class="btn small" id="overlayBack">Back</button>
+        </div>
+      </header>
+      <iframe id="vizFrame" title="Power BI Embed" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // === Config: replace with your real links ===
+    const PBI_EMBED_URL = ""; // e.g., https://app.powerbi.com/view?r=... (Publish to web URL)
+    const COLAB_URL = ""; // your Colab notebook share link (optional)
+    const PBIX_URL = ""; // your PBIX/report url (optional)
+
+    // Minimal gtag proxy already defined above
+
     // --- Simple slide router with hash support & GA events
     const slides = Array.from(document.querySelectorAll('.slide'));
     const titleEl = document.getElementById('slideTitle');
@@ -297,6 +352,7 @@
       const pct = ((idx+1)/slides.length)*100; progressBar.style.width = pct+'%';
       location.hash = '#'+step;
       gtag('event','demo_step',{step: step, title: name});
+      if(step==='6'){ ensureSummaryViz(); }
     }
 
     function next(){ if(idx < slides.length-1) go(idx+1); }
@@ -336,10 +392,83 @@
       go(i>=0?i:0);
     })();
 
-    // Hook buttons (replace with real links if available)
-    document.getElementById('openColab').onclick = (e)=>{ e.preventDefault(); alert('Open your Colab notebook URL here.'); };
-    document.getElementById('openPBIX').onclick = (e)=>{ e.preventDefault(); alert('Link your .pbix (or report server) here.'); };
-    document.getElementById('openPBI').onclick = (e)=>{ e.preventDefault(); alert('This would open your Power BI scorecard.'); };
+    // Hook external buttons
+    document.getElementById('openColab').onclick = (e)=>{ e.preventDefault(); const url = COLAB_URL || '#'; if(url==='#'){ alert('Set COLAB_URL in the HTML.'); return; } window.open(url, '_blank'); };
+    document.getElementById('openPBIX').onclick = (e)=>{ e.preventDefault(); const url = PBIX_URL || '#'; if(url==='#'){ alert('Set PBIX_URL in the HTML.'); return; } window.open(url, '_blank'); };
+    document.getElementById('openPBI').onclick = (e)=>{ e.preventDefault(); if(PBI_EMBED_URL){ openOverlay(); } else { alert('Set PBI_EMBED_URL in the HTML (Publish to web link).'); } };
+
+    // Close slide buttons
+    document.getElementById('btnEmbedPBI').onclick = ()=>{ if(PBI_EMBED_URL){ openOverlay(); } else { alert('Set PBI_EMBED_URL in the HTML (Publish to web link).'); } };
+    document.getElementById('btnSummaryViz').onclick = ()=> go(6);
+
+    // === Overlay logic ===
+    const overlay = document.getElementById('vizOverlay');
+    const vizFrame = document.getElementById('vizFrame');
+    document.getElementById('overlayBack').onclick = closeOverlay;
+    function openOverlay(){ overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); vizFrame.src = PBI_EMBED_URL; gtag('event','open_pbi',{location:'overlay'}); }
+    function closeOverlay(){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); vizFrame.src = 'about:blank'; }
+
+    // === Summary Stats (client-side) ===
+    let summaryLoaded = false;
+    async function ensureSummaryViz(){ if(summaryLoaded) return; summaryLoaded = true; try{ await renderSummary(); } catch(e){ console.error(e); document.getElementById('statusMsg').textContent = 'Summary load error. Check console.'; } }
+
+    // Simple CSV loader
+    async function loadCSV(path){
+      const res = await fetch(path, {cache:'no-store'});
+      if(!res.ok) throw new Error('Fetch failed '+path);
+      const text = await res.text();
+      const [head, ...rows] = text.trim().split(/
+?
+/);
+      const cols = head.split(',');
+      return rows.map(line=>{
+        const vals = line.split(',');
+        const obj = {}; cols.forEach((c,i)=> obj[c] = vals[i]);
+        return obj;
+      });
+    }
+
+    function toBool(v){ if(v===undefined) return false; const s=String(v).toLowerCase(); return s==='true'||s==='1'||s==='yes'; }
+    function toNum(v){ const n = Number(v); return Number.isFinite(n)? n : 0; }
+
+    async function renderSummary(){
+      const [drills, maintenance, incidents, sites] = await Promise.all([
+        loadCSV('data/drills.csv'),
+        loadCSV('data/maintenance.csv'),
+        loadCSV('data/incidents.csv'),
+        loadCSV('data/sites.csv'),
+      ]);
+
+      // KPIs
+      const drillPassPct = 100 * (drills.filter(r=> toBool(r.passed)).length / Math.max(1, drills.length));
+      const maintCompPct = 100 * (maintenance.filter(r=> toBool(r.completed)).length / Math.max(1, maintenance.length));
+      const falseAlarms = incidents.filter(r=> r.incident_type==='False Alarm').length;
+      const incidentTotal = incidents.length;
+      const falsePct = 100 * (falseAlarms / Math.max(1, incidentTotal));
+      const realLosses = incidents.filter(r=> r.incident_type==='Real Event').map(r=> toNum(r.property_loss_usd)).filter(x=> x>0).sort((a,b)=>a-b);
+      const mid = Math.floor(realLosses.length/2);
+      const medianLoss = realLosses.length%2? realLosses[mid] : (realLosses[mid-1]+realLosses[mid])/2;
+
+      document.getElementById('kpiDrill').textContent = drillPassPct.toFixed(1)+'%';
+      document.getElementById('kpiMaint').textContent = maintCompPct.toFixed(1)+'%';
+      document.getElementById('kpiFalse').textContent = falsePct.toFixed(1)+'%';
+      document.getElementById('kpiLoss').textContent = '$'+(medianLoss||0).toLocaleString();
+
+      // Charts
+      const ctxMix = document.getElementById('chartMix').getContext('2d');
+      const real = incidentTotal - falseAlarms;
+      new Chart(ctxMix, { type:'doughnut', data:{ labels:['Real Events','False Alarms'], datasets:[{ data:[real, falseAlarms] }] }, options:{responsive:true,plugins:{legend:{position:'bottom'}}} });
+
+      // Real incidents by market (join with sites)
+      const siteCityMap = new Map(sites.map(s=>[s.site_id, s.city]));
+      const byCity = {};
+      for(const r of incidents){ if(r.incident_type==='Real Event'){ const city = siteCityMap.get(r.site_id) || 'Unknown'; byCity[city] = (byCity[city]||0)+1; } }
+      const cityEntries = Object.entries(byCity).sort((a,b)=> b[1]-a[1]).slice(0,8);
+      const ctxCity = document.getElementById('chartCity').getContext('2d');
+      new Chart(ctxCity, { type:'bar', data:{ labels: cityEntries.map(x=>x[0]), datasets:[{ label:'Real Incidents', data: cityEntries.map(x=>x[1]) }] }, options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}} });
+
+      gtag('event','summary_ready',{drills: drills.length, maintenance: maintenance.length, incidents: incidents.length, sites: sites.length});
+    }
   </script>
 </body>
 </html>
