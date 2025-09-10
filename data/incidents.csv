@@ -1,9 +1,0 @@
-ts,site,type,severity,response_min,resolved
-2025-08-12T14:02:00Z,Plant 3,fire,high,8,true
-2025-08-14T02:51:00Z,Warehouse 4,intrusion,medium,11,true
-2025-08-15T09:17:00Z,HQ,system_fault,low,22,true
-2025-08-18T18:40:00Z,HQ,intrusion,high,5,true
-2025-08-22T07:03:00Z,Plant 3,fire,medium,7,true
-2025-08-29T21:12:00Z,Retail #12,intrusion,low,18,true
-2025-09-01T03:09:00Z,Plant 3,fire,high,6,false
-2025-09-03T10:44:00Z,Warehouse 4,system_fault,low,35,true
