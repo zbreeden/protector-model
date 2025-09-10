@@ -23,6 +23,12 @@ Supporting context:
 - **Incident Mix** shows the breakdown of fire, intrusion, and system faults.  
 - **Top Sites by Risk** highlights facilities needing attention.
 
+## Schema
+- sites: site_id, site_name, site_type, occupancy_class, has_sprinklers, sq_ft, city, address, ahj_jurisdiction, installed_year, system_age_years, service_level, risk_score
+- drills: drill_id, site_id, scheduled_date, completed, passed, evac_time_seconds
+- maintenance: maintenance_id, site_id, scheduled_date, completed, technician, task_type, parts_cost
+- incidents: incident_id, site_id, incident_date, incident_type (False Alarm/Real Event), severity_1to5, property_loss_usd
+
 ---
 
 ## Core System Role (Permanent)
