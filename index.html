@@ -1,231 +1,345 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Protector — Fire & Safety Lens</title>
-  <meta name="description" content="The Protector (Fire & Safety lens): monitor incidents, readiness, and response." />
-
+  <title>The Protector · Demo Navigator</title>
+  <meta name="description" content="A click-through, presenter-friendly demo for The Protector (Silco Fire & Security)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0b0f14; --panel:#0f1623; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af;
-      --accent:#60a5fa; --good:#10b981; --warn:#f59e0b; --bad:#ef4444; --shadow:0 8px 24px rgba(0,0,0,.35);
-    }
+    :root{--bg:#0f172a;--card:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#60a5fa;--line:#1f2937;--good:#34d399;--warn:#fbbf24;--bad:#fb7185}
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#0b0f14;color:var(--text);
-      background: radial-gradient(1200px 800px at 20% -10%, #0f172a 0%, #0b0f14 60%, #06080c 100%);}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1000px 600px at 10% -10%,#12213a,transparent),linear-gradient(180deg,#0b1222,#060913);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:1080px;margin:0 auto;padding:24px}
-    .topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .back{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0b111b;
-      padding:8px 12px;border-radius:999px;color:var(--text)}
-    .badge{margin-left:auto;color:var(--muted);font-size:.9rem}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+    header{display:flex;align-items:center;gap:14px;justify-content:space-between;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#2dd4bf,#60a5fa);display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+    .brand .logo span{font-weight:800;color:#041018}
+    .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}
+    .tag{border:1px solid #1f2a3a;border-radius:999px;padding:6px 10px;color:var(--muted);font-size:12px}
 
-    .hero{border:1px solid var(--border);border-radius:16px;padding:24px;background:linear-gradient(180deg, rgba(96,165,250,.12), rgba(96,165,250,.02));box-shadow:var(--shadow)}
-    .hero h1{margin:0 0 6px 0;font-size:1.8rem}
-    .hero p{margin:0;color:var(--muted)}
-    .controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
-    .btn{background:var(--accent);color:#08111c;border:none;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-    .pill{padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:#0b111b;color:var(--muted);font-size:.85rem}
+    .top-actions{display:flex;gap:8px;flex-wrap:wrap}
+    button, .btn{appearance:none;border:none;background:#0b1222;border:1px solid #1a2437;color:var(--ink);padding:9px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+    button:hover, .btn:hover{border-color:#2a3a55}
+    .btn.primary{background:linear-gradient(180deg,#1b2a44,#132137);border-color:#274166}
+    .btn.ghost{background:transparent}
+    .btn.small{padding:6px 10px;font-size:13px}
 
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:16px}
-    .card{grid-column:span 3;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;min-height:116px}
-    .card h3{margin:0 0 6px 0;font-size:1rem}
-    .metric{font-size:1.6rem;font-weight:800}
-    .sub{color:var(--muted);font-size:.9rem}
-    .half{grid-column:span 6}
-    .wide{grid-column:span 12}
-    .list{list-style:none;margin:0;padding:0}
-    .list li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)}
-    .good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+    .stage{position:relative;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#0e1729,#0a1220);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+    .toolbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:rgba(5,10,20,.5);backdrop-filter:blur(6px);position:sticky;top:0;z-index:5}
+    .toolbar .grow{flex:1}
+    .progress{height:6px;background:#0b1222;border:1px solid #1a2437;border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#34d399)}
 
-    @media (max-width:980px){ .card{grid-column:span 6} .half,.wide{grid-column:span 12} }
-    @media (max-width:640px){ .card{grid-column:span 12} .hero h1{font-size:1.5rem} }
+    .slides{position:relative;min-height:420px}
+    .slide{display:none;padding:26px 26px 34px}
+    .slide.active{display:block}
+    .kicker{color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-weight:700;font-size:12px;margin:0 0 8px}
+    h2{margin:0 0 10px;font-size:28px}
+    .lead{color:#cbd5e1;margin:0 0 20px}
+    .grid{display:grid;gap:16px}
+    @media(min-width:900px){.grid.cols-2{grid-template-columns:1.1fr 1fr}}
+    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:#0b1222}
+    .list{margin:0;padding-left:20px}
+    .list li{margin:6px 0}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #22324c;border-radius:999px;padding:6px 10px;background:#0b1222;color:#cbd5e1;font-size:13px}
+
+    .notes{display:none;margin-top:10px;color:#a3aed0;border-left:3px solid #2b3c5c;padding-left:10px}
+    body.presenter .notes{display:block}
+
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:14px;border-top:1px solid var(--line);background:#0a1220;border-radius:0 0 18px 18px}
+    .nav .hint{color:var(--muted);font-size:13px}
+
+    /* Tiny table styles */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px dashed #1f2a3a;text-align:left}
+    th{color:#93c5fd;font-weight:600}
+
+    .status{display:inline-flex;align-items:center;gap:8px}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .dot.good{background:var(--good)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
+
+    footer{margin-top:22px;display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
   </style>
+  <!-- GTM (replace with your container if different) -->
+  <script>
+    // Minimal gtag proxy so events don't error if GTM is blocked
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+  </script>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript safe) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WVC4SNLB');
+  </script>
+
   <div class="wrap">
-    <div class="topbar">
-      <a class="back" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a>
-      <span class="badge">🛡️ The Protector • Fire &amp; Safety Lens</span>
-    </div>
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>🛡️</span></div>
+        <div>
+          <h1>The Protector — Demo Navigator</h1>
+          <div class="tag">Silco Fire & Security · Business Data Analyst</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a class="btn ghost small" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a>
+        <button class="btn small" id="togglePresenter" title="Toggle presenter notes (P)">Presenter Notes</button>
+        <button class="btn primary" id="startDemo">Start Demo</button>
+      </div>
+    </header>
 
-    <section class="hero">
-      <h1>🛡️ The Protector — Fire &amp; Safety</h1>
-      <p>Monitor incidents, readiness, and response. This lens is tailored for Fire &amp; Security; cards can be swapped later when you shift this page to a Core-Systems homepage.</p>
-      <div class="controls">
-        <button id="run" class="btn">Run Check</button>
-        <span class="pill">demo mode</span>
-        <span class="pill">v0.1</span>
-      </div>
-    </section>
-
-    <section class="grid" aria-label="Fire & Safety KPIs">
-      <div class="card">
-        <h3>Incidents (30d)</h3>
-        <div id="incidents" class="metric">—</div>
-        <div class="sub">Severity-weighted count</div>
-      </div>
-      <div class="card">
-        <h3>High-Severity %</h3>
-        <div id="sevHigh" class="metric">—</div>
-        <div class="sub">High / total incidents</div>
-      </div>
-      <div class="card">
-        <h3>Median Response Time</h3>
-        <div id="response" class="metric">—</div>
-        <div class="sub">Minutes to on-site or remote resolve</div>
-      </div>
-      <div class="card">
-        <h3>Drill Compliance</h3>
-        <div id="drill" class="metric">—</div>
-        <div class="sub">% on schedule</div>
+    <section class="stage" aria-live="polite">
+      <div class="toolbar">
+        <div class="pill" id="modePill">Mode: <strong id="modeLabel">Self‑guided</strong></div>
+        <div class="grow"></div>
+        <div class="progress" aria-label="Progress"><i id="progressBar"></i></div>
+        <button class="btn small" id="autoplayBtn" title="Auto-advance (A)">Auto‑advance: Off</button>
+        <button class="btn small" id="prevBtn" title="Prev (←)">Prev</button>
+        <button class="btn small" id="nextBtn" title="Next (→)">Next</button>
       </div>
 
-      <div class="card">
-        <h3>Asset Protection Score</h3>
-        <div id="aps" class="metric">—</div>
-        <div class="sub">0–100 model (config + maintenance)</div>
-      </div>
-      <div class="card">
-        <h3>Preventive Health</h3>
-        <div id="preventive" class="metric">—</div>
-        <div class="sub">Overdue maintenance items</div>
-      </div>
-      <div class="card">
-        <h3>False Alarm Rate</h3>
-        <div id="falseRate" class="metric">—</div>
-        <div class="sub">% of triggered events</div>
-      </div>
-      <div class="card">
-        <h3>MTTR</h3>
-        <div id="mttr" class="metric">—</div>
-        <div class="sub">Mean time to recovery</div>
+      <div class="slides" id="slides">
+        <!-- 0. Welcome -->
+        <article class="slide" data-step="0" data-title="Welcome">
+          <p class="kicker">Welcome</p>
+          <h2>What you’ll see in 3 minutes</h2>
+          <p class="lead">A realistic, decision‑oriented view of fire & security data: sites, drills, maintenance, and incidents — plus how I turn it into action.</p>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>Demo goals</h3>
+              <ul class="list">
+                <li>Show a <strong>Silco‑sized</strong> synthetic model (3,500 sites · 3 years).</li>
+                <li>Connect <strong>readiness → risk → incidents → loss</strong>.</li>
+                <li>Share a repeatable approach I can run on day one.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Artifacts (click to open)</h3>
+              <ul class="list">
+                <li><a href="data/talk_track.txt" target="_blank">Talk‑track cheat sheet</a></li>
+                <li><a href="data/sites.csv" target="_blank">sites.csv</a> · <a href="data/drills.csv" target="_blank">drills.csv</a> · <a href="data/maintenance.csv" target="_blank">maintenance.csv</a> · <a href="data/incidents.csv" target="_blank">incidents.csv</a></li>
+                <li><a href="#" id="openPBI">(Optional) Power BI scorecard</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">Speaker notes: Intro in one sentence. If remote/phone‑only, say you can DM a link after the call. If screen‑sharing, click a CSV to show scale.</div>
+        </article>
+
+        <!-- 1. Business context -->
+        <article class="slide" data-step="1" data-title="Business context">
+          <p class="kicker">Context</p>
+          <h2>Protecting lives, property, and uptime</h2>
+          <p class="lead">We influence outcomes by improving <em>readiness</em> (drills, maintenance) and reducing <em>risk</em> (false alarms, real events, severity, loss).</p>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>Key questions</h3>
+              <ul class="list">
+                <li>Which sites are <strong>high‑risk & low‑compliance</strong> right now?</li>
+                <li>Where can we cut <strong>false alarms</strong> fastest?</li>
+                <li>How does <strong>service level</strong> translate to readiness & outcomes?</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>KPIs</h3>
+              <table>
+                <tr><th>Metric</th><th>Why it matters</th></tr>
+                <tr><td>Drill Pass %</td><td>Readiness → evacuation effectiveness</td></tr>
+                <tr><td>Maintenance Completion %</td><td>System reliability</td></tr>
+                <tr><td>False Alarm %</td><td>Ops cost & trust with AHJs</td></tr>
+                <tr><td>Incident Rate / 100 site‑months</td><td>Comparable risk signal</td></tr>
+                <tr><td>Median Real‑Event Loss</td><td>Financial impact</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="notes">Tie to Silco mission; keep under 40 seconds.</div>
+        </article>
+
+        <!-- 2. Data model -->
+        <article class="slide" data-step="2" data-title="Data model">
+          <p class="kicker">Data</p>
+          <h2>Star schema & features</h2>
+          <p class="lead">Four fact tables over a Sites dimension plus Calendar. Compliance features aggregate to site‑month.</p>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>Tables</h3>
+              <ul class="list">
+                <li><strong>sites</strong>(site_id,…,service_level,risk_score)</li>
+                <li><strong>drills</strong>(scheduled_date,completed,passed,evac_time)</li>
+                <li><strong>maintenance</strong>(scheduled_date,completed,task_type,parts_cost)</li>
+                <li><strong>incidents</strong>(date,type,severity,property_loss)</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Derived signals</h3>
+              <ul class="list">
+                <li>Drill/maint <strong>completion & pass rates</strong> by site‑month</li>
+                <li><strong>Incident probability</strong> links risk & compliance</li>
+                <li>Sprinklers ↓ real‑event odds & loss</li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">If they ask: Power BI relationships = Sites→(Drills/Maint/Incidents) and Calendar→dates.</div>
+        </article>
+
+        <!-- 3. Findings -->
+        <article class="slide" data-step="3" data-title="Findings">
+          <p class="kicker">Insights</p>
+          <h2>What the quick stats say</h2>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>Headlines</h3>
+              <ul class="list">
+                <li><span class="status"><i class="dot good"></i> High maintenance → fewer real events</span></li>
+                <li><span class="status"><i class="dot good"></i> Gold &gt; Bronze on drill pass %</span></li>
+                <li><span class="status"><i class="dot good"></i> Sprinklers reduce loss & shift mix</span></li>
+                <li><span class="status"><i class="dot warn"></i> False alarms ≈ 55% of incidents</span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Action ideas</h3>
+              <ul class="list">
+                <li>Proactive outreach: <em>high‑risk × low‑compliance</em> sites</li>
+                <li>Market‑level false alarm reduction playbook</li>
+                <li>Risk‑adjusted maintenance budgeting</li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">If time: mention the five tests (t‑test, Mann‑Whitney, 2‑prop z, chi‑square, simple logit).</div>
+        </article>
+
+        <!-- 4. Live demo hooks -->
+        <article class="slide" data-step="4" data-title="Live demo">
+          <p class="kicker">Hands‑on</p>
+          <h2>Open what they ask for</h2>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>Data</h3>
+              <ul class="list">
+                <li><a href="data/sites.csv" target="_blank">Sites (dimension)</a></li>
+                <li><a href="data/drills.csv" target="_blank">Drills</a> · <a href="data/maintenance.csv" target="_blank">Maintenance</a></li>
+                <li><a href="data/incidents.csv" target="_blank">Incidents</a></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Notebooks & BI</h3>
+              <ul class="list">
+                <li><a target="_blank" id="openColab">Open Colab generator</a></li>
+                <li><a target="_blank" id="openPBIX">Open Power BI scorecard</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">Keep clicks minimal; let them drive questions. If lag: pivot to talk_track.txt.</div>
+        </article>
+
+        <!-- 5. Close -->
+        <article class="slide" data-step="5" data-title="Close">
+          <p class="kicker">Wrap‑up</p>
+          <h2>Day‑one plan & value</h2>
+          <div class="grid cols-2">
+            <div class="card">
+              <h3>If hired</h3>
+              <ul class="list">
+                <li>Connect to prod data, validate schema & quality gates</li>
+                <li>Stand up scorecard + outreach list for field teams</li>
+                <li>Partner with AHJs on false‑alarm levers</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Keep in touch</h3>
+              <ul class="list">
+                <li><a href="data/talk_track.txt" target="_blank">Download my talk‑track</a></li>
+                <li><a href="https://zbreeden.github.io/FourTwentyAnalytics/" target="_blank">FourTwenty Analytics hub</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notes">Thank them; ask how they’re solving false alarms today and where data can accelerate.</div>
+        </article>
       </div>
 
-      <div class="card half">
-        <h3>Incident Mix</h3>
-        <ul id="mix" class="list">
-          <li><span>Loading…</span><span class="pill">—</span></li>
-        </ul>
-      </div>
-      <div class="card half">
-        <h3>Top Sites by Risk</h3>
-        <ul id="sites" class="list">
-          <li><span>Loading…</span><span class="pill">—</span></li>
-        </ul>
-      </div>
-
-      <div class="card wide">
-        <h3>Notes</h3>
-        <div class="sub">
-          This face is a <strong>Fire &amp; Safety lens</strong> for interviews. Later you can pivot these tiles to Core-System KPIs
-          (uptime, failed pulses, secrets hygiene) without changing the layout. Add a README to this repo and link it here:
-          <a id="readme" href="#" target="_blank" rel="noopener">README</a> • <a id="readmeRaw" href="#" target="_blank" rel="noopener">raw</a>.
+      <div class="nav">
+        <div class="hint">Use ← → or click Next • <span id="slideTitle">Welcome</span></div>
+        <div>
+          <button class="btn small" id="prevBtn2">Prev</button>
+          <button class="btn small" id="nextBtn2">Next</button>
         </div>
       </div>
     </section>
+
+    <footer>
+      <div>Built by Zach · The Protector</div>
+      <div id="statusMsg" aria-live="polite"></div>
+    </footer>
   </div>
 
-<script>
-async function loadCSV(url){
-  const t = await fetch(url + '?t=' + Date.now(), {cache:'no-store'}).then(r=>r.text());
-  const [h, ...rows] = t.trim().split('\n');
-  const keys = h.split(','); 
-  return rows.map(r => Object.fromEntries(r.split(',').map((v,i)=>[keys[i], v])));
-}
+  <script>
+    // --- Simple slide router with hash support & GA events
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const titleEl = document.getElementById('slideTitle');
+    const progressBar = document.getElementById('progressBar');
+    let idx = 0, autoplay = false, timer = null;
 
-async function hydrateFS(){
-  const [inc, drills, maint, sites] = await Promise.all([
-    loadCSV('./data/incidents.csv'),
-    loadCSV('./data/drills.csv'),
-    loadCSV('./data/maintenance.csv'),
-    loadCSV('./data/sites.csv')
-  ]);
+    function go(i){
+      idx = Math.max(0, Math.min(i, slides.length-1));
+      slides.forEach((el, k)=> el.classList.toggle('active', k===idx));
+      const step = slides[idx].dataset.step;
+      const name = slides[idx].dataset.title;
+      titleEl.textContent = name;
+      const pct = ((idx+1)/slides.length)*100; progressBar.style.width = pct+'%';
+      location.hash = '#'+step;
+      gtag('event','demo_step',{step: step, title: name});
+    }
 
-  const within30d = (ts) => (Date.now() - new Date(ts).getTime())/86400000 <= 30;
-  const recentInc = inc.filter(x => within30d(x.ts));
-  const num = (x)=>Number(x)||0;
+    function next(){ if(idx < slides.length-1) go(idx+1); }
+    function prev(){ if(idx > 0) go(idx-1); }
 
-  const total = recentInc.length;
-  const high = recentInc.filter(x=>x.severity==='high').length;
-  const responseMins = recentInc.filter(x=>x.response_min).map(x=>num(x.response_min)).sort((a,b)=>a-b);
-  const median = responseMins.length ? responseMins[Math.floor(responseMins.length/2)] : 0;
+    document.getElementById('nextBtn').onclick = next;
+    document.getElementById('prevBtn').onclick = prev;
+    document.getElementById('nextBtn2').onclick = next;
+    document.getElementById('prevBtn2').onclick = prev;
+    document.getElementById('startDemo').onclick = ()=> go(1);
 
-  const byMonth = drills.reduce((m,x)=>{m[x.month]=m[x.month]||{sched:0,done:0}; m[x.month].sched+=num(x.scheduled); m[x.month].done+=num(x.completed); return m;},{});
-  const latestMonth = Object.keys(byMonth).sort().pop();
-  const drillPct = latestMonth ? Math.round((byMonth[latestMonth].done / Math.max(1,byMonth[latestMonth].sched))*100) : 0;
+    // Presenter notes toggle
+    const presenterBtn = document.getElementById('togglePresenter');
+    function setPresenter(on){ document.body.classList.toggle('presenter', !!on); localStorage.setItem('presenter', on?'1':'0'); document.getElementById('modeLabel').textContent = on? 'Presenter' : 'Self‑guided'; }
+    presenterBtn.onclick = ()=> setPresenter(!document.body.classList.contains('presenter'));
+    setPresenter(localStorage.getItem('presenter')==='1');
 
-  const overdue = maint.filter(x => !x.completed_on && new Date(x.check_due) < new Date()).length;
-  const falseRate = total ? Math.round(100 * recentInc.filter(x=>x.type==='system_fault' && x.severity==='low').length / total) : 0;
+    // Autoplay (advance every 18s)
+    const autoBtn = document.getElementById('autoplayBtn');
+    function setAuto(on){ autoplay = !!on; autoBtn.textContent = 'Auto‑advance: ' + (autoplay?'On':'Off'); clearInterval(timer); if(autoplay){ timer = setInterval(()=>{ if(idx < slides.length-1) next(); else setAuto(false); }, 18000); } }
+    autoBtn.onclick = ()=> setAuto(!autoplay);
 
-  const mttr = recentInc.filter(x=>x.resolved==='true').map(x=>num(x.response_min));
-  const mttrAvg = mttr.length ? Math.round(mttr.reduce((a,b)=>a+b,0)/mttr.length) : 0;
+    // Keyboard nav
+    window.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); if(e.key.toLowerCase()==='p') presenterBtn.click(); if(e.key.toLowerCase()==='a') autoBtn.click(); });
 
-  const riskBySite = {};
-  sites.forEach(s => {
-    const guard = Number(s.has_guard) ? 0.85 : 0.65;
-    const perim = Number(s.perimeter_quality || 0.5);
-    const overduePenalty = maint.filter(m => m.site===s.site && !m.completed_on).length * 0.08;
-    const score = Math.max(0, Math.min(1, (guard*0.5 + perim*0.5) - overduePenalty));
-    riskBySite[s.site] = Math.round(score*100);
-  });
+    // Hash routing
+    window.addEventListener('hashchange', ()=> {
+      const h = location.hash.replace('#','');
+      const i = slides.findIndex(s=> s.dataset.step===h);
+      if(i>=0) go(i);
+    });
 
-  setMetric("incidents",  String(total), total>20 ? "warn" : "good");
-  setMetric("sevHigh",    `${Math.round(100*high/Math.max(1,total))}%`, high/Math.max(1,total) > 0.15 ? "warn" : "good");
-  setMetric("response",   `${median}m`,  median<=8 ? "good" : "warn");
-  setMetric("drill",      `${drillPct}%`, drillPct>=90 ? "good" : "warn");
-  setMetric("preventive", `${overdue} overdue`, overdue>0 ? "warn" : "good");
-  setMetric("falseRate",  `${falseRate}%`, falseRate<=10 ? "good" : "warn");
-  setMetric("mttr",       `${mttrAvg}m`, mttrAvg<=45 ? "good" : "warn");
+    // Initial slide
+    (function(){
+      const h = location.hash.replace('#','');
+      const i = slides.findIndex(s=> s.dataset.step===h);
+      go(i>=0?i:0);
+    })();
 
-  const mix = ['fire','intrusion','system_fault','other'];
-  const mixCounts = mix.map(k => [labelize(k), recentInc.filter(x=>x.type===k).length]).filter(x=>x[1]>0);
-  setList("mix", mixCounts.map(([k,v]) => [k, String(v)]));
-
-  const topSites = Object.entries(riskBySite).sort((a,b)=>a[1]-b[1]).slice(0,4);
-  setList("sites", topSites.map(([site,score]) => [`${site}`, `risk ${100-score}`]));
-
-  function labelize(k){ return k.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase()); }
-}
-
-// --- UI helpers ---
-function setMetric(id, value, mood) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = value;
-  el.classList.remove('good','warn','bad');
-  if (mood) el.classList.add(mood);
-}
-
-function setList(id, items) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = "";
-  items.forEach(([label, status]) => {
-    const li = document.createElement("li");
-    const left = document.createElement("span"); left.textContent = label;
-    const right = document.createElement("span"); right.className = "pill"; right.textContent = status;
-    li.append(left, right);
-    el.appendChild(li);
-  });
-}
-
-// --- Button wiring ---
-const runBtn = document.getElementById("run");
-if (runBtn) {
-  runBtn.addEventListener("click", async () => {
-    runBtn.disabled = true;
-    runBtn.textContent = "Checking…";
-    try { await hydrateFS(); }
-    finally { runBtn.disabled = false; runBtn.textContent = "Re-run Check"; }
-  });
-}
-
-// Auto-run once at page load
-hydrateFS().catch(console.error);
-</script>
-
-
+    // Hook buttons (replace with real links if available)
+    document.getElementById('openColab').onclick = (e)=>{ e.preventDefault(); alert('Open your Colab notebook URL here.'); };
+    document.getElementById('openPBIX').onclick = (e)=>{ e.preventDefault(); alert('Link your .pbix (or report server) here.'); };
+    document.getElementById('openPBI').onclick = (e)=>{ e.preventDefault(); alert('This would open your Power BI scorecard.'); };
+  </script>
 </body>
 </html>
