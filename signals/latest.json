@@ -1,29 +1,27 @@
 {
-  "version": 1,
-  "ts_utc": "2025-09-08T00:00:00Z",
+  "id": "2025-09-10T20:00:00Z-protector-broadcast-seed",
+  "ts_utc": "2025-09-10T20:00:00Z",
+  "date": "2025-09-10",
+  "module": "The Protector",
+  "repo": "protector-model",
+  "title": "Master star broadcast seed initialized",
+  "summary": "Bootstrapped constellation broadcasting: schema, nightly pulse, and Signal renderer.",
+  "tags": ["broadcasting", "schema", "renderer", "pulse"],
+  "rating": "high",
   "origin": {
-    "repo": "protector-model",
-    "module_key": "protector",
-    "label": "The Protector",
-    "emoji": "🛡️",
-    "pages_url": "https://zbreeden.github.io/protector-model/"
+    "name": "The Protector",
+    "url": "https://zbreeden.github.io/protector-model/",
+    "emoji": "🛡️"
   },
-  "broadcast": {
-    "key": "protector_core_init",
-    "kind": "module_announce",
-    "message": "Initialized The Protector as a Core System (Guardian). Fire & Safety lens available for demo.",
-    "tags": ["system_security", "fire_security"],
-    "status": "published",
-    "links": [
-      {
-        "label": "Face (index.html)",
-        "url": "https://zbreeden.github.io/protector-model/"
-      },
-      {
-        "label": "README",
-        "url": "https://github.com/zbreeden/protector-model/blob/main/README.md"
-      }
-    ]
-  }
+  "links": {
+    "readme": "https://github.com/zbreeden/protector-model#readme",
+    "page": "https://zbreeden.github.io/protector-model/",
+    "data": "https://github.com/zbreeden/protector-model/tree/main/signals",
+    "runbook": "https://github.com/zbreeden/protector-model/blob/main/RUNBOOK.md"
+  },
+  "payload": {
+    "notes": "This is the top-level aggregator in The Protector. Nightly pulse pulls latest.json from each star."
+  },
+  "checksum": "",
+  "version": "1.0.0"
 }
-
