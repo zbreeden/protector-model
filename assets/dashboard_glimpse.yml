@@ -1,0 +1,28 @@
+title: "Protector KPI Concept"
+subtitle: "Non-interactive preview — dashboard stays in the background; pipeline is the star."
+kpis:
+  - label: "On-time compliance"
+    value: "94%"
+    delta: "+3 pts"
+  - label: "Open deficiencies (A/B/C)"
+    value: "3 / 11 / 18"
+  - label: "WO intake due ≤ 7 days"
+    value: "5"
+charts:
+  - type: bar
+    title: "Deficiencies by Severity"
+    subtitle: "Seed data"
+    data:
+      - ["A", 3]
+      - ["B", 11]
+      - ["C", 18]
+  - type: bar
+    title: "Intake Work Orders by Branch"
+    subtitle: "Last 7 days"
+    data:
+      - ["Cincinnati", 5]
+      - ["Dayton", 3]
+      - ["Columbus", 4]
+  - type: note
+    title: "Notes"
+    text: "Illustrative only. Powered by the same Salesforce-shaped feed the pipeline produces."
