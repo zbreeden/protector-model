@@ -1,0 +1,40 @@
+defaults:
+  Country: USA
+  StateFallback: OH
+  SilcoBranch: Cincinnati HQ
+  Territory: Cincinnati
+field_maps:
+  AccountName: AccountName
+  SiteName: SiteNameRaw
+  Address1: AddressRaw
+  County: CountyRaw
+  Phone: PhoneRaw
+parsing_rules:
+  normalize_city_state_zip: true
+  standardize_phone: true
+  fix_common_typos:
+    Hamilt0n: Hamilton
+    Cinti: Cincinnati
+  product_inference:
+    patterns:
+      Wet sprinkler: SPRINKLER_WET
+      Dry sprinkler: SPRINKLER_DRY
+      preaction: SPRINKLER_PREACTION
+      Ansul: ANSUL_KITCHEN
+  maintenance_frequency_map:
+    qtrly: Quarterly
+    quarterly: Quarterly
+    semi: Semiannual
+    annual: Annual
+severity_scoring:
+  A:
+  - blocked exits
+  - fire pump failure
+  - supervisory off
+  B:
+  - painted head
+  - tamper sw loose
+  - missing escutcheon
+  C:
+  - label faded
+  - minor corrosion
