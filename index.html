@@ -59,6 +59,24 @@
     .bar-row{display:flex;align-items:center;gap:8px;margin:6px 0}
     .bar-wrap{flex:1;background:#0b101b;border:1px solid #21324e;border-radius:8px;overflow:hidden}
     .bar{height:10px;border-radius:6px;background:linear-gradient(90deg,#4cc38a,#81a7ff)}
+      /* Modal preview styles */
+    .modal{position:fixed;inset:0;background:rgba(5,8,13,.86);backdrop-filter:blur(6px);display:grid;place-items:center;padding:24px}
+    .modal[hidden]{display:none}
+    .modal-panel{max-width:1100px;width:100%;background:#0f1522;border:1px solid #223148;border-radius:18px;box-shadow:var(--shadow);padding:18px;max-height:90vh;overflow:auto}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .glimpse-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+    .glimpse-kpi{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px}
+    .glimpse-kpi .label{font-size:12px;color:#a8b7cd}
+    .glimpse-kpi .value{font-size:22px;margin-top:4px}
+    .glimpse-chart{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px;margin-bottom:12px}
+    .bar-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+    .bar-wrap{flex:1;background:#0b101b;border:1px solid #21324e;border-radius:8px;overflow:hidden}
+    .bar{height:10px;border-radius:6px;background:linear-gradient(90deg,#4cc38a,#81a7ff)}
+    /* Steps rendering */
+    .steps{display:grid;gap:10px;margin:10px 0}
+    .step{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px}
+    .step .h{font-weight:700;margin-bottom:6px}
+    .code{background:#0b101b;border:1px solid #23314c;border-radius:10px;padding:10px;overflow:auto;margin-top:6px}
   </style>
 </head>
 <body>
@@ -157,6 +175,7 @@
         </svg>
       </div>
       <p class="subtitle" style="margin-top:8px">Same dashboard, no rebuild. The pipeline feeds a standard Salesforce shape that Service/Field Ops already use.</p>
+      <div style="margin-top:10px"><button class="btn" onclick="openTransforms()">View ETL transformation steps</button></div>
     </section>
 
     <!-- Run -->
@@ -335,6 +354,121 @@
       }
       body.innerHTML=''; body.appendChild(frag);
     }
+    // Close on ESC and backdrop click
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeGlimpse(); });
+    document.getElementById('glimpseModal').addEventListener('click', (e)=>{ if(e.target.id==='glimpseModal') closeGlimpse(); });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script>
+    function copyCmd(){
+      const el = document.getElementById('cmd');
+      const text = el.textContent.trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        const b = document.querySelector('#run .btn'); b.textContent='Copied ✔'; setTimeout(()=>b.textContent='Copy command',1200);
+      });
+    }
+    async function openGlimpse(){
+      const modal=document.getElementById('glimpseModal');
+      const body=document.getElementById('glimpseBody');
+      body.innerHTML='<p class="subtitle">Loading…</p>';
+      modal.hidden=false; modal.setAttribute('aria-hidden','false');
+      try{
+        const res=await fetch('./assets/dashboard_glimpse.yml');
+        const txt=await res.text();
+        const data=jsyaml.load(txt);
+        renderGlimpse(data);
+      }catch(e){
+        body.innerHTML='<p style="color:#f99">Failed to load preview.</p>';
+        console.error(e);
+      }
+      document.getElementById('glimpseTitle').focus?.();
+    }
+    function closeGlimpse(){
+      const modal=document.getElementById('glimpseModal');
+      modal.hidden=true; modal.setAttribute('aria-hidden','true');
+    }
+    function renderGlimpse(cfg){
+      const body=document.getElementById('glimpseBody');
+      const titleEl=document.getElementById('glimpseTitle');
+      titleEl.textContent=cfg.title || 'Protector KPI Concept';
+      const frag=document.createDocumentFragment();
+      if (cfg.subtitle){
+        const sub=document.createElement('p'); sub.className='subtitle'; sub.textContent=cfg.subtitle; frag.appendChild(sub);
+      }
+      if (cfg.kpis && Array.isArray(cfg.kpis)){
+        const kpiWrap=document.createElement('div'); kpiWrap.className='glimpse-kpis';
+        cfg.kpis.forEach(k=>{
+          const d=document.createElement('div'); d.className='glimpse-kpi';
+          d.innerHTML=`<div class="label">${k.label||''}</div><div class="value">${k.value||''}</div>${k.delta?`<div class="label">Δ ${k.delta}</div>`:''}`;
+          kpiWrap.appendChild(d);
+        });
+        frag.appendChild(kpiWrap);
+      }
+      if (cfg.charts && Array.isArray(cfg.charts)){
+        cfg.charts.forEach(ch=>{
+          const c=document.createElement('div'); c.className='glimpse-chart';
+          const head=document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
+          head.innerHTML=`<div style="font-weight:600">${ch.title||''}</div><div class="label">${ch.subtitle||''}</div>`;
+          c.appendChild(head);
+          if (ch.type==='bar' && Array.isArray(ch.data)){
+            const max=ch.data.reduce((m,row)=>Math.max(m, Number(row[1])||0),0)||1;
+            ch.data.forEach(row=>{
+              const rowEl=document.createElement('div'); rowEl.className='bar-row';
+              const name=document.createElement('div'); name.style.width='120px'; name.textContent=String(row[0]);
+              const wrap=document.createElement('div'); wrap.className='bar-wrap';
+              const bar=document.createElement('div'); bar.className='bar'; bar.style.width=((Number(row[1])||0)/max*100)+'%';
+              wrap.appendChild(bar);
+              const val=document.createElement('div'); val.style.minWidth='44px'; val.style.textAlign='right'; val.textContent=String(row[1]);
+              rowEl.appendChild(name); rowEl.appendChild(wrap); rowEl.appendChild(val);
+              c.appendChild(rowEl);
+            });
+          } else if (ch.type==='note' && ch.text){
+            const p=document.createElement('p'); p.className='subtitle'; p.textContent=ch.text; c.appendChild(p);
+          }
+          frag.appendChild(c);
+        });
+      }
+      body.innerHTML=''; body.appendChild(frag);
+    }
+
+    // NEW: open YAML-driven ETL steps in the same modal
+    async function openTransforms(){
+      const modal=document.getElementById('glimpseModal');
+      const body=document.getElementById('glimpseBody');
+      const titleEl=document.getElementById('glimpseTitle');
+      body.innerHTML='<p class="subtitle">Loading…</p>';
+      modal.hidden=false; modal.setAttribute('aria-hidden','false');
+      titleEl.textContent='ETL Transformation Steps';
+      try{
+        const res=await fetch('./assets/transform_steps.yml');
+        const txt=await res.text();
+        const data=jsyaml.load(txt);
+        renderTransforms(data);
+      }catch(e){
+        body.innerHTML='<p style="color:#f99">Failed to load steps.</p>';
+        console.error(e);
+      }
+      titleEl.focus?.();
+    }
+    function renderTransforms(cfg){
+      const body=document.getElementById('glimpseBody');
+      const frag=document.createDocumentFragment();
+      if (cfg.summary){
+        const p=document.createElement('p'); p.className='subtitle'; p.textContent=cfg.summary; frag.appendChild(p);
+      }
+      const ul=document.createElement('div'); ul.className='steps';
+      (cfg.steps||[]).forEach((s,idx)=>{
+        const li=document.createElement('div'); li.className='step';
+        const h=document.createElement('div'); h.className='h'; h.textContent=(idx+1)+'. '+(s.name||'Step'); li.appendChild(h);
+        if (s.action){ const a=document.createElement('div'); a.textContent=s.action; li.appendChild(a); }
+        const show = (label,obj)=>{ if(obj===undefined) return; const pre=document.createElement('pre'); pre.className='code'; pre.textContent=typeof obj==='string'?obj:JSON.stringify(obj,null,2); li.appendChild(pre); };
+        show('before', s.before); show('after', s.after);
+        ul.appendChild(li);
+      });
+      frag.appendChild(ul);
+      body.innerHTML=''; body.appendChild(frag);
+    }
+
     // Close on ESC and backdrop click
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeGlimpse(); });
     document.getElementById('glimpseModal').addEventListener('click', (e)=>{ if(e.target.id==='glimpseModal') closeGlimpse(); });
