@@ -3,471 +3,239 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Protector · Demo Navigator</title>
-  <meta name="description" content="A click-through, presenter-friendly demo for The Protector (Silco Fire & Security)." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>The Protector — Acquisition Intake Demo Track</title>
+  <meta name="description" content="Pen‑and‑paper acquisition → Python pipeline → Salesforce‑shaped outputs → Protector KPIs. A 3‑minute, scrollable demo track." />
+  <!-- Optional: Google Tag Manager (GTM-WVC4SNLB) -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WVC4SNLB');</script>
   <style>
-    :root{--bg:#0f172a;--card:#111827;--ink:#e5e7eb;--muted:#9ca3af;--accent:#60a5fa;--line:#1f2937;--good:#34d399;--warn:#fbbf24;--bad:#fb7185}
+    :root{
+      --bg:#0c0f14; --panel:#121826; --muted:#9fb0c3; --text:#e7eef8; --brand:#4cc38a; --accent:#81a7ff; --warn:#f1a73d;
+      --radius:18px; --shadow:0 12px 40px rgba(0,0,0,.25);
+    }
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:radial-gradient(1000px 600px at 10% -10%,#12213a,transparent),linear-gradient(180deg,#0b1222,#060913);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    body{margin:0;background:linear-gradient(180deg,#0b0e13,#0f1522 30%,#0b0e13);color:var(--text);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
-    header{display:flex;align-items:center;gap:14px;justify-content:space-between;margin-bottom:18px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#2dd4bf,#60a5fa);display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.4)}
-    .brand .logo span{font-weight:800;color:#041018}
-    .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}
-    .tag{border:1px solid #1f2a3a;border-radius:999px;padding:6px 10px;color:var(--muted);font-size:12px}
-
-    .top-actions{display:flex;gap:8px;flex-wrap:wrap}
-    button, .btn{appearance:none;border:none;background:#0b1222;border:1px solid #1a2437;color:var(--ink);padding:9px 12px;border-radius:12px;cursor:pointer;font-weight:600}
-    button:hover, .btn:hover{border-color:#2a3a55}
-    .btn.primary{background:linear-gradient(180deg,#1b2a44,#132137);border-color:#274166}
-    .btn.ghost{background:transparent}
-    .btn.small{padding:6px 10px;font-size:13px}
-
-    .stage{position:relative;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#0e1729,#0a1220);box-shadow:0 20px 40px rgba(0,0,0,.35)}
-    .toolbar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:rgba(5,10,20,.5);backdrop-filter:blur(6px);position:sticky;top:0;z-index:5}
-    .toolbar .grow{flex:1}
-    .progress{height:6px;background:#0b1222;border:1px solid #1a2437;border-radius:999px;overflow:hidden}
-    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#34d399)}
-
-    .slides{position:relative;min-height:460px}
-    .slide{display:none;padding:26px 26px 34px}
-    .slide.active{display:block}
-    .kicker{color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-weight:700;font-size:12px;margin:0 0 8px}
-    h2{margin:0 0 10px;font-size:28px}
-    .lead{color:#cbd5e1;margin:0 0 20px}
-    .grid{display:grid;gap:16px}
-    @media(min-width:900px){.grid.cols-2{grid-template-columns:1.1fr 1fr}}
-    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:#0b1222}
-    .list{margin:0;padding-left:20px}
-    .list li{margin:6px 0}
-    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #22324c;border-radius:999px;padding:6px 10px;background:#0b1222;color:#cbd5e1;font-size:13px}
-
-    .notes{display:none;margin-top:10px;color:#a3aed0;border-left:3px solid #2b3c5c;padding-left:10px}
-    body.presenter .notes{display:block}
-
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:14px;border-top:1px solid var(--line);background:#0a1220;border-radius:0 0 18px 18px}
-    .nav .hint{color:var(--muted);font-size:13px}
-
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px;border-bottom:1px dashed #1f2a3a;text-align:left}
-    th{color:#93c5fd;font-weight:600}
-
-    .status{display:inline-flex;align-items:center;gap:8px}
-    .dot{width:10px;height:10px;border-radius:50%}
-    .dot.good{background:var(--good)}.dot.warn{background:var(--warn)}.dot.bad{background:var(--bad)}
-
-    footer{margin-top:22px;display:flex;justify-content:space-between;align-items:center;color:var(--muted)}
-
-    /* Overlay for embedded viz */
-    .overlay{position:fixed;inset:0;background:rgba(3,6,13,.88);backdrop-filter:blur(6px);display:none;z-index:60}
-    .overlay.active{display:flex}
-    .overlay .frame{margin:auto;width:min(1100px,92vw);height:min(700px,84vh);background:#0b1222;border:1px solid var(--line);border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.55);display:flex;flex-direction:column}
-    .overlay header{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-    .overlay iframe{flex:1;border:0;border-top:1px solid #0a1220}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    header{position:sticky;top:0;background:rgba(12,15,20,.8);backdrop-filter:saturate(160%) blur(10px);z-index:50;border-bottom:1px solid rgba(255,255,255,.05)}
+    .nav{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:10px 24px}
+    .nav .brand{display:flex;align-items:center;gap:12px}
+    .brand-badge{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:radial-gradient(90% 90% at 30% 20%,#4cc38a55,#4cc38a10),#0f1522;border:1px solid #2a3346;box-shadow:var(--shadow)}
+    .brand-badge span{font-size:22px}
+    .nav a.btn{background:#1b2436;border:1px solid #2a3346;padding:8px 12px;border-radius:10px}
+    .nav a.btn:hover{background:#202a40}
+    .hero{padding:48px 24px 8px}
+    .title{font-size:32px;line-height:1.15;margin:0 0 6px}
+    .subtitle{color:var(--muted);margin:0 0 18px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+    .tag{font-size:12px;padding:6px 10px;border-radius:999px;background:#111726;border:1px solid #27324a;color:#cfe2ff}
+    .grid{display:grid;gap:18px}
+    @media (min-width:900px){.grid{grid-template-columns:1.1fr .9fr}}
+    .card{background:linear-gradient(180deg,#0f1522,#0c111d);border:1px solid #1e2536;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .card h3{margin:0 0 8px;font-size:18px}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:14px}
+    .kpi .label{font-size:12px;color:#a8b7cd}
+    .kpi .value{font-size:22px;margin-top:4px}
+    .section{margin:28px 0}
+    .section h2{font-size:22px;margin:0 0 10px}
+    pre,code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
+    pre{background:#0b101b;border:1px solid #23314c;border-radius:12px;padding:14px;overflow:auto}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:#132038;border:1px solid #2a3b5c;color:#dbe7ff;padding:10px 12px;border-radius:10px}
+    .btn:hover{background:#172747}
+    .pill{display:inline-block;background:#0e1628;border:1px solid #2b3b59;border-radius:999px;padding:6px 10px;font-size:12px;color:#c9d9f6}
+    .diagram{border-radius:14px;border:1px dashed #2a3856;padding:14px}
+    .footer{color:#9fb0c3;font-size:13px;margin:40px 0 20px}
   </style>
-  <!-- GTM (replace with your container if different) -->
-  <script>
-    // Minimal gtag proxy so events don't error if GTM is blocked
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-  </script>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript safe) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WVC4SNLB');
-  </script>
-
-  <div class="wrap">
-    <header>
+  <header>
+    <div class="nav">
       <div class="brand">
-        <div class="logo" aria-hidden="true"><span>🛡️</span></div>
+        <div class="brand-badge" aria-hidden="true"><span>🛡️</span></div>
         <div>
-          <h1>The Protector — Demo Navigator</h1>
-          <div class="tag">Silco Fire & Security · Business Data Analyst</div>
+          <div style="font-weight:700">The Protector</div>
+          <div style="font-size:12px;color:var(--muted)">Acquisition Intake · Demo Track</div>
         </div>
       </div>
-      <div class="top-actions">
-        <a class="btn ghost small" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a>
-        <button class="btn small" id="togglePresenter" title="Toggle presenter notes (P)">Presenter Notes</button>
-        <button class="btn primary" id="startDemo">Start Demo</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a class="btn" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Constellation</a>
+        <a class="btn" href="#tldr">TL;DR</a>
+        <a class="btn" href="#pipeline">Pipeline</a>
+        <a class="btn" href="#assets">Assets</a>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <section class="stage" aria-live="polite">
-      <div class="toolbar">
-        <div class="pill" id="modePill">Mode: <strong id="modeLabel">Self‑guided</strong></div>
-        <div class="grow"></div>
-        <div class="progress" aria-label="Progress"><i id="progressBar"></i></div>
-        <button class="btn small" id="autoplayBtn" title="Auto-advance (A)">Auto‑advance: Off</button>
-        <button class="btn small" id="prevBtn" title="Prev (←)">Prev</button>
-        <button class="btn small" id="nextBtn" title="Next (→)">Next</button>
-      </div>
-
-      <div class="slides" id="slides">
-        <!-- 0. Welcome -->
-        <article class="slide" data-step="0" data-title="Welcome">
-          <p class="kicker">Welcome</p>
-          <h2>What you’ll see in 3 minutes</h2>
-          <p class="lead">A realistic, decision‑oriented view of fire & security data: sites, drills, maintenance, and incidents — plus how I turn it into action.</p>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>Demo goals</h3>
-              <ul class="list">
-                <li>Show a <strong>Silco‑sized</strong> synthetic model (3,500 sites · 3 years).</li>
-                <li>Connect <strong>readiness → risk → incidents → loss</strong>.</li>
-                <li>Share a repeatable approach I can run on day one.</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Artifacts (click to open)</h3>
-              <ul class="list">
-                <li><a href="data/talk_track.txt" target="_blank">Talk‑track cheat sheet</a></li>
-                <li><a href="data/sites.csv" target="_blank">sites.csv</a> · <a href="data/drills.csv" target="_blank">drills.csv</a> · <a href="data/maintenance.csv" target="_blank">maintenance.csv</a> · <a href="data/incidents.csv" target="_blank">incidents.csv</a></li>
-                <li><a href="#" id="openPBI">(Optional) Power BI scorecard</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="notes">Speaker notes: Intro in one sentence. If remote/phone‑only, say you can DM a link after the call. If screen‑sharing, click a CSV to show scale.</div>
-        </article>
-
-        <!-- 1. Business context -->
-        <article class="slide" data-step="1" data-title="Business context">
-          <p class="kicker">Context</p>
-          <h2>Protecting lives, property, and uptime</h2>
-          <p class="lead">We influence outcomes by improving <em>readiness</em> (drills, maintenance) and reducing <em>risk</em> (false alarms, real events, severity, loss).</p>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>Key questions</h3>
-              <ul class="list">
-                <li>Which sites are <strong>high‑risk & low‑compliance</strong> right now?</li>
-                <li>Where can we cut <strong>false alarms</strong> fastest?</li>
-                <li>How does <strong>service level</strong> translate to readiness & outcomes?</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>KPIs</h3>
-              <table>
-                <tr><th>Metric</th><th>Why it matters</th></tr>
-                <tr><td>Drill Pass %</td><td>Readiness → evacuation effectiveness</td></tr>
-                <tr><td>Maintenance Completion %</td><td>System reliability</td></tr>
-                <tr><td>False Alarm %</td><td>Ops cost & trust with AHJs</td></tr>
-                <tr><td>Incident Rate / 100 site‑months</td><td>Comparable risk signal</td></tr>
-                <tr><td>Median Real‑Event Loss</td><td>Financial impact</td></tr>
-              </table>
-            </div>
-          </div>
-          <div class="notes">Tie to Silco mission; keep under 40 seconds.</div>
-        </article>
-
-        <!-- 2. Data model -->
-        <article class="slide" data-step="2" data-title="Data model">
-          <p class="kicker">Data</p>
-          <h2>Star schema & features</h2>
-          <p class="lead">Four fact tables over a Sites dimension plus Calendar. Compliance features aggregate to site‑month.</p>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>Tables</h3>
-              <ul class="list">
-                <li><strong>sites</strong>(site_id,…,service_level,risk_score)</li>
-                <li><strong>drills</strong>(scheduled_date,completed,passed,evac_time)</li>
-                <li><strong>maintenance</strong>(scheduled_date,completed,task_type,parts_cost)</li>
-                <li><strong>incidents</strong>(date,type,severity,property_loss)</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Derived signals</h3>
-              <ul class="list">
-                <li>Drill/maint <strong>completion & pass rates</strong> by site‑month</li>
-                <li><strong>Incident probability</strong> links risk & compliance</li>
-                <li>Sprinklers ↓ real‑event odds & loss</li>
-              </ul>
-            </div>
-          </div>
-          <div class="notes">If they ask: Power BI relationships = Sites→(Drills/Maint/Incidents) and Calendar→dates.</div>
-        </article>
-
-        <!-- 3. Findings -->
-        <article class="slide" data-step="3" data-title="Findings">
-          <p class="kicker">Insights</p>
-          <h2>What the quick stats say</h2>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>Headlines</h3>
-              <ul class="list">
-                <li><span class="status"><i class="dot good"></i> High maintenance → fewer real events</span></li>
-                <li><span class="status"><i class="dot good"></i> Gold &gt; Bronze on drill pass %</span></li>
-                <li><span class="status"><i class="dot good"></i> Sprinklers reduce loss & shift mix</span></li>
-                <li><span class="status"><i class="dot warn"></i> False alarms ≈ 55% of incidents</span></li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Action ideas</h3>
-              <ul class="list">
-                <li>Proactive outreach: <em>high‑risk × low‑compliance</em> sites</li>
-                <li>Market‑level false alarm reduction playbook</li>
-                <li>Risk‑adjusted maintenance budgeting</li>
-              </ul>
-            </div>
-          </div>
-          <div class="notes">If time: mention the five tests (t‑test, Mann‑Whitney, 2‑prop z, chi‑square, simple logit).</div>
-        </article>
-
-        <!-- 4. Live demo hooks -->
-        <article class="slide" data-step="4" data-title="Live demo">
-          <p class="kicker">Hands‑on</p>
-          <h2>Open what they ask for</h2>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>Data</h3>
-              <ul class="list">
-                <li><a href="data/sites.csv" target="_blank">Sites (dimension)</a></li>
-                <li><a href="data/drills.csv" target="_blank">Drills</a> · <a href="data/maintenance.csv" target="_blank">Maintenance</a></li>
-                <li><a href="data/incidents.csv" target="_blank">Incidents</a></li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Notebooks & BI</h3>
-              <ul class="list">
-                <li><a target="_blank" id="openColab">Open Colab generator</a></li>
-                <li><a target="_blank" id="openPBIX">Open Power BI scorecard</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="notes">Keep clicks minimal; let them drive questions. If lag: pivot to talk_track.txt.</div>
-        </article>
-
-        <!-- 5. Close -->
-        <article class="slide" data-step="5" data-title="Close">
-          <p class="kicker">Wrap‑up</p>
-          <h2>Day‑one plan & value</h2>
-          <div class="grid cols-2">
-            <div class="card">
-              <h3>If hired</h3>
-              <ul class="list">
-                <li>Connect to prod data, validate schema & quality gates</li>
-                <li>Stand up scorecard + outreach list for field teams</li>
-                <li>Partner with AHJs on false‑alarm levers</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Take a look</h3>
-              <ul class="list">
-                <li><button class="btn small" id="btnEmbedPBI">View embedded Power BI</button></li>
-                <li><button class="btn small" id="btnSummaryViz">Open Summary Stats</button></li>
-                <li><a href="data/talk_track.txt" target="_blank">Download my talk‑track</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="notes">Thank them; then either open the PBI embed (modal with back) or jump to Summary Stats slide.</div>
-        </article>
-
-        <!-- 6. Summary Stats (inline viz) -->
-        <article class="slide" data-step="6" data-title="Summary Stats">
-          <p class="kicker">Snapshot</p>
-          <h2>Key metrics from the CSVs</h2>
-          <p class="lead">This page reads the four CSVs directly from <code>/data/</code>, computes the core KPIs, and renders two quick charts.</p>
-          <div class="grid cols-2">
-            <div class="card" id="kpiCards">
-              <h3>KPIs</h3>
-              <div class="grid" style="grid-template-columns:repeat(2,1fr);gap:12px">
-                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Drill Pass %</div><div id="kpiDrill" style="font-size:24px;font-weight:700">—</div></div>
-                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Maint Completion %</div><div id="kpiMaint" style="font-size:24px;font-weight:700">—</div></div>
-                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">False Alarm %</div><div id="kpiFalse" style="font-size:24px;font-weight:700">—</div></div>
-                <div class="card" style="padding:12px"><div style="color:#93c5fd;font-size:12px">Median Real Loss</div><div id="kpiLoss" style="font-size:24px;font-weight:700">—</div></div>
-              </div>
-            </div>
-            <div class="card">
-              <h3>Incident mix</h3>
-              <canvas id="chartMix" height="200"></canvas>
-            </div>
-          </div>
-          <div class="card" style="margin-top:16px">
-            <h3>Real incidents by market</h3>
-            <canvas id="chartCity" height="230"></canvas>
-          </div>
-          <div class="notes">Everything here is client‑side: fetch CSV → compute → render. Keep this as a fallback when you can’t share Power BI.</div>
-        </article>
-      </div>
-
-      <div class="nav">
-        <div class="hint">Use ← → or click Next • <span id="slideTitle">Welcome</span></div>
-        <div>
-          <button class="btn small" id="prevBtn2">Prev</button>
-          <button class="btn small" id="nextBtn2">Next</button>
-        </div>
+  <main class="wrap">
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="title">Pen‑and‑paper acquisition → Python → Salesforce‑shape → KPIs</h1>
+      <p class="subtitle">A 3‑minute, scrollable preview for busy execs. The dashboard is the periphery; the <strong>pipeline</strong> is the star.</p>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">Cleaning</span>
+        <span class="tag">Enrichment</span>
+        <span class="tag">Normalization</span>
+        <span class="tag">Salesforce</span>
+        <span class="tag">Power BI</span>
+        <span class="tag">Dynamics‑friendly</span>
       </div>
     </section>
 
-    <footer>
-      <div>Built by Zach · The Protector</div>
-      <div id="statusMsg" aria-live="polite"></div>
-    </footer>
-  </div>
-
-  <!-- Overlay for embedded Power BI (publish-to-web) -->
-  <div class="overlay" id="vizOverlay" aria-hidden="true">
-    <div class="frame">
-      <header>
-        <strong>Power BI — Embedded</strong>
-        <div>
-          <button class="btn small" id="overlayBack">Back</button>
+    <!-- TLDR + KPI snapshot -->
+    <section id="tldr" class="section grid">
+      <div class="card">
+        <h2>TL;DR — What you’ll see</h2>
+        <ol>
+          <li><strong>Raw intake</strong> from a newly acquired, pen‑and‑paper site.</li>
+          <li><strong>Python</strong> pipeline that <em>cleans, enriches, normalizes</em> the data.</li>
+          <li><strong>Salesforce‑shaped tables</strong> ready for Service/Field Ops.</li>
+          <li><strong>Protector KPIs</strong> update with no dashboard rebuild.</li>
+        </ol>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <a class="btn" href="#run">Run the pipeline</a>
+          <a class="btn" href="#normalized">See normalized outputs</a>
+          <a class="btn" href="#quality">View quality report</a>
         </div>
-      </header>
-      <iframe id="vizFrame" title="Power BI Embed" allowfullscreen></iframe>
-    </div>
-  </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:8px">Protector snapshot (periphery)</h3>
+        <div class="kpis">
+          <div class="kpi"><div class="label">On‑time compliance</div><div class="value">94%</div></div>
+          <div class="kpi"><div class="label">Open deficiencies (A/B/C)</div><div class="value">3 / 11 / 18</div></div>
+          <div class="kpi"><div class="label">WO intake due ≤ 7 days</div><div class="value">5</div></div>
+        </div>
+        <div style="margin-top:10px;color:var(--muted);font-size:13px">Illustrative only; source = Salesforce‑shaped feed produced by the pipeline.</div>
+      </div>
+    </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Pipeline diagram -->
+    <section id="pipeline" class="section">
+      <h2>Pipeline overview</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 940 160" width="100%" height="auto" role="img" aria-label="Raw → Python → Salesforce‑shape → KPIs diagram">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4cc38a" offset="0"/><stop stop-color="#81a7ff" offset="1"/></linearGradient>
+          </defs>
+          <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
+          <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
+
+          <rect x="250" y="30" rx="12" ry="12" width="220" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="265" y="62" fill="#cfe2ff" font-size="14">Python ETL</text>
+          <text x="265" y="84" fill="#9fb0c3" font-size="12">normalize_pen_paper.py</text>
+          <text x="265" y="104" fill="#9fb0c3" font-size="12">clean • enrich • normalize</text>
+
+          <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce‑shaped outputs</text>
+          <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
+          <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
+
+          <rect x="790" y="30" rx="12" ry="12" width="140" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="805" y="62" fill="#cfe2ff" font-size="14">Protector KPIs</text>
+          <text x="805" y="84" fill="#9fb0c3" font-size="12">compliance • backlog</text>
+
+          <path d="M220 80 L250 80" stroke="url(#g1)" stroke-width="3"/>
+          <path d="M470 80 L510 80" stroke="url(#g1)" stroke-width="3"/>
+          <path d="M750 80 L790 80" stroke="url(#g1)" stroke-width="3"/>
+        </svg>
+      </div>
+      <p class="subtitle" style="margin-top:8px">Same dashboard, no rebuild. The pipeline feeds a standard Salesforce shape that Service/Field Ops already use.</p>
+    </section>
+
+    <!-- Run -->
+    <section id="run" class="section">
+      <h2>Run the pipeline (time‑boxed demo)</h2>
+      <p>One command produces normalized tables and a quality report.</p>
+      <pre><code id="cmd">python normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml normalized_out/</code></pre>
+      <button class="btn" onclick="copyCmd()">Copy command</button>
+      <span class="pill">~3 seconds</span>
+    </section>
+
+    <!-- Quality report -->
+    <section id="quality" class="section grid">
+      <div class="card">
+        <h2 style="margin-bottom:8px">Quality report (auditable fixes & flags)</h2>
+        <ul>
+          <li><strong>Invalid date</strong> → flagged (e.g., <em>02‑31‑2025</em>)</li>
+          <li><strong>Typos</strong> → corrected (<em>Hamilt0n → Hamilton</em>)</li>
+          <li><strong>Abbreviations</strong> → normalized (<em>rt. → Route</em>)</li>
+        </ul>
+        <div style="margin-top:8px"><a class="btn" href="./signals/intake_demo/quality_report.csv">Download quality_report.csv</a></div>
+        <p class="subtitle" style="margin-top:10px">This file explains <em>what changed</em> between raw input and normalized output.</p>
+      </div>
+      <div class="card">
+        <h3>Light GA4/GTM telemetry (optional)</h3>
+        <p class="subtitle">Minimal events (e.g., <code>request_submitted</code> with GUID) let us tie portal actions → Cases/Work Orders. Not the focus today.</p>
+        <div><span class="pill">Operational attribution</span> <span class="pill">No PII</span></div>
+      </div>
+    </section>
+
+    <!-- Normalized outputs -->
+    <section id="normalized" class="section">
+      <h2>Normalized, Salesforce‑shaped outputs</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Core tables</h3>
+          <ul>
+            <li><a href="./signals/intake_demo/sites__c.csv">sites__c.csv</a></li>
+            <li><a href="./signals/intake_demo/assets.csv">assets.csv</a></li>
+            <li><a href="./signals/intake_demo/maintenance_plans__c.csv">maintenance_plans__c.csv</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Field service & compliance</h3>
+          <ul>
+            <li><a href="./signals/intake_demo/work_orders.csv">work_orders.csv</a></li>
+            <li><a href="./signals/intake_demo/inspections__c.csv">inspections__c.csv</a></li>
+            <li><a href="./signals/intake_demo/deficiencies__c.csv">deficiencies__c.csv</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="subtitle" style="margin-top:8px">These shapes drop into Salesforce (or serve as a staging export) and are already wired into the Protector model.</p>
+    </section>
+
+    <!-- Assets -->
+    <section id="assets" class="section">
+      <h2>Downloads & assets</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Pen‑and‑paper intake pack</h3>
+          <p>Raw sample + mapping config + Python ETL + sample quality report.</p>
+          <a class="btn" href="./signals/intake_demo/protector_pen_paper_demo.zip">Download .zip</a>
+        </div>
+        <div class="card">
+          <h3>Salesforce export seed</h3>
+          <p>Accounts, Sites, Assets, Maintenance Plans, Work Orders, Inspections, Deficiencies, Opportunities.</p>
+          <a class="btn" href="./signals/salesforce_export/protector_salesforce_templates.zip">Download .zip</a>
+        </div>
+      </div>
+      <p class="subtitle" style="margin-top:10px">If sharing ahead of time, these bundles let reviewers reproduce the demo in minutes.</p>
+    </section>
+
+    <!-- Close -->
+    <section class="section card">
+      <h2>Why this matters now</h2>
+      <ul>
+        <li><strong>Zero disruption:</strong> No dashboard rebuild; feeds a standard Salesforce shape.</li>
+        <li><strong>Faster onboarding:</strong> New acquisitions move from paper → action with quality traceability.</li>
+        <li><strong>ERP‑friendly:</strong> The same normalized tables can hand off to Dynamics for billing/inventory.</li>
+      </ul>
+      <div style="margin-top:12px"><span class="pill">Time‑boxed 3–4 min walkthrough</span> <span class="pill">CIO‑friendly scroll</span></div>
+    </section>
+
+    <p class="footer">© Zach Breeden — FourTwenty Analytics · Module: The Protector 🛡️</p>
+  </main>
+
   <script>
-    // === Config: replace with your real links ===
-    const PBI_EMBED_URL = ""; // e.g., https://app.powerbi.com/view?r=... (Publish to web URL)
-    const COLAB_URL = ""; // your Colab notebook share link (optional)
-    const PBIX_URL = ""; // your PBIX/report url (optional)
-
-    // Minimal gtag proxy already defined above
-
-    // --- Simple slide router with hash support & GA events
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    const titleEl = document.getElementById('slideTitle');
-    const progressBar = document.getElementById('progressBar');
-    let idx = 0, autoplay = false, timer = null;
-
-    function go(i){
-      idx = Math.max(0, Math.min(i, slides.length-1));
-      slides.forEach((el, k)=> el.classList.toggle('active', k===idx));
-      const step = slides[idx].dataset.step;
-      const name = slides[idx].dataset.title;
-      titleEl.textContent = name;
-      const pct = ((idx+1)/slides.length)*100; progressBar.style.width = pct+'%';
-      location.hash = '#'+step;
-      gtag('event','demo_step',{step: step, title: name});
-      if(step==='6'){ ensureSummaryViz(); }
-    }
-
-    function next(){ if(idx < slides.length-1) go(idx+1); }
-    function prev(){ if(idx > 0) go(idx-1); }
-
-    document.getElementById('nextBtn').onclick = next;
-    document.getElementById('prevBtn').onclick = prev;
-    document.getElementById('nextBtn2').onclick = next;
-    document.getElementById('prevBtn2').onclick = prev;
-    document.getElementById('startDemo').onclick = ()=> go(1);
-
-    // Presenter notes toggle
-    const presenterBtn = document.getElementById('togglePresenter');
-    function setPresenter(on){ document.body.classList.toggle('presenter', !!on); localStorage.setItem('presenter', on?'1':'0'); document.getElementById('modeLabel').textContent = on? 'Presenter' : 'Self‑guided'; }
-    presenterBtn.onclick = ()=> setPresenter(!document.body.classList.contains('presenter'));
-    setPresenter(localStorage.getItem('presenter')==='1');
-
-    // Autoplay (advance every 18s)
-    const autoBtn = document.getElementById('autoplayBtn');
-    function setAuto(on){ autoplay = !!on; autoBtn.textContent = 'Auto‑advance: ' + (autoplay?'On':'Off'); clearInterval(timer); if(autoplay){ timer = setInterval(()=>{ if(idx < slides.length-1) next(); else setAuto(false); }, 18000); } }
-    autoBtn.onclick = ()=> setAuto(!autoplay);
-
-    // Keyboard nav
-    window.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); if(e.key.toLowerCase()==='p') presenterBtn.click(); if(e.key.toLowerCase()==='a') autoBtn.click(); });
-
-    // Hash routing
-    window.addEventListener('hashchange', ()=> {
-      const h = location.hash.replace('#','');
-      const i = slides.findIndex(s=> s.dataset.step===h);
-      if(i>=0) go(i);
-    });
-
-    // Initial slide
-    (function(){
-      const h = location.hash.replace('#','');
-      const i = slides.findIndex(s=> s.dataset.step===h);
-      go(i>=0?i:0);
-    })();
-
-    // Hook external buttons
-    document.getElementById('openColab').onclick = (e)=>{ e.preventDefault(); const url = COLAB_URL || '#'; if(url==='#'){ alert('Set COLAB_URL in the HTML.'); return; } window.open(url, '_blank'); };
-    document.getElementById('openPBIX').onclick = (e)=>{ e.preventDefault(); const url = PBIX_URL || '#'; if(url==='#'){ alert('Set PBIX_URL in the HTML.'); return; } window.open(url, '_blank'); };
-    document.getElementById('openPBI').onclick = (e)=>{ e.preventDefault(); if(PBI_EMBED_URL){ openOverlay(); } else { alert('Set PBI_EMBED_URL in the HTML (Publish to web link).'); } };
-
-    // Close slide buttons
-    document.getElementById('btnEmbedPBI').onclick = ()=>{ if(PBI_EMBED_URL){ openOverlay(); } else { alert('Set PBI_EMBED_URL in the HTML (Publish to web link).'); } };
-    document.getElementById('btnSummaryViz').onclick = ()=> go(6);
-
-    // === Overlay logic ===
-    const overlay = document.getElementById('vizOverlay');
-    const vizFrame = document.getElementById('vizFrame');
-    document.getElementById('overlayBack').onclick = closeOverlay;
-    function openOverlay(){ overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); vizFrame.src = PBI_EMBED_URL; gtag('event','open_pbi',{location:'overlay'}); }
-    function closeOverlay(){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); vizFrame.src = 'about:blank'; }
-
-    // === Summary Stats (client-side) ===
-    let summaryLoaded = false;
-    async function ensureSummaryViz(){ if(summaryLoaded) return; summaryLoaded = true; try{ await renderSummary(); } catch(e){ console.error(e); document.getElementById('statusMsg').textContent = 'Summary load error. Check console.'; } }
-
-    // Simple CSV loader
-    async function loadCSV(path){
-      const res = await fetch(path, {cache:'no-store'});
-      if(!res.ok) throw new Error('Fetch failed '+path);
-      const text = await res.text();
-      const [head, ...rows] = text.trim().split(/
-?
-/);
-      const cols = head.split(',');
-      return rows.map(line=>{
-        const vals = line.split(',');
-        const obj = {}; cols.forEach((c,i)=> obj[c] = vals[i]);
-        return obj;
+    function copyCmd(){
+      const el = document.getElementById('cmd');
+      const text = el.textContent.trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        const b = document.querySelector('#run .btn'); b.textContent='Copied ✔'; setTimeout(()=>b.textContent='Copy command',1200);
       });
-    }
-
-    function toBool(v){ if(v===undefined) return false; const s=String(v).toLowerCase(); return s==='true'||s==='1'||s==='yes'; }
-    function toNum(v){ const n = Number(v); return Number.isFinite(n)? n : 0; }
-
-    async function renderSummary(){
-      const [drills, maintenance, incidents, sites] = await Promise.all([
-        loadCSV('data/drills.csv'),
-        loadCSV('data/maintenance.csv'),
-        loadCSV('data/incidents.csv'),
-        loadCSV('data/sites.csv'),
-      ]);
-
-      // KPIs
-      const drillPassPct = 100 * (drills.filter(r=> toBool(r.passed)).length / Math.max(1, drills.length));
-      const maintCompPct = 100 * (maintenance.filter(r=> toBool(r.completed)).length / Math.max(1, maintenance.length));
-      const falseAlarms = incidents.filter(r=> r.incident_type==='False Alarm').length;
-      const incidentTotal = incidents.length;
-      const falsePct = 100 * (falseAlarms / Math.max(1, incidentTotal));
-      const realLosses = incidents.filter(r=> r.incident_type==='Real Event').map(r=> toNum(r.property_loss_usd)).filter(x=> x>0).sort((a,b)=>a-b);
-      const mid = Math.floor(realLosses.length/2);
-      const medianLoss = realLosses.length%2? realLosses[mid] : (realLosses[mid-1]+realLosses[mid])/2;
-
-      document.getElementById('kpiDrill').textContent = drillPassPct.toFixed(1)+'%';
-      document.getElementById('kpiMaint').textContent = maintCompPct.toFixed(1)+'%';
-      document.getElementById('kpiFalse').textContent = falsePct.toFixed(1)+'%';
-      document.getElementById('kpiLoss').textContent = '$'+(medianLoss||0).toLocaleString();
-
-      // Charts
-      const ctxMix = document.getElementById('chartMix').getContext('2d');
-      const real = incidentTotal - falseAlarms;
-      new Chart(ctxMix, { type:'doughnut', data:{ labels:['Real Events','False Alarms'], datasets:[{ data:[real, falseAlarms] }] }, options:{responsive:true,plugins:{legend:{position:'bottom'}}} });
-
-      // Real incidents by market (join with sites)
-      const siteCityMap = new Map(sites.map(s=>[s.site_id, s.city]));
-      const byCity = {};
-      for(const r of incidents){ if(r.incident_type==='Real Event'){ const city = siteCityMap.get(r.site_id) || 'Unknown'; byCity[city] = (byCity[city]||0)+1; } }
-      const cityEntries = Object.entries(byCity).sort((a,b)=> b[1]-a[1]).slice(0,8);
-      const ctxCity = document.getElementById('chartCity').getContext('2d');
-      new Chart(ctxCity, { type:'bar', data:{ labels: cityEntries.map(x=>x[0]), datasets:[{ label:'Real Incidents', data: cityEntries.map(x=>x[1]) }] }, options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}} });
-
-      gtag('event','summary_ready',{drills: drills.length, maintenance: maintenance.length, incidents: incidents.length, sites: sites.length});
     }
   </script>
 </body>
