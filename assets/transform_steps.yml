@@ -1,0 +1,37 @@
+title: "ETL Transformation Steps"
+summary: "Synthetic pen-and-paper intake normalized for Salesforce & Power BI."
+steps:
+  - name: "Schema & Types"
+    action: "Validate required columns; cast dates/phones; create Issues table."
+    before: {"LastInspectionRaw":"02-31-2025","PhoneRaw":"513.555.0198"}
+    after: {"LastInspection":"null (flagged)","Phone":"(513) 555-0198"}
+
+  - name: "Typo & Abbreviation Fixes"
+    action: "Correct common spellings and road abbreviations."
+    before: {"CountyRaw":"Hamilt0n","AddressRaw":"120 rt. 50"}
+    after:  {"County":"Hamilton","Address":"120 Route 50"}
+
+  - name: "Address Parsing"
+    action: "Split into Street/City/State/Zip; infer state=OH if missing."
+
+  - name: "Frequency Normalization"
+    action: "Map qtrly/semi/annual → Quarterly/Semiannual/Annual; explode into rows."
+    before: "NFPA25 qtrly; NFPA96 semi"
+    after:
+      - {"Standard":"NFPA25","Frequency":"Quarterly"}
+      - {"Standard":"NFPA96","Frequency":"Semiannual"}
+
+  - name: "Product Inference"
+    action: "Infer ProductCode from notes."
+    before: "Wet sprinkler sys; Ansul-Kitchen hood"
+    after:  ["SPRINKLER_WET","ANSUL_KITCHEN"]
+
+  - name: "Severity Scoring"
+    action: "Classify notes to A/B/C."
+    before: "painted head by dock; 2 exits blocked"
+    after:
+      - {"item":"painted head","severity":"B"}
+      - {"item":"blocked exits","severity":"A"}
+
+  - name: "Salesforce Conformance"
+    action: "Emit sites__c, assets, maintenance_plans__c, work_orders, inspections__c, deficiencies__c"
