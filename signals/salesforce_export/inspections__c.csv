@@ -1,0 +1,2 @@
+InspectionId__c,WorkOrderId,InspectionDate__c,Inspector__c,Standard__c,PassFail__c,Notes__c
+INSP-0001,WO-0001,2025-09-18,Taylor Reed,NFPA 25,Pass,No impairments observed

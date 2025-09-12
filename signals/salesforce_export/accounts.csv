@@ -1,0 +1,2 @@
+AccountId,AccountName,AccountNumber,Industry,BillingCity,BillingState,BillingCountry,NumberOfLocations,PrimaryContactEmail,Territory,SilcoBranch
+A-0001,Acme Manufacturing - Cincinnati Plant,ACME-CIN-001,Manufacturing,Cincinnati,OH,USA,3,fmgr@acme.com,Cincinnati,Cincinnati HQ
