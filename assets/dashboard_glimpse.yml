@@ -25,4 +25,4 @@ charts:
       - ["Columbus", 4]
   - type: note
     title: "Notes"
-    text: ""
+    text: "Light GA4/GTM telemetry (optional)"
