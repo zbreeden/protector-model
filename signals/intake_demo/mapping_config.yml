@@ -38,3 +38,17 @@ severity_scoring:
   C:
   - label faded
   - minor corrosion
+lookups:
+  city_to_county:
+    Cincinnati: Hamilton
+    Hamilton: Butler
+    Mason: Warren
+    Dayton: Montgomery
+    Columbus: Franklin
+  zip_to_county:
+    "45202": Hamilton
+    "45011": Butler
+    "45040": Warren
+    "45402": Montgomery
+    "43215": Franklin
+
