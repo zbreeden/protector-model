@@ -5,14 +5,44 @@ steps:
     action: "Validate required columns; cast dates/phones; create Issues table."
     before: {"LastInspectionRaw":"02-31-2025","PhoneRaw":"513.555.0198"}
     after: {"LastInspection":"null (flagged)","Phone":"(513) 555-0198"}
+    real_world:
+      - "Data contract / schema registry (e.g., OpenAPI/JSON Schema) enforced at ingress."
+      - "Great Expectations/Deequ checks in an Airflow/dbt test step."
+      - "Bad records quarantined to a landing table with reconciliation metrics."
+
+  - name: "Column Backfill (CountyRaw)"
+    action: "Input lacked CountyRaw → derive from ZIP/City; log unresolved as NULL."
+    before: {"CountyRaw": "missing", "City": "Cincinnati", "Zip": "45202"}
+    after:  {"CountyRaw": "Hamilton"}
+    real_world:
+      - "Reference lookup from MDM/dimension tables (ZIP↔County, City↔County)."
+      - "Priority rules (ZIP over City) captured in a dbt model or SQL view."
+      - "Data quality alert if backfill rate exceeds a threshold."
+
+  - name: "Date Validation"
+    action: "Differentiate between missing vs. invalid dates; leave missing blank, flag invalid in quality report."
+    before: {"LastInspectionRaw": ["", "02-31-2025"]}
+    after:  {"LastInspection": ["blank (missing)", "null (invalid, flagged)"]}
+    real_world:
+      - "Standardize date parsing via warehouse UDFs or dbt macros."
+      - "DQ rule: invalid-date count pushed to monitoring (Grafana/CloudWatch)."
+      - "SLA/alerting if invalid rate > X% for N days."
 
   - name: "Typo & Abbreviation Fixes"
     action: "Correct common spellings and road abbreviations."
     before: {"CountyRaw":"Hamilt0n","AddressRaw":"120 rt. 50"}
     after:  {"County":"Hamilton","Address":"120 Route 50"}
+    real_world:
+      - "Curated normalization dictionaries stored in a shared reference schema."
+      - "Team workflow to propose/approve new synonyms via PRs to the dictionary."
+      - "Versioned mappings so changes are auditable."
 
   - name: "Address Parsing"
     action: "Split into Street/City/State/Zip; infer state=OH if missing."
+    real_world:
+      - "Use a postal address service (USPS, Smarty, Loqate) for canonicalization."
+      - "Confidence scores; low-confidence rows routed to a review queue."
+      - "Geocoding pushes lat/long to a DIM_SITE table."
 
   - name: "Frequency Normalization"
     action: "Map qtrly/semi/annual → Quarterly/Semiannual/Annual; explode into rows."
@@ -20,11 +50,19 @@ steps:
     after:
       - {"Standard":"NFPA25","Frequency":"Quarterly"}
       - {"Standard":"NFPA96","Frequency":"Semiannual"}
+    real_world:
+      - "Operational calendar expansion (dbt snapshot/model) to generate due schedules."
+      - "Business rules tracked in YAML (dbt) or feature flags."
+      - "KPI impact measured with model tests (row counts, uniqueness, not-null)."
 
   - name: "Product Inference"
     action: "Infer ProductCode from notes."
     before: "Wet sprinkler sys; Ansul-Kitchen hood"
     after:  ["SPRINKLER_WET","ANSUL_KITCHEN"]
+    real_world:
+      - "Rule-based NLP or ML text classification (spaCy/SageMaker/Vertex)."
+      - "Model registry + A/B guardrails; fallbacks to deterministic rules."
+      - "Explainability: store matched pattern/score for audit."
 
   - name: "Severity Scoring"
     action: "Classify notes to A/B/C."
@@ -32,6 +70,22 @@ steps:
     after:
       - {"item":"painted head","severity":"B"}
       - {"item":"blocked exits","severity":"A"}
+    real_world:
+      - "Policy-encoded severity thresholds governed by Compliance/HSSE."
+      - "Threshold changes versioned; KPI backfills run on policy updates."
+      - "Downstream routing (e.g., auto-create high-priority WOs via API)."
 
   - name: "Salesforce Conformance"
     action: "Emit sites__c, assets, maintenance_plans__c, work_orders, inspections__c, deficiencies__c"
+    real_world:
+      - "Land → Stage → Curated model in the warehouse; SFDC loads via MuleSoft/Informatica/API."
+      - "Upsert semantics: natural keys, dedupe windows, soft-deletes."
+      - "End-of-pipe data contract tests + success/failure notifications."
+
+  - name: "Quality Report & Metrics"
+    action: "Write quality_report.csv capturing issues (invalid dates, backfills, unresolved values)."
+    real_world:
+      - "Persist issue metrics to a DQ mart; visualize in a DataOps dashboard."
+      - "Pager/Slack alerts on anomaly spikes; runbooks linked from alerts."
+      - "Weekly DQ review with owners; track MTTR and recurring offenders."
+
