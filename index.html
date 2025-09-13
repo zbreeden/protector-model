@@ -181,7 +181,16 @@
     <!-- Run -->
     <section id="run" class="section">
       <h2>Run the pipeline (time‑boxed demo)</h2>
-      <p>One command produces normalized tables and a quality report.</p>
+      <p>A few commands produces normalized tables and a quality report on your desktop.</p>
+      <pre><code id="cmd">python3 -m pip install pandas pyyaml</code></pre>
+      <button class="btn" onclick="copyCmd()">Copy command</button>
+      <span class="pill">~3 seconds</span>
+      <pre><code id="cmd">python3 synth_data.py --spec spec.pen_and_paper.clean.yml</code></pre>
+      <button class="btn" onclick="copyCmd()">Copy command</button>
+      <span class="pill">~3 seconds</span>
+      <pre><code id="cmd">python3 make_bad_pen_paper.py clean_base.csv raw_pen_paper_intake.csv</code></pre>
+      <button class="btn" onclick="copyCmd()">Copy command</button>
+      <span class="pill">~3 seconds</span>
       <pre><code id="cmd">python3 normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml normalized_out/</code></pre>
       <button class="btn" onclick="copyCmd()">Copy command</button>
       <span class="pill">~3 seconds</span>
