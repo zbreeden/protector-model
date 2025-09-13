@@ -81,7 +81,7 @@
         <a class="btn" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Constellation</a>
         <a class="btn" href="#tldr">TL;DR</a>
         <a class="btn" href="#pipeline">Pipeline</a>
-        <a class="btn" href="#assets">Assets</a>
+        <!-- removed Assets link -->
       </div>
     </div>
   </header>
@@ -131,24 +131,40 @@
       <div class="diagram">
         <svg viewBox="0 0 940 160" width="100%" height="auto" role="img" aria-label="Raw → Python → Salesforce-shape → KPIs diagram">
           <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4cc38a" offset="0"/><stop stop-color="#81a7ff" offset="1"/></linearGradient></defs>
-          <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
-          <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
 
+          <!-- Raw intake box -->
+          <a href="./signals/intake_demo/protector_pen_paper_demo.zip">
+            <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
+            <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
+            <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
+            <!-- Button inside box -->
+            <rect x="25" y="100" rx="8" ry="8" width="170" height="22" fill="#132038" stroke="#2a3b5c"/>
+            <text x="110" y="116" text-anchor="middle" fill="#dbe7ff" font-size="12">Download pen-and-paper .zip</text>
+          </a>
+
+          <!-- Python ETL box -->
           <rect x="250" y="30" rx="12" ry="12" width="220" height="100" fill="#101727" stroke="#2a3856"/>
           <text x="265" y="62" fill="#cfe2ff" font-size="14">Python ETL</text>
           <text x="265" y="84" fill="#9fb0c3" font-size="12">normalize_pen_paper.py</text>
           <text x="265" y="104" fill="#9fb0c3" font-size="12">clean • enrich • normalize</text>
 
-          <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce-shaped outputs</text>
-          <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
-          <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
+          <!-- Salesforce-shaped outputs box -->
+          <a href="./signals/salesforce_export/protector_salesforce_templates.zip">
+            <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
+            <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce-shaped outputs</text>
+            <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
+            <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
+            <!-- Button inside box -->
+            <rect x="525" y="100" rx="8" ry="8" width="210" height="22" fill="#132038" stroke="#2a3b5c"/>
+            <text x="630" y="116" text-anchor="middle" fill="#dbe7ff" font-size="12">Download Salesforce templates</text>
+          </a>
 
+          <!-- KPIs box -->
           <rect x="790" y="30" rx="12" ry="12" width="140" height="100" fill="#101727" stroke="#2a3856"/>
           <text x="805" y="62" fill="#cfe2ff" font-size="14">Protector KPIs</text>
           <text x="805" y="84" fill="#9fb0c3" font-size="12">compliance • backlog</text>
 
+          <!-- connectors -->
           <path d="M220 80 L250 80" stroke="url(#g1)" stroke-width="3"/>
           <path d="M470 80 L510 80" stroke="url(#g1)" stroke-width="3"/>
           <path d="M750 80 L790 80" stroke="url(#g1)" stroke-width="3"/>
@@ -214,24 +230,6 @@ python3 normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml norma
         </div>
       </div>
       <p class="subtitle" style="margin-top:8px">These shapes drop into Salesforce (or serve as a staging export) and are already wired into the Protector model.</p>
-    </section>
-
-    <!-- Assets -->
-    <section id="assets" class="section">
-      <h2>Downloads & assets</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Pen-and-paper intake pack</h3>
-          <p>Raw sample + mapping config + Python ETL + sample quality report.</p>
-          <a class="btn" href="./signals/intake_demo/protector_pen_paper_demo.zip">Download .zip</a>
-        </div>
-        <div class="card">
-          <h3>Salesforce export seed</h3>
-          <p>Accounts, Sites, Assets, Maintenance Plans, Work Orders, Inspections, Deficiencies, Opportunities.</p>
-          <a class="btn" href="./signals/salesforce_export/protector_salesforce_templates.zip">Download .zip</a>
-        </div>
-      </div>
-      <p class="subtitle" style="margin-top:10px">If sharing ahead of time, these bundles let reviewers reproduce the demo in minutes.</p>
     </section>
 
     <!-- Close -->
