@@ -278,6 +278,17 @@
   </main>
 
   <script>
+  function copyCmd(codeId, btn){
+    const text = document.getElementById(codeId).textContent.trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent = 'Copied ✔';
+      setTimeout(()=> btn.textContent = 'Copy command', 1200);
+    });
+  }
+</script>
+
+
+  <script>
     function copyCmd(){
       const el = document.getElementById('cmd');
       const text = el.textContent.trim();
