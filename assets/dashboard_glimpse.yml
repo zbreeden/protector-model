@@ -25,4 +25,4 @@ charts:
       - ["Columbus", 4]
   - type: note
     title: "Notes"
-    text: "Illustrative only. Powered by the same Salesforce-shaped feed the pipeline produces."
+    text: ""
