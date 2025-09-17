@@ -81,7 +81,6 @@
         <a class="btn" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Constellation</a>
         <a class="btn" href="#tldr">TL;DR</a>
         <a class="btn" href="#pipeline">Pipeline</a>
-        <!-- removed Assets link -->
       </div>
     </div>
   </header>
@@ -89,7 +88,7 @@
   <main class="wrap">
     <!-- Hero -->
     <section class="hero">
-      <h1 class="title">Silco Case Study --> Pen-and-paper site acquisition → Python normalization → Salesforce-shaped outputs → KPIs</h1>
+      <h1 class="title">Silco Case Study → Pen-and-paper site acquisition → Python normalization → Salesforce-shaped outputs → KPIs</h1>
       <p class="subtitle">A 3-minute, scrollable preview for busy execs. The dashboard that has been built is in the periphery; the <strong>pipeline</strong> is the star in the case study.</p>
       <div class="tags">
         <span class="tag">Python</span><span class="tag">Cleaning</span><span class="tag">Enrichment</span>
@@ -108,9 +107,8 @@
           <li><strong>Protector KPIs</strong> update in the dashboard with data imports to PBI or Tableau.</li>
         </ol>
         <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <a class="btn" href="#run">Receive the data and run the pipeline</a>
-          <a class="btn" href="#normalized">See normalized outputs</a>
-          <a class="btn" href="#quality">View quality report</a>
+          <a class="btn" href="./signals/intake_demo/protector_pen_paper_demo.zip">Download raw intake .zip</a>
+          <a class="btn" href="./signals/salesforce_export/normalized_out.zip">Download normalized outputs .zip</a>
         </div>
       </div>
       <div class="card">
@@ -133,14 +131,9 @@
           <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4cc38a" offset="0"/><stop stop-color="#81a7ff" offset="1"/></linearGradient></defs>
 
           <!-- Raw intake box -->
-          <a href="./signals/intake_demo/protector_pen_paper_demo.zip">
-            <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
-            <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
-            <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
-            <!-- Button inside box -->
-            <rect x="25" y="100" rx="8" ry="8" width="170" height="22" fill="#132038" stroke="#2a3b5c"/>
-            <text x="110" y="116" text-anchor="middle" fill="#dbe7ff" font-size="12">Download new site data & algorithms.</text>
-          </a>
+          <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
+          <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
 
           <!-- Python ETL box -->
           <rect x="250" y="30" rx="12" ry="12" width="220" height="100" fill="#101727" stroke="#2a3856"/>
@@ -149,21 +142,15 @@
           <text x="265" y="104" fill="#9fb0c3" font-size="12">clean • enrich • normalize</text>
 
           <!-- Salesforce-shaped outputs box -->
-            <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
-            <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce-shaped outputs</text>
-            <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
-            <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
-          
+          <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce-shaped outputs</text>
+          <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
+          <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
 
-         <!-- KPIs box (fixed button position) -->
-         <a href="./signals/salesforce_export/normalized_out.zip">
-           <rect x="790" y="30" rx="12" ry="12" width="140" height="100" fill="#101727" stroke="#2a3856"/>
-           <text x="805" y="62" fill="#cfe2ff" font-size="14">Protector KPIs</text>
-           <text x="805" y="84" fill="#9fb0c3" font-size="12">compliance • backlog</text>
-           <!-- Button inside box (moved from x=525 → x=800; text from x=630 → x=860) -->
-           <rect x="800" y="100" rx="8" ry="8" width="120" height="22" fill="#132038" stroke="#2a3b5c"/>
-           <text x="860" y="116" text-anchor="middle" fill="#dbe7ff" font-size="12">Download Salesforce templates</text>
-         </a>
+          <!-- KPIs box -->
+          <rect x="790" y="30" rx="12" ry="12" width="140" height="100" fill="#101727" stroke="#2a3856"/>
+          <text x="805" y="62" fill="#cfe2ff" font-size="14">Protector KPIs</text>
+          <text x="805" y="84" fill="#9fb0c3" font-size="12">compliance • backlog</text>
 
           <!-- connectors -->
           <path d="M220 80 L250 80" stroke="url(#g1)" stroke-width="3"/>
@@ -213,172 +200,4 @@ python3 normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml norma
     <section id="normalized" class="section">
       <h2>Normalized, Salesforce-shaped outputs</h2>
       <div class="grid">
-        <div class="card">
-          <h3>Core tables</h3>
-          <ul>
-            <li><a href="./signals/salesforce_export/sites__c.csv">sites__c.csv</a></li>
-            <li><a href="./signals/salesforce_export/assets.csv">assets.csv</a></li>
-            <li><a href="./signals/salesforce_export/maintenance_plans__c.csv">maintenance_plans__c.csv</a></li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Field service & compliance</h3>
-          <ul>
-            <li><a href="./signals/salesforce_export/work_orders.csv">work_orders.csv</a></li>
-            <li><a href="./signals/salesforce_export/inspections__c.csv">inspections__c.csv</a></li>
-            <li><a href="./signals/salesforce_export/deficiencies__c.csv">deficiencies__c.csv</a></li>
-          </ul>
-        </div>
-      </div>
-      <p class="subtitle" style="margin-top:8px">These shapes drop into Salesforce (or serve as a staging export) and are already wired into the Protector model.</p>
-    </section>
-
-    <!-- Close -->
-    <section class="section card">
-      <h2>Why this matters now</h2>
-      <ul>
-        <li><strong>Zero disruption:</strong> No dashboard rebuild; feeds a standard Salesforce shape.</li>
-        <li><strong>Faster onboarding:</strong> New acquisitions move from paper → action with quality traceability.</li>
-        <li><strong>ERP-friendly:</strong> The same normalized tables can hand off to Dynamics for billing/inventory.</li>
-      </ul>
-      <div style="margin-top:12px"><span class="pill">Time-boxed 3–4 min walkthrough</span> <span class="pill">CIO-friendly scroll</span></div>
-    </section>
-
-    <p class="footer">© Zach Breeden — FourTwenty Analytics · Module: The Protector 🛡️</p>
-
-    <!-- Modal: KPI concept / Steps -->
-    <div id="glimpseModal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="glimpseTitle">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h2 id="glimpseTitle" tabindex="-1">Protector KPI Concept</h2>
-          <button class="btn" onclick="closeGlimpse()">← Back</button>
-        </div>
-        <div id="glimpseBody"><p class="subtitle">Loading…</p></div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-
-  <!-- App Scripts -->
-  <script>
-    // Copy helper
-    function copyAll(codeId, btn){
-      const text = document.getElementById(codeId).textContent.trim();
-      navigator.clipboard.writeText(text).then(()=>{
-        const keep = btn.textContent;
-        btn.textContent = 'Copied ✔';
-        setTimeout(()=> btn.textContent = keep, 1200);
-      });
-    }
-
-    // KPI glimpse modal (YAML-driven)
-    async function openGlimpse(){
-      const modal=document.getElementById('glimpseModal');
-      const body=document.getElementById('glimpseBody');
-      body.innerHTML='<p class="subtitle">Loading…</p>';
-      modal.hidden=false; modal.setAttribute('aria-hidden','false');
-      try{
-        const res=await fetch('./assets/dashboard_glimpse.yml');
-        const txt=await res.text();
-        const data=jsyaml.load(txt);
-        renderGlimpse(data);
-      }catch(e){
-        body.innerHTML='<p style="color:#f99">Failed to load preview.</p>';
-        console.error(e);
-      }
-      document.getElementById('glimpseTitle').focus?.();
-    }
-    function closeGlimpse(){
-      const modal=document.getElementById('glimpseModal');
-      modal.hidden=true; modal.setAttribute('aria-hidden','true');
-    }
-    function renderGlimpse(cfg){
-      const body=document.getElementById('glimpseBody');
-      const titleEl=document.getElementById('glimpseTitle');
-      titleEl.textContent=cfg.title || 'Protector KPI Concept';
-      const frag=document.createDocumentFragment();
-      if (cfg.subtitle){
-        const sub=document.createElement('p'); sub.className='subtitle'; sub.textContent=cfg.subtitle; frag.appendChild(sub);
-      }
-      if (cfg.kpis && Array.isArray(cfg.kpis)){
-        const kpiWrap=document.createElement('div'); kpiWrap.className='glimpse-kpis';
-        cfg.kpis.forEach(k=>{
-          const d=document.createElement('div'); d.className='glimpse-kpi';
-          d.innerHTML=`<div class="label">${k.label||''}</div><div class="value">${k.value||''}</div>${k.delta?`<div class="label">Δ ${k.delta}</div>`:''}`;
-          kpiWrap.appendChild(d);
-        });
-        frag.appendChild(kpiWrap);
-      }
-      if (cfg.charts && Array.isArray(cfg.charts)){
-        cfg.charts.forEach(ch=>{
-          const c=document.createElement('div'); c.className='glimpse-chart';
-          const head=document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
-          head.innerHTML=`<div style="font-weight:600">${ch.title||''}</div><div class="label">${ch.subtitle||''}</div>`;
-          c.appendChild(head);
-          if (ch.type==='bar' && Array.isArray(ch.data)){
-            const max=ch.data.reduce((m,row)=>Math.max(m, Number(row[1])||0),0)||1;
-            ch.data.forEach(row=>{
-              const rowEl=document.createElement('div'); rowEl.className='bar-row';
-              const name=document.createElement('div'); name.style.width='120px'; name.textContent=String(row[0]);
-              const wrap=document.createElement('div'); wrap.className='bar-wrap';
-              const bar=document.createElement('div'); bar.className='bar'; bar.style.width=((Number(row[1])||0)/max*100)+'%';
-              wrap.appendChild(bar);
-              const val=document.createElement('div'); val.style.minWidth='44px'; val.style.textAlign='right'; val.textContent=String(row[1]);
-              rowEl.appendChild(name); rowEl.appendChild(wrap); rowEl.appendChild(val);
-              c.appendChild(rowEl);
-            });
-          } else if (ch.type==='note' && ch.text){
-            const p=document.createElement('p'); p.className='subtitle'; p.textContent=ch.text; c.appendChild(p);
-          }
-          frag.appendChild(c);
-        });
-      }
-      body.innerHTML=''; body.appendChild(frag);
-    }
-
-    // ETL steps (YAML-driven)
-    async function openTransforms(){
-      const modal=document.getElementById('glimpseModal');
-      const body=document.getElementById('glimpseBody');
-      const titleEl=document.getElementById('glimpseTitle');
-      body.innerHTML='<p class="subtitle">Loading…</p>';
-      modal.hidden=false; modal.setAttribute('aria-hidden','false');
-      titleEl.textContent='ETL Transformation Steps';
-      try{
-        const res=await fetch('./assets/transform_steps.yml');
-        const txt=await res.text();
-        const data=jsyaml.load(txt);
-        renderTransforms(data);
-      }catch(e){
-        body.innerHTML='<p style="color:#f99">Failed to load steps.</p>';
-        console.error(e);
-      }
-      titleEl.focus?.();
-    }
-    function renderTransforms(cfg){
-      const body=document.getElementById('glimpseBody');
-      const frag=document.createDocumentFragment();
-      if (cfg.summary){
-        const p=document.createElement('p'); p.className='subtitle'; p.textContent=cfg.summary; frag.appendChild(p);
-      }
-      const ul=document.createElement('div'); ul.className='steps';
-      (cfg.steps||[]).forEach((s,idx)=>{
-        const li=document.createElement('div'); li.className='step';
-        const h=document.createElement('div'); h.className='h'; h.textContent=(idx+1)+'. '+(s.name||'Step'); li.appendChild(h);
-        if (s.action){ const a=document.createElement('div'); a.textContent=s.action; li.appendChild(a); }
-        const show = (label,obj)=>{ if(obj===undefined) return; const pre=document.createElement('pre'); pre.className='code'; pre.textContent=typeof obj==='string'?obj:JSON.stringify(obj,null,2); li.appendChild(pre); };
-        show('before', s.before); show('after', s.after);
-        ul.appendChild(li);
-      });
-      frag.appendChild(ul);
-      body.innerHTML=''; body.appendChild(frag);
-    }
-
-    // Close modal on ESC and backdrop click
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeGlimpse(); });
-    document.getElementById('glimpseModal').addEventListener('click', (e)=>{ if(e.target.id==='glimpseModal') closeGlimpse(); });
-  </script>
-</body>
-</html>
+        <div class
