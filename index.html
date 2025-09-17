@@ -200,4 +200,172 @@ python3 normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml norma
     <section id="normalized" class="section">
       <h2>Normalized, Salesforce-shaped outputs</h2>
       <div class="grid">
-        <div class
+        <div class="card">
+          <h3>Core tables</h3>
+          <ul>
+            <li><a href="./signals/salesforce_export/sites__c.csv">sites__c.csv</a></li>
+            <li><a href="./signals/salesforce_export/assets.csv">assets.csv</a></li>
+            <li><a href="./signals/salesforce_export/maintenance_plans__c.csv">maintenance_plans__c.csv</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Field service & compliance</h3>
+          <ul>
+            <li><a href="./signals/salesforce_export/work_orders.csv">work_orders.csv</a></li>
+            <li><a href="./signals/salesforce_export/inspections__c.csv">inspections__c.csv</a></li>
+            <li><a href="./signals/salesforce_export/deficiencies__c.csv">deficiencies__c.csv</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="subtitle" style="margin-top:8px">These shapes drop into Salesforce (or serve as a staging export) and are already wired into the Protector model.</p>
+    </section>
+
+    <!-- Close -->
+    <section class="section card">
+      <h2>Why this matters now</h2>
+      <ul>
+        <li><strong>Zero disruption:</strong> No dashboard rebuild; feeds a standard Salesforce shape.</li>
+        <li><strong>Faster onboarding:</strong> New acquisitions move from paper → action with quality traceability.</li>
+        <li><strong>ERP-friendly:</strong> The same normalized tables can hand off to Dynamics for billing/inventory.</li>
+      </ul>
+      <div style="margin-top:12px"><span class="pill">Time-boxed 3–4 min walkthrough</span> <span class="pill">CIO-friendly scroll</span></div>
+    </section>
+
+    <p class="footer">© Zach Breeden — FourTwenty Analytics · Module: The Protector 🛡️</p>
+
+    <!-- Modal: KPI concept / Steps -->
+    <div id="glimpseModal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="glimpseTitle">
+      <div class="modal-panel">
+        <div class="modal-head">
+          <h2 id="glimpseTitle" tabindex="-1">Protector KPI Concept</h2>
+          <button class="btn" onclick="closeGlimpse()">← Back</button>
+        </div>
+        <div id="glimpseBody"><p class="subtitle">Loading…</p></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+
+  <!-- App Scripts -->
+  <script>
+    // Copy helper
+    function copyAll(codeId, btn){
+      const text = document.getElementById(codeId).textContent.trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        const keep = btn.textContent;
+        btn.textContent = 'Copied ✔';
+        setTimeout(()=> btn.textContent = keep, 1200);
+      });
+    }
+
+    // KPI glimpse modal (YAML-driven)
+    async function openGlimpse(){
+      const modal=document.getElementById('glimpseModal');
+      const body=document.getElementById('glimpseBody');
+      body.innerHTML='<p class="subtitle">Loading…</p>';
+      modal.hidden=false; modal.setAttribute('aria-hidden','false');
+      try{
+        const res=await fetch('./assets/dashboard_glimpse.yml');
+        const txt=await res.text();
+        const data=jsyaml.load(txt);
+        renderGlimpse(data);
+      }catch(e){
+        body.innerHTML='<p style="color:#f99">Failed to load preview.</p>';
+        console.error(e);
+      }
+      document.getElementById('glimpseTitle').focus?.();
+    }
+    function closeGlimpse(){
+      const modal=document.getElementById('glimpseModal');
+      modal.hidden=true; modal.setAttribute('aria-hidden','true');
+    }
+    function renderGlimpse(cfg){
+      const body=document.getElementById('glimpseBody');
+      const titleEl=document.getElementById('glimpseTitle');
+      titleEl.textContent=cfg.title || 'Protector KPI Concept';
+      const frag=document.createDocumentFragment();
+      if (cfg.subtitle){
+        const sub=document.createElement('p'); sub.className='subtitle'; sub.textContent=cfg.subtitle; frag.appendChild(sub);
+      }
+      if (cfg.kpis && Array.isArray(cfg.kpis)){
+        const kpiWrap=document.createElement('div'); kpiWrap.className='glimpse-kpis';
+        cfg.kpis.forEach(k=>{
+          const d=document.createElement('div'); d.className='glimpse-kpi';
+          d.innerHTML=`<div class="label">${k.label||''}</div><div class="value">${k.value||''}</div>${k.delta?`<div class="label">Δ ${k.delta}</div>`:''}`;
+          kpiWrap.appendChild(d);
+        });
+        frag.appendChild(kpiWrap);
+      }
+      if (cfg.charts && Array.isArray(cfg.charts)){
+        cfg.charts.forEach(ch=>{
+          const c=document.createElement('div'); c.className='glimpse-chart';
+          const head=document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
+          head.innerHTML=`<div style="font-weight:600">${ch.title||''}</div><div class="label">${ch.subtitle||''}</div>`;
+          c.appendChild(head);
+          if (ch.type==='bar' && Array.isArray(ch.data)){
+            const max=ch.data.reduce((m,row)=>Math.max(m, Number(row[1])||0),0)||1;
+            ch.data.forEach(row=>{
+              const rowEl=document.createElement('div'); rowEl.className='bar-row';
+              const name=document.createElement('div'); name.style.width='120px'; name.textContent=String(row[0]);
+              const wrap=document.createElement('div'); wrap.className='bar-wrap';
+              const bar=document.createElement('div'); bar.className='bar'; bar.style.width=((Number(row[1])||0)/max*100)+'%';
+              wrap.appendChild(bar);
+              const val=document.createElement('div'); val.style.minWidth='44px'; val.style.textAlign='right'; val.textContent=String(row[1]);
+              rowEl.appendChild(name); rowEl.appendChild(wrap); rowEl.appendChild(val);
+              c.appendChild(rowEl);
+            });
+          } else if (ch.type==='note' && ch.text){
+            const p=document.createElement('p'); p.className='subtitle'; p.textContent=ch.text; c.appendChild(p);
+          }
+          frag.appendChild(c);
+        });
+      }
+      body.innerHTML=''; body.appendChild(frag);
+    }
+
+    // ETL steps (YAML-driven)
+    async function openTransforms(){
+      const modal=document.getElementById('glimpseModal');
+      const body=document.getElementById('glimpseBody');
+      const titleEl=document.getElementById('glimpseTitle');
+      body.innerHTML='<p class="subtitle">Loading…</p>';
+      modal.hidden=false; modal.setAttribute('aria-hidden','false');
+      titleEl.textContent='ETL Transformation Steps';
+      try{
+        const res=await fetch('./assets/transform_steps.yml');
+        const txt=await res.text();
+        const data=jsyaml.load(txt);
+        renderTransforms(data);
+      }catch(e){
+        body.innerHTML='<p style="color:#f99">Failed to load steps.</p>';
+        console.error(e);
+      }
+      titleEl.focus?.();
+    }
+    function renderTransforms(cfg){
+      const body=document.getElementById('glimpseBody');
+      const frag=document.createDocumentFragment();
+      if (cfg.summary){
+        const p=document.createElement('p'); p.className='subtitle'; p.textContent=cfg.summary; frag.appendChild(p);
+      }
+      const ul=document.createElement('div'); ul.className='steps';
+      (cfg.steps||[]).forEach((s,idx)=>{
+        const li=document.createElement('div'); li.className='step';
+        const h=document.createElement('div'); h.className='h'; h.textContent=(idx+1)+'. '+(s.name||'Step'); li.appendChild(h);
+        if (s.action){ const a=document.createElement('div'); a.textContent=s.action; li.appendChild(a); }
+        const show = (label,obj)=>{ if(obj===undefined) return; const pre=document.createElement('pre'); pre.className='code'; pre.textContent=typeof obj==='string'?obj:JSON.stringify(obj,null,2); li.appendChild(pre); };
+        show('before', s.before); show('after', s.after);
+        ul.appendChild(li);
+      });
+      frag.appendChild(ul);
+      body.innerHTML=''; body.appendChild(frag);
+    }
+
+    // Close modal on ESC and backdrop click
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeGlimpse(); });
+    document.getElementById('glimpseModal').addEventListener('click', (e)=>{ if(e.target.id==='glimpseModal') closeGlimpse(); });
+  </script>
+</body>
+</html>
