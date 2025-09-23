@@ -1,371 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Protector — Acquisition Intake Demo Track</title>
-  <meta name="description" content="Pen-and-paper acquisition → Python pipeline → Salesforce-shaped outputs → Protector KPIs. A 3-minute, scrollable demo track." />
-  <!-- Optional: Google Tag Manager (GTM-WVC4SNLB) -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WVC4SNLB');</script>
-  <style>
-    :root{
-      --bg:#0c0f14; --panel:#121826; --muted:#9fb0c3; --text:#e7eef8; --brand:#4cc38a; --accent:#81a7ff; --warn:#f1a73d;
-      --radius:18px; --shadow:0 12px 40px rgba(0,0,0,.25);
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#0b0e13,#0f1522 30%,#0b0e13);color:var(--text);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .wrap{max-width:1000px;margin:0 auto;padding:24px}
-    header{position:sticky;top:0;background:rgba(12,15,20,.8);backdrop-filter:saturate(160%) blur(10px);z-index:50;border-bottom:1px solid rgba(255,255,255,.05)}
-    .nav{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:10px 24px}
-    .nav .brand{display:flex;align-items:center;gap:12px}
-    .brand-badge{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:radial-gradient(90% 90% at 30% 20%,#4cc38a55,#4cc38a10),#0f1522;border:1px solid #2a3346;box-shadow:var(--shadow)}
-    .brand-badge span{font-size:22px}
-    .nav a.btn{background:#1b2436;border:1px solid #2a3346;padding:8px 12px;border-radius:10px}
-    .nav a.btn:hover{background:#202a40}
-    .hero{padding:48px 24px 8px}
-    .title{font-size:32px;line-height:1.15;margin:0 0 6px}
-    .subtitle{color:var(--muted);margin:0 0 18px}
-    .tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
-    .tag{font-size:12px;padding:6px 10px;border-radius:999px;background:#111726;border:1px solid #27324a;color:#cfe2ff}
-    .grid{display:grid;gap:18px}
-    @media (min-width:900px){.grid{grid-template-columns:1.1fr .9fr}}
-    .card{background:linear-gradient(180deg,#0f1522,#0c111d);border:1px solid #1e2536;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
-    .card h3{margin:0 0 8px;font-size:18px}
-    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .kpi{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:14px}
-    .kpi .label{font-size:12px;color:#a8b7cd}
-    .kpi .value{font-size:22px;margin-top:4px}
-    .section{margin:28px 0}
-    .section h2{font-size:22px;margin:0 0 10px}
-    pre,code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
-    pre{background:#0b101b;border:1px solid #23314c;border-radius:12px;padding:14px;overflow:auto}
-    .btn{display:inline-flex;align-items:center;gap:8px;background:#132038;border:1px solid #2a3b5c;color:#dbe7ff;padding:10px 12px;border-radius:10px;cursor:pointer}
-    .btn:hover{background:#172747}
-    .pill{display:inline-block;background:#0e1628;border:1px solid #2b3b59;border-radius:999px;padding:6px 10px;font-size:12px;color:#c9d9f6}
-    .diagram{border-radius:14px;border:1px dashed #2a3856;padding:14px}
-    .footer{color:#9fb0c3;font-size:13px;margin:40px 0 20px}
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(5,8,13,.86);backdrop-filter:blur(6px);display:grid;place-items:center;padding:24px}
-    .modal[hidden]{display:none}
-    .modal-panel{max-width:1100px;width:100%;background:#0f1522;border:1px solid #223148;border-radius:18px;box-shadow:var(--shadow);padding:18px;max-height:90vh;overflow:auto}
-    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .glimpse-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
-    .glimpse-kpi{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px}
-    .glimpse-kpi .label{font-size:12px;color:#a8b7cd}
-    .glimpse-kpi .value{font-size:22px;margin-top:4px}
-    .glimpse-chart{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px;margin-bottom:12px}
-    .bar-row{display:flex;align-items:center;gap:8px;margin:6px 0}
-    .bar-wrap{flex:1;background:#0b101b;border:1px solid #21324e;border-radius:8px;overflow:hidden}
-    .bar{height:10px;border-radius:6px;background:linear-gradient(90deg,#4cc38a,#81a7ff)}
-    /* Steps rendering */
-    .steps{display:grid;gap:10px;margin:10px 0}
-    .step{background:#0e1422;border:1px solid #24304a;border-radius:14px;padding:12px}
-    .step .h{font-weight:700;margin-bottom:6px}
-    .code{background:#0b101b;border:1px solid #23314c;border-radius:10px;padding:10px;overflow:auto;margin-top:6px}
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protector Model - FourTwenty Analytics</title>
+  <meta name="description" content="The Protector is the guardian">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🛡️</text></svg>">
 </head>
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVC4SNLB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <header>
-    <div class="nav">
-      <div class="brand">
-        <div class="brand-badge" aria-hidden="true"><span>🛡️</span></div>
-        <div>
-          <div style="font-weight:700">The Protector</div>
-          <div style="font-size:12px;color:var(--muted)">Acquisition Intake · Demo Track</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <a class="btn" href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Constellation</a>
-        <a class="btn" href="#tldr">TL;DR</a>
-        <a class="btn" href="#pipeline">Pipeline</a>
-      </div>
-    </div>
+    <h1>🛡️ Protector Model</h1>
+    <p>The Protector is the guardian</p>
+    <nav>
+      <a href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a> |
+      <a href="https://github.com/zbreeden/protector-model">Repository</a> |
+      <a href="https://github.com/zbreeden/FourTwentyAnalytics">Hub Source</a>
+    </nav>
   </header>
-
-  <main class="wrap">
-    <!-- Hero -->
-    <section class="hero">
-      <h1 class="title">Silco Case Study → Pen-and-paper site acquisition → Python normalization → Salesforce-shaped outputs → KPIs</h1>
-      <p class="subtitle">A 3-minute, scrollable preview for busy execs. The dashboard that has been built is in the periphery; the <strong>pipeline</strong> is the star in the case study.</p>
-      <div class="tags">
-        <span class="tag">Python</span><span class="tag">Cleaning</span><span class="tag">Enrichment</span>
-        <span class="tag">Normalization</span><span class="tag">Salesforce</span><span class="tag">Power BI</span><span class="tag">Dynamics-friendly</span>
-      </div>
-    </section>
-
-    <!-- TLDR + KPI snapshot -->
-    <section id="tldr" class="section grid">
-      <div class="card">
-        <h2>TL;DR — What you’ll see</h2>
-        <ol>
-          <li><strong>Raw intake</strong> from a newly acquired, pen-and-paper site.</li>
-          <li><strong>Python</strong> pipeline that <em>cleans, enriches, normalizes</em> the data.</li>
-          <li><strong>Salesforce-shaped tables</strong> ready for Service/Field Ops.</li>
-          <li><strong>Protector KPIs</strong> update in the dashboard with data imports to PBI or Tableau.</li>
-        </ol>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <a class="btn" href="./signals/intake_demo/protector_pen_paper_demo.zip">Download raw intake .zip</a>
-          <a class="btn" href="./signals/salesforce_export/normalized_out.zip">Download normalized outputs .zip</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:8px">Protector snapshot (periphery dashboard)</h3>
-        <div class="kpis">
-          <div class="kpi"><div class="label">On-time compliance</div><div class="value">94%</div></div>
-          <div class="kpi"><div class="label">Open deficiencies (A/B/C)</div><div class="value">3 / 11 / 18</div></div>
-          <div class="kpi"><div class="label">WO intake due ≤ 7 days</div><div class="value">5</div></div>
-        </div>
-        <div style="margin-top:10px;color:var(--muted);font-size:13px">Illustrative only; source = Salesforce-shaped feed produced by the pipeline.</div>
-        <div style="margin-top:10px"><button class="btn" onclick="openGlimpse()">Preview KPI Dashboard Concept</button></div>
-      </div>
-    </section>
-
-    <!-- Pipeline diagram -->
-    <section id="pipeline" class="section">
-      <h2>Pipeline overview</h2>
-      <div class="diagram">
-        <svg viewBox="0 0 940 160" width="100%" height="auto" role="img" aria-label="Raw → Python → Salesforce-shape → KPIs diagram">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4cc38a" offset="0"/><stop stop-color="#81a7ff" offset="1"/></linearGradient></defs>
-
-          <!-- Raw intake box -->
-          <rect x="10" y="30" rx="12" ry="12" width="210" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="25" y="62" fill="#cfe2ff" font-size="14">Raw intake</text>
-          <text x="25" y="84" fill="#9fb0c3" font-size="12">raw_pen_paper_intake.csv</text>
-
-          <!-- Python ETL box -->
-          <rect x="250" y="30" rx="12" ry="12" width="220" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="265" y="62" fill="#cfe2ff" font-size="14">Python ETL</text>
-          <text x="265" y="84" fill="#9fb0c3" font-size="12">normalize_pen_paper.py</text>
-          <text x="265" y="104" fill="#9fb0c3" font-size="12">clean • enrich • normalize</text>
-
-          <!-- Salesforce-shaped outputs box -->
-          <rect x="510" y="30" rx="12" ry="12" width="240" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="525" y="62" fill="#cfe2ff" font-size="14">Salesforce-shaped outputs</text>
-          <text x="525" y="84" fill="#9fb0c3" font-size="12">sites__c • assets • plans</text>
-          <text x="525" y="104" fill="#9fb0c3" font-size="12">work_orders • inspections • deficiencies</text>
-
-          <!-- KPIs box -->
-          <rect x="790" y="30" rx="12" ry="12" width="140" height="100" fill="#101727" stroke="#2a3856"/>
-          <text x="805" y="62" fill="#cfe2ff" font-size="14">Protector KPIs</text>
-          <text x="805" y="84" fill="#9fb0c3" font-size="12">compliance • backlog</text>
-
-          <!-- connectors -->
-          <path d="M220 80 L250 80" stroke="url(#g1)" stroke-width="3"/>
-          <path d="M470 80 L510 80" stroke="url(#g1)" stroke-width="3"/>
-          <path d="M750 80 L790 80" stroke="url(#g1)" stroke-width="3"/>
-        </svg>
-      </div>
-      <p class="subtitle" style="margin-top:8px">Same dashboard, no rebuild. The pipeline feeds a standard Salesforce shape that Service/Field Ops already use.</p>
-      <div style="margin-top:10px"><button class="btn" onclick="openTransforms()">View ETL transformation steps</button></div>
-    </section>
-
-    <!-- Run -->
-    <section id="run" class="section">
-      <h2>Run the pipeline (time-boxed demo)</h2>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
-          <p class="subtitle" style="margin:0">Copy these four commands, paste into Terminal, and hit Enter after each.</p>
-          <button class="btn" onclick="copyAll('cmdAll', this)">Copy all</button>
-        </div>
-        <pre><code id="cmdAll">python3 -m pip install pandas pyyaml
-python3 synth_data.py --spec spec.pen_and_paper.clean.yml
-python3 make_bad_pen_paper.py clean_base.csv raw_pen_paper_intake.csv
-python3 normalize_pen_paper.py raw_pen_paper_intake.csv mapping_config.yml normalized_out/</code></pre>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-          <span class="pill">~1–2 min first run (installs)</span>
-          <span class="pill">Mac: use <code>python3</code></span>
-          <span class="pill">Windows: use <code>python</code></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quality report -->
-    <section id="quality" class="section grid">
-      <div class="card">
-        <h2 style="margin-bottom:8px">Quality report (auditable fixes & flags)</h2>
-        <ul>
-          <li><strong>Invalid date</strong> → flagged (e.g., <em>02-31-2025</em>)</li>
-          <li><strong>Typos</strong> → corrected (<em>Hamilt0n → Hamilton</em>)</li>
-          <li><strong>Abbreviations</strong> → normalized (<em>rt. → Route</em>)</li>
-        </ul>
-        <div style="margin-top:8px"><a class="btn" href="./signals/salesforce_export/quality_report.csv">Download quality_report.csv</a></div>
-        <p class="subtitle" style="margin-top:10px">This file explains <em>what changed</em> between raw input and normalized output.</p>
-      </div>
-    </section>
-
-    <!-- Normalized outputs -->
-    <section id="normalized" class="section">
-      <h2>Normalized, Salesforce-shaped outputs</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Core tables</h3>
-          <ul>
-            <li><a href="./signals/salesforce_export/sites__c.csv">sites__c.csv</a></li>
-            <li><a href="./signals/salesforce_export/assets.csv">assets.csv</a></li>
-            <li><a href="./signals/salesforce_export/maintenance_plans__c.csv">maintenance_plans__c.csv</a></li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Field service & compliance</h3>
-          <ul>
-            <li><a href="./signals/salesforce_export/work_orders.csv">work_orders.csv</a></li>
-            <li><a href="./signals/salesforce_export/inspections__c.csv">inspections__c.csv</a></li>
-            <li><a href="./signals/salesforce_export/deficiencies__c.csv">deficiencies__c.csv</a></li>
-          </ul>
-        </div>
-      </div>
-      <p class="subtitle" style="margin-top:8px">These shapes drop into Salesforce (or serve as a staging export) and are already wired into the Protector model.</p>
-    </section>
-
-    <!-- Close -->
-    <section class="section card">
-      <h2>Why this matters now</h2>
+  
+  <main>
+    <section>
+      <h2>🌌 Constellation Info</h2>
       <ul>
-        <li><strong>Zero disruption:</strong> No dashboard rebuild; feeds a standard Salesforce shape.</li>
-        <li><strong>Faster onboarding:</strong> New acquisitions move from paper → action with quality traceability.</li>
-        <li><strong>ERP-friendly:</strong> The same normalized tables can hand off to Dynamics for billing/inventory.</li>
+        <li><strong>Orbit</strong>: core</li>
+        <li><strong>Status</strong>: seed</li>  
+        <li><strong>Module Key</strong>: <code>protector_model</code></li>
       </ul>
-      <div style="margin-top:12px"><span class="pill">Time-boxed 3–4 min walkthrough</span> <span class="pill">CIO-friendly scroll</span></div>
     </section>
-
-    <p class="footer">© Zach Breeden — FourTwenty Analytics · Module: The Protector 🛡️</p>
-
-    <!-- Modal: KPI concept / Steps -->
-    <div id="glimpseModal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="glimpseTitle">
-      <div class="modal-panel">
-        <div class="modal-head">
-          <h2 id="glimpseTitle" tabindex="-1">Protector KPI Concept</h2>
-          <button class="btn" onclick="closeGlimpse()">← Back</button>
-        </div>
-        <div id="glimpseBody"><p class="subtitle">Loading…</p></div>
+    
+    <section>
+      <h2>📡 Latest Signal</h2>
+      <div id="signal-container">
+        <p><em>Loading signal data...</em></p>
       </div>
-    </div>
+    </section>
   </main>
+  
+  <footer>
+    <p>Part of the <a href="https://zbreeden.github.io/FourTwentyAnalytics/">FourTwenty Analytics</a> constellation</p>
+  </footer>
 
-  <!-- Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-
-  <!-- App Scripts -->
   <script>
-    // Copy helper
-    function copyAll(codeId, btn){
-      const text = document.getElementById(codeId).textContent.trim();
-      navigator.clipboard.writeText(text).then(()=>{
-        const keep = btn.textContent;
-        btn.textContent = 'Copied ✔';
-        setTimeout(()=> btn.textContent = keep, 1200);
-      });
-    }
-
-    // KPI glimpse modal (YAML-driven)
-    async function openGlimpse(){
-      const modal=document.getElementById('glimpseModal');
-      const body=document.getElementById('glimpseBody');
-      body.innerHTML='<p class="subtitle">Loading…</p>';
-      modal.hidden=false; modal.setAttribute('aria-hidden','false');
-      try{
-        const res=await fetch('./assets/dashboard_glimpse.yml');
-        const txt=await res.text();
-        const data=jsyaml.load(txt);
-        renderGlimpse(data);
-      }catch(e){
-        body.innerHTML='<p style="color:#f99">Failed to load preview.</p>';
-        console.error(e);
+    // Load and display latest signal data
+    async function loadSignalData() {
+      try {
+        const response = await fetch('./signals/latest.json');
+        if (!response.ok) {
+          throw new Error('Signal data not available');
+        }
+        
+        const signal = await response.json();
+        const container = document.getElementById('signal-container');
+        
+        container.innerHTML = `
+          <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: #f9f9f9;">
+            <h3>${signal.emoji || '📡'} ${signal.title}</h3>
+            <p><strong>Summary:</strong> ${signal.summary}</p>
+            <p><strong>Broadcast Time:</strong> ${new Date(signal.ts_utc).toLocaleString()}</p>
+            <p><strong>Rating:</strong> <span style="
+              background: ${signal.rating === 'critical' ? '#ff4444' : 
+                         signal.rating === 'high' ? '#ff8800' : 
+                         signal.rating === 'normal' ? '#4CAF50' : '#888'}; 
+              color: white; 
+              padding: 2px 8px; 
+              border-radius: 4px; 
+              font-size: 0.8em;">${signal.rating}</span></p>
+            ${signal.tags && signal.tags.length > 0 ? 
+              `<p><strong>Tags:</strong> ${signal.tags.map(tag => 
+                `<span style="background: #e1e8ed; padding: 2px 6px; border-radius: 12px; font-size: 0.8em; margin-right: 4px;">${tag}</span>`
+              ).join('')}</p>` : ''}
+            ${signal.payload && signal.payload.notes ? 
+              `<details>
+                <summary>📋 Additional Notes</summary>
+                <p style="margin-top: 0.5rem; padding: 0.5rem; background: white; border-radius: 4px;">${signal.payload.notes}</p>
+              </details>` : ''}
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById('signal-container').innerHTML = 
+          '<p style="color: #888;"><em>Signal data not yet available. Generate signals/latest.json to see broadcast information.</em></p>';
       }
-      document.getElementById('glimpseTitle').focus?.();
     }
-    function closeGlimpse(){
-      const modal=document.getElementById('glimpseModal');
-      modal.hidden=true; modal.setAttribute('aria-hidden','true');
-    }
-    function renderGlimpse(cfg){
-      const body=document.getElementById('glimpseBody');
-      const titleEl=document.getElementById('glimpseTitle');
-      titleEl.textContent=cfg.title || 'Protector KPI Concept';
-      const frag=document.createDocumentFragment();
-      if (cfg.subtitle){
-        const sub=document.createElement('p'); sub.className='subtitle'; sub.textContent=cfg.subtitle; frag.appendChild(sub);
-      }
-      if (cfg.kpis && Array.isArray(cfg.kpis)){
-        const kpiWrap=document.createElement('div'); kpiWrap.className='glimpse-kpis';
-        cfg.kpis.forEach(k=>{
-          const d=document.createElement('div'); d.className='glimpse-kpi';
-          d.innerHTML=`<div class="label">${k.label||''}</div><div class="value">${k.value||''}</div>${k.delta?`<div class="label">Δ ${k.delta}</div>`:''}`;
-          kpiWrap.appendChild(d);
-        });
-        frag.appendChild(kpiWrap);
-      }
-      if (cfg.charts && Array.isArray(cfg.charts)){
-        cfg.charts.forEach(ch=>{
-          const c=document.createElement('div'); c.className='glimpse-chart';
-          const head=document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
-          head.innerHTML=`<div style="font-weight:600">${ch.title||''}</div><div class="label">${ch.subtitle||''}</div>`;
-          c.appendChild(head);
-          if (ch.type==='bar' && Array.isArray(ch.data)){
-            const max=ch.data.reduce((m,row)=>Math.max(m, Number(row[1])||0),0)||1;
-            ch.data.forEach(row=>{
-              const rowEl=document.createElement('div'); rowEl.className='bar-row';
-              const name=document.createElement('div'); name.style.width='120px'; name.textContent=String(row[0]);
-              const wrap=document.createElement('div'); wrap.className='bar-wrap';
-              const bar=document.createElement('div'); bar.className='bar'; bar.style.width=((Number(row[1])||0)/max*100)+'%';
-              wrap.appendChild(bar);
-              const val=document.createElement('div'); val.style.minWidth='44px'; val.style.textAlign='right'; val.textContent=String(row[1]);
-              rowEl.appendChild(name); rowEl.appendChild(wrap); rowEl.appendChild(val);
-              c.appendChild(rowEl);
-            });
-          } else if (ch.type==='note' && ch.text){
-            const p=document.createElement('p'); p.className='subtitle'; p.textContent=ch.text; c.appendChild(p);
-          }
-          frag.appendChild(c);
-        });
-      }
-      body.innerHTML=''; body.appendChild(frag);
-    }
-
-    // ETL steps (YAML-driven)
-    async function openTransforms(){
-      const modal=document.getElementById('glimpseModal');
-      const body=document.getElementById('glimpseBody');
-      const titleEl=document.getElementById('glimpseTitle');
-      body.innerHTML='<p class="subtitle">Loading…</p>';
-      modal.hidden=false; modal.setAttribute('aria-hidden','false');
-      titleEl.textContent='ETL Transformation Steps';
-      try{
-        const res=await fetch('./assets/transform_steps.yml');
-        const txt=await res.text();
-        const data=jsyaml.load(txt);
-        renderTransforms(data);
-      }catch(e){
-        body.innerHTML='<p style="color:#f99">Failed to load steps.</p>';
-        console.error(e);
-      }
-      titleEl.focus?.();
-    }
-    function renderTransforms(cfg){
-      const body=document.getElementById('glimpseBody');
-      const frag=document.createDocumentFragment();
-      if (cfg.summary){
-        const p=document.createElement('p'); p.className='subtitle'; p.textContent=cfg.summary; frag.appendChild(p);
-      }
-      const ul=document.createElement('div'); ul.className='steps';
-      (cfg.steps||[]).forEach((s,idx)=>{
-        const li=document.createElement('div'); li.className='step';
-        const h=document.createElement('div'); h.className='h'; h.textContent=(idx+1)+'. '+(s.name||'Step'); li.appendChild(h);
-        if (s.action){ const a=document.createElement('div'); a.textContent=s.action; li.appendChild(a); }
-        const show = (label,obj)=>{ if(obj===undefined) return; const pre=document.createElement('pre'); pre.className='code'; pre.textContent=typeof obj==='string'?obj:JSON.stringify(obj,null,2); li.appendChild(pre); };
-        show('before', s.before); show('after', s.after);
-        ul.appendChild(li);
-      });
-      frag.appendChild(ul);
-      body.innerHTML=''; body.appendChild(frag);
-    }
-
-    // Close modal on ESC and backdrop click
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeGlimpse(); });
-    document.getElementById('glimpseModal').addEventListener('click', (e)=>{ if(e.target.id==='glimpseModal') closeGlimpse(); });
+    
+    // Load signal data when page loads
+    loadSignalData();
   </script>
 </body>
 </html>
