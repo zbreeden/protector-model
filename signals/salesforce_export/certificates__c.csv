@@ -1,2 +1,0 @@
-CertificateId__c,WorkOrderId,IssueDate__c,Expires__c,CertificateURL__c
-CERT-0001,WO-0001,2025-09-18,2026-09-17,https://example.com/certificates/CERT-0001.pdf

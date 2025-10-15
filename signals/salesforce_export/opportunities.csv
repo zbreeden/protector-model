@@ -1,2 +1,0 @@
-OpportunityId,AccountId,Name,StageName,Amount,CloseDate,Source,RelatedDeficiencyId__c,Territory
-OPP-0001,A-0001,Acme - Sprinkler Head Replacement,Proposal/Price Quote,185.0,2025-09-25,Deficiency,DEF-0001,Cincinnati

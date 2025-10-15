@@ -1,2 +1,0 @@
-DeficiencyId__c,WorkOrderId,Severity__c,CodeReference__c,Description__c,RecommendedAction__c,QuotedAmount__c,Status__c
-DEF-0001,WO-0001,A,NFPA 25 5.2.4,Painted sprinkler head in loading dock,Replace head,185.0,Open
