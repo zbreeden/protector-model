@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protector Model – Trust & Identity Analytics</title>
+  <meta name="description" content="Innovis-style consumer protection model demo (synthetic data).">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="stylesheet" href="./model.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <h1>🛡️ The Protector — Model</h1>
+      <p>Trust, identity & consumer protection demo • SQL → Features → Risk → Power BI</p>
+      <nav class="crumbs">
+        <a href="./index.html">← Overview</a>
+        <a href="https://github.com/zbreeden/protector-model" target="_blank" rel="noopener">Repository</a>
+        <a href="https://zbreeden.github.io/FourTwentyAnalytics/" target="_blank" rel="noopener">Hub</a>
+      </nav>
+      <a class="cta" href="https://app.powerbi.com/view?r=YOUR-PBI-REPORT-ID" target="_blank" rel="noopener">Open Power BI Report</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Model Overview</h2>
+      <p><strong>Goal:</strong> Demonstrate explainable risk scoring on synthetic identity/transaction data with auditable lineage.</p>
+      <ul class="bullets">
+        <li>Relational core: <code>Customer</code>, <code>Account</code>, <code>Device</code>, <code>LoginEvent</code>, <code>Txn</code></li>
+        <li>Feature views: velocity (30m), geo/device mismatch, device reputation</li>
+        <li>Materialized risk: <code>fact_risk</code> (rule score + optional model score)</li>
+        <li>Power BI: overview KPIs, analyst workbench, customer 360, rules monitoring</li>
+      </ul>
+      <p class="note">All data are synthetic. Any sensitive fields are hashed or simulated.</p>
+    </section>
+
+    <section class="card">
+      <h2>Live Dashboard (Embedded)</h2>
+      <p class="subtle">Tip: use the external button above if your device blocks iframes.</p>
+      <div class="framewrap">
+        <iframe
+          title="Protector – Trust & Identity Dashboard"
+          src="https://app.powerbi.com/view?r=YOUR-PBI-REPORT-ID"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Architecture</h3>
+        <ul class="bullets">
+          <li>Lineage columns on every table (<code>record_src</code>, <code>batch_id</code>, <code>created_at</code>)</li>
+          <li>Hash-based surrogate (<code>person_hash</code>) to keep PII out of analytics</li>
+          <li>Star schema exposures for BI; RLS and incremental refresh ready</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Explainability</h3>
+        <ul class="bullets">
+          <li>Rule hits (velocity, geo mismatch, device rep) shown per transaction</li>
+          <li>Optional model score; combine as <code>risk_score = rule + model</code></li>
+          <li>Closed case outcomes flow back to label store (continuous learning)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>What to Explore</h2>
+      <ol>
+        <li>Fraud rate trend & score distribution</li>
+        <li>High-risk queue — drill to case detail</li>
+        <li>Customer 360 (recent logins, devices, geo)</li>
+        <li>Quality panel: freshness, missingness, lineage notes</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>© 2025 Zach Breeden • Educational demo • Synthetic data only</p>
+  </footer>
+
+  <script src="./model.js"></script>
+</body>
+</html>
