@@ -1,0 +1,673 @@
+{
+  "generated_at": "2025-10-27T22:23:22Z",
+  "trainings": {
+    "resting_heart_rate": {
+      "id": "resting_heart_rate",
+      "title": "Resting Heart Rate",
+      "steps_total": 14,
+      "steps_completed": [],
+      "percent_complete": 9.3333,
+      "last_activity": "2025-10-27",
+      "notes": "Consistent replication of resting heart rate readings",
+      "steps": [
+        {
+          "id": "rhh_01",
+          "title": "Resting Heart Rate Logging",
+          "metric": 62,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83c\udf31",
+          "last_activity": "2025-10-14"
+        },
+        {
+          "id": "rhh_02",
+          "title": "Resting Heart Rate Logging",
+          "metric": 61,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-15"
+        },
+        {
+          "id": "rhh_03",
+          "title": "Resting Heart Rate Logging",
+          "metric": 60,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-16"
+        },
+        {
+          "id": "rhh_04",
+          "title": "Resting Heart Rate Logging",
+          "metric": 62,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-17"
+        },
+        {
+          "id": "rhh_05",
+          "title": "Resting Heart Rate Logging",
+          "metric": 66,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-18"
+        },
+        {
+          "id": "rhh_06",
+          "title": "Resting Heart Rate Logging",
+          "metric": 64,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-19"
+        },
+        {
+          "id": "rhh_07",
+          "title": "Resting Heart Rate Logging",
+          "metric": 51,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-20"
+        },
+        {
+          "id": "rhh_08",
+          "title": "Resting Heart Rate Logging",
+          "metric": 62,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-21"
+        },
+        {
+          "id": "rhh_09",
+          "title": "Resting Heart Rate Logging",
+          "metric": 63,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-22"
+        },
+        {
+          "id": "rhh_10",
+          "title": "Resting Heart Rate Logging",
+          "metric": 61,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-23"
+        },
+        {
+          "id": "rhh_11",
+          "title": "Resting Heart Rate Logging",
+          "metric": 63,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-24"
+        },
+        {
+          "id": "rhh_12",
+          "title": "Resting Heart Rate Logging",
+          "metric": 63,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-25"
+        },
+        {
+          "id": "rhh_13",
+          "title": "Resting Heart Rate Logging",
+          "metric": 61,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-26"
+        },
+        {
+          "id": "rhh_14",
+          "title": "Resting Heart Rate Logging",
+          "metric": 59,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-27"
+        }
+      ]
+    },
+    "heart_rate_variability": {
+      "id": "heart_rate_variability",
+      "title": "Heart Rate Variability",
+      "steps_total": 14,
+      "steps_completed": [],
+      "percent_complete": 9.3333,
+      "last_activity": "2025-10-27",
+      "notes": "Consistent replication of heart rate variability readings",
+      "steps": [
+        {
+          "id": "hrv_01",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 158,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83c\udf31",
+          "last_activity": "2025-10-14"
+        },
+        {
+          "id": "hrv_02",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 150,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-15"
+        },
+        {
+          "id": "hrv_03",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 208,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-16"
+        },
+        {
+          "id": "hrv_04",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 151,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-17"
+        },
+        {
+          "id": "hrv_05",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 187,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-18"
+        },
+        {
+          "id": "hrv_06",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 162,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-19"
+        },
+        {
+          "id": "hrv_07",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 163,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-20"
+        },
+        {
+          "id": "hrv_08",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 165,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-21"
+        },
+        {
+          "id": "hrv_09",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 143,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-22"
+        },
+        {
+          "id": null,
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 120,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-23"
+        },
+        {
+          "id": "hrv_11",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 129,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-24"
+        },
+        {
+          "id": "hrv_12",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 143,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-25"
+        },
+        {
+          "id": "hrv_13",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 173,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-26"
+        },
+        {
+          "id": "hrv_14",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 169,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-27"
+        }
+      ]
+    },
+    "breathing_rate": {
+      "id": "breathing_rate",
+      "title": "Breathing Rate",
+      "steps_total": 14,
+      "steps_completed": [],
+      "percent_complete": 9.3333,
+      "last_activity": "2025-10-27",
+      "notes": "Consistent replication of breathing rate readings",
+      "steps": [
+        {
+          "id": "br_01",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83c\udf31",
+          "last_activity": "2025-10-14"
+        },
+        {
+          "id": "br_02",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-15"
+        },
+        {
+          "id": "br_03",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-16"
+        },
+        {
+          "id": "br_04",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-17"
+        },
+        {
+          "id": "br_05",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-18"
+        },
+        {
+          "id": "br_06",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-19"
+        },
+        {
+          "id": "br_07",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 19,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-20"
+        },
+        {
+          "id": "br_08",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-21"
+        },
+        {
+          "id": "br_09",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-22"
+        },
+        {
+          "id": "br_10",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-23"
+        },
+        {
+          "id": "br_11",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-24"
+        },
+        {
+          "id": "br_12",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 19,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-25"
+        },
+        {
+          "id": "br_13",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 20,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-26"
+        },
+        {
+          "id": "br_14",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 17,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-27"
+        }
+      ]
+    },
+    "daily_blood_pressure": {
+      "id": "daily_blood_pressure",
+      "title": "Daily Blood Pressure",
+      "steps_total": 6,
+      "steps_completed": [],
+      "percent_complete": 4.0,
+      "last_activity": "2025-10-27",
+      "notes": "Consistent replication of daily blood pressure readings",
+      "steps": [
+        {
+          "id": "bp_01",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "142/111",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf31",
+          "last_activity": "2025-10-22"
+        },
+        {
+          "id": "bp_02",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "152/116",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-23"
+        },
+        {
+          "id": "bp_03",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "145/104",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-24"
+        },
+        {
+          "id": "bp_04",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "139/95",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-25"
+        },
+        {
+          "id": "bp_05",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "133/91",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-26"
+        },
+        {
+          "id": "bp_06",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "129/97",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-27"
+        }
+      ]
+    },
+    "daily_weight_tracking": {
+      "id": "daily_weight_tracking",
+      "title": "Daily Weight Tracking",
+      "steps_total": 20,
+      "steps_completed": [],
+      "percent_complete": 13.3333,
+      "last_activity": "2025-10-27",
+      "notes": "Consistent replication of daily weight readings",
+      "steps": [
+        {
+          "id": "wt_01",
+          "title": "Daily Weight Logging",
+          "metric": 199,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83c\udf31",
+          "last_activity": "2025-10-08"
+        },
+        {
+          "id": "wt_02",
+          "title": "Daily Weight Logging",
+          "metric": 197,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83c\udf3f",
+          "last_activity": "2025-10-09"
+        },
+        {
+          "id": "wt_03",
+          "title": "Daily Weight Logging",
+          "metric": 197,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\u2744\ufe0f",
+          "last_activity": "2025-10-10"
+        },
+        {
+          "id": "wt_04",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-11"
+        },
+        {
+          "id": "wt_05",
+          "title": "Daily Weight Logging",
+          "metric": 194,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83c\udf0b",
+          "last_activity": "2025-10-12"
+        },
+        {
+          "id": "wt_06",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-13"
+        },
+        {
+          "id": "wt_07",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-14"
+        },
+        {
+          "id": "wt_08",
+          "title": "Daily Weight Logging",
+          "metric": 194,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-15"
+        },
+        {
+          "id": "wt_09",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-16"
+        },
+        {
+          "id": "wt_10",
+          "title": "Daily Weight Logging",
+          "metric": 193,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-17"
+        },
+        {
+          "id": "wt_11",
+          "title": "Daily Weight Logging",
+          "metric": 194,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-18"
+        },
+        {
+          "id": "wt_12",
+          "title": "Daily Weight Logging",
+          "metric": 197,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-19"
+        },
+        {
+          "id": "wt_13",
+          "title": "Daily Weight Logging",
+          "metric": 198,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-20"
+        },
+        {
+          "id": "wt_14",
+          "title": "Daily Weight Logging",
+          "metric": 196,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-21"
+        },
+        {
+          "id": "wt_15",
+          "title": "Daily Weight Logging",
+          "metric": 196,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-22"
+        },
+        {
+          "id": "wt_16",
+          "title": "Daily Weight Logging",
+          "metric": 197,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-23"
+        },
+        {
+          "id": "wt_17",
+          "title": "Daily Weight Logging",
+          "metric": 196,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-24"
+        },
+        {
+          "id": "wt_18",
+          "title": "Daily Weight Logging",
+          "metric": 196,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-25"
+        },
+        {
+          "id": "wt_19",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-26"
+        },
+        {
+          "id": "wt_20",
+          "title": "Daily Weight Logging",
+          "metric": 195,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "\ud83d\udd25",
+          "last_activity": "2025-10-27"
+        }
+      ]
+    }
+  },
+  "orphans": []
+}
