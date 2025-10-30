@@ -26,66 +26,7 @@
       <a href="https://github.com/zbreeden/FourTwentyAnalytics">Hub Source</a>
     </nav>
         <p><a class="cta" href="./model.html">Open Model →</a></p>
-    <script>
-      // Fail-safe: if the linked model page does not exist, render the external markdown file
-      (function(){
-        try {
-          const cta = document.querySelector('a.cta[href="./model.html"]');
-          if (!cta) return;
-          const href = cta.getAttribute('href');
-          const parent = cta.parentElement;
-          const renderMarkdownFallback = async () => {
-            try {
-              const mdResp = await fetch('./data/external/fraud.md');
-              if (!mdResp.ok) throw new Error('Markdown not available');
-              let mdText = await mdResp.text();
-              let html = mdText;
-              if (window.marked && typeof window.marked.parse === 'function') html = marked.parse(mdText);
-              if (window.DOMPurify && typeof DOMPurify.sanitize === 'function') html = DOMPurify.sanitize(html);
-              else html = '<pre>' + html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>';
-
-              const container = document.createElement('div');
-              container.className = 'external-markdown';
-              container.style.border = '1px solid #ddd';
-              container.style.padding = '0.75rem';
-              container.style.borderRadius = '8px';
-              container.style.background = '#fff';
-              container.innerHTML = html;
-
-              // Replace CTA with the rendered markdown container
-              parent.replaceChild(container, cta);
-            } catch (err) {
-              // Fallback to a friendly static message if markdown fetch fails
-              const span = document.createElement('span');
-              span.textContent = 'No model yet; check back soon.';
-              span.className = 'cta disabled';
-              span.style.background = '#ddd';
-              span.style.color = '#555';
-              span.style.cursor = 'default';
-              parent.replaceChild(span, cta);
-            }
-          };
-
-          // Try HEAD first, then GET. If model page missing or blocked, render markdown fallback.
-          fetch(href, { method: 'HEAD' }).then(res => {
-            if (!res.ok) {
-              renderMarkdownFallback();
-            }
-          }).catch(()=>{
-            // If HEAD fails, try GET to check existence
-            fetch(href, { method: 'GET' }).then(r => {
-              if (!r.ok) renderMarkdownFallback();
-            }).catch(() => {
-              // If GET also fails (CORS/blocked/not found), render the markdown fallback
-              renderMarkdownFallback();
-            });
-          });
-        } catch (e) {
-          // no-op on unexpected errors
-        }
-      })();
-    </script>
-    <p class="subtle">This model is in development.</p>
+    
   </header>
   
   <main>
@@ -282,5 +223,7 @@
     // initial load of the firm latest signal
     loadSignalData();
   </script>
+
+  <script src="./index.js" defer></script>
 </body>
 </html>
