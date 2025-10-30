@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protector Model - FourTwenty Analytics</title>
+  <meta name="description" content="The Firm is the guardian">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🛡️</text></svg>">
+  <!-- Markdown renderer + sanitizer (used by README section) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <style>
+    .cta { display:inline-block; margin-top:.75rem; padding:.6rem 1rem; border-radius:8px;
+           background:#0f4c81; color:#fff; text-decoration:none; font-weight:600 }
+    .cta:hover { filter:brightness(1.05) }
+    .subtle { color:#666; font-size:.95rem }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛡️ Protector Model</h1>
+    <p>The Firm is the guardian</p>
+    <nav>
+      <a href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a> |
+      <a href="https://github.com/zbreeden/protector-model">Repository</a> |
+      <a href="https://github.com/zbreeden/FourTwentyAnalytics">Hub Source</a>
+    </nav>
+        <p><a class="cta" href="./model.html">Open Model →</a></p>
+    <script>
+      // Fail-safe: if the linked model page does not exist, render the external markdown file
+      (function(){
+        try {
+          const cta = document.querySelector('a.cta[href="./model.html"]');
+          if (!cta) return;
+          const href = cta.getAttribute('href');
+          const parent = cta.parentElement;
+          const renderMarkdownFallback = async () => {
+            try {
+              const mdResp = await fetch('./data/external/fraud.md');
+              if (!mdResp.ok) throw new Error('Markdown not available');
+              let mdText = await mdResp.text();
+              let html = mdText;
+              if (window.marked && typeof window.marked.parse === 'function') html = marked.parse(mdText);
+              if (window.DOMPurify && typeof DOMPurify.sanitize === 'function') html = DOMPurify.sanitize(html);
+              else html = '<pre>' + html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>';
+
+              const container = document.createElement('div');
+              container.className = 'external-markdown';
+              container.style.border = '1px solid #ddd';
+              container.style.padding = '0.75rem';
+              container.style.borderRadius = '8px';
+              container.style.background = '#fff';
+              container.innerHTML = html;
+
+              // Replace CTA with the rendered markdown container
+              parent.replaceChild(container, cta);
+            } catch (err) {
+              // Fallback to a friendly static message if markdown fetch fails
+              const span = document.createElement('span');
+              span.textContent = 'No model yet; check back soon.';
+              span.className = 'cta disabled';
+              span.style.background = '#ddd';
+              span.style.color = '#555';
+              span.style.cursor = 'default';
+              parent.replaceChild(span, cta);
+            }
+          };
+
+          // Try HEAD first, then GET. If model page missing or blocked, render markdown fallback.
+          fetch(href, { method: 'HEAD' }).then(res => {
+            if (!res.ok) {
+              renderMarkdownFallback();
+            }
+          }).catch(()=>{
+            // If HEAD fails, try GET to check existence
+            fetch(href, { method: 'GET' }).then(r => {
+              if (!r.ok) renderMarkdownFallback();
+            }).catch(() => {
+              // If GET also fails (CORS/blocked/not found), render the markdown fallback
+              renderMarkdownFallback();
+            });
+          });
+        } catch (e) {
+          // no-op on unexpected errors
+        }
+      })();
+    </script>
+    <p class="subtle">Model in development.</p>
+  </header>
+  
+  <main>
+    <section>
+      <h2>🌌 Constellation Info</h2>
+      <ul>
+        <li><strong>Orbit</strong>: 🪐</li>
+        <li><strong>Status</strong>: 🚧</li>  
+        <li><strong>Module Key</strong>: <code>protector_model</code></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📡 Latest Signal</h2>
+      <div id="signal-container">
+        <p><em>Loading signal data...</em></p>
+      </div>
+      <!-- Archive toggle and container (copied from Coach UI pattern) -->
+      <div style="margin-top: 1rem;">
+        <button id="archive-toggle" aria-expanded="false" style="padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer;">Show archive</button>
+      </div>
+      <div id="archive-container" style="margin-top: 1rem; display: none;"></div>
+    </section>
+
+    <section>
+      <h2>🚀 Workflow Progress</h2>
+      <div style="margin-top: 0.5rem;">
+        <button id="progress-toggle" aria-expanded="false" style="padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer;">Show progress</button>
+      </div>
+      <div id="progress-container" style="margin-top: 1rem; display: none;"></div>
+    </section>
+
+    <section>
+      <h2>📘 README</h2>
+      <div style="margin-top: 0.5rem;">
+        <button id="readme-toggle" aria-expanded="false" style="padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer;">Show README</button>
+      </div>
+      <div id="readme-container" style="margin-top: 1rem; display: none; background: #fff; padding: 0.75rem; border-radius: 6px; border:1px solid #eee;"></div>
+    </section>
+  </main>
+  
+  <footer>
+    <p>Part of the <a href="https://zbreeden.github.io/FourTwentyAnalytics/">FourTwenty Analytics</a> constellation</p>
+  </footer>
+
+  <script>
+    // --- Latest signal renderer (keeps Protector header behavior, adjust as needed) ---
+    async function loadSignalData() {
+      try {
+        const response = await fetch('./signals/latest.json');
+        if (!response.ok) throw new Error('Signal data not available');
+        const signal = await response.json();
+        const container = document.getElementById('signal-container');
+        container.innerHTML = `
+          <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; background: #f9f9f9;">
+            <h3>${signal.emoji || '🛡️'} ${signal.title}</h3>
+            <p><strong>Summary:</strong> ${signal.summary}</p>
+            <p><strong>Broadcast Time:</strong> ${signal.ts_utc ? new Date(signal.ts_utc).toLocaleString() : ''}</p>
+            <p><strong>Rating:</strong> <span style="background: ${signal.rating === 'critical' ? '#ff4444' : signal.rating === 'high' ? '#ff8800' : signal.rating === 'normal' ? '#4CAF50' : '#888'}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em;">${signal.rating}</span></p>
+            ${signal.tags && signal.tags.length ? `<p><strong>Tags:</strong> ${signal.tags.map(tag => `<span style="background:#e1e8ed; padding:2px 6px; border-radius:12px; font-size:0.8em; margin-right:4px">${tag}</span>`).join('')}</p>` : ''}
+            ${signal.payload && signal.payload.notes ? `<details><summary>📋 Additional Notes</summary><p style="margin-top:0.5rem; padding:0.5rem; background:white; border-radius:4px">${signal.payload.notes}</p></details>` : ''}
+          </div>`;
+      } catch (err) {
+        document.getElementById('signal-container').innerHTML = '<p style="color:#888;"><em>Signal data not yet available. Generate signals/latest.json to see broadcast information.</em></p>';
+      }
+    }
+
+    // --- Archive renderer (copied pattern) ---
+    const archiveToggle = document.getElementById('archive-toggle');
+    const archiveContainer = document.getElementById('archive-container');
+    let archiveLoaded = false;
+    archiveToggle && archiveToggle.addEventListener('click', async () => {
+      const expanded = archiveToggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        archiveContainer.style.display = 'none';
+        archiveToggle.textContent = 'Show archive';
+        archiveToggle.setAttribute('aria-expanded', 'false');
+        return;
+      }
+      archiveContainer.style.display = 'block';
+      archiveToggle.textContent = 'Hide archive';
+      archiveToggle.setAttribute('aria-expanded', 'true');
+      if (archiveLoaded) return;
+      archiveContainer.innerHTML = '<p><em>Loading archive...</em></p>';
+      try {
+        const resp = await fetch('./signals/archive.latest.json');
+        if (!resp.ok) throw new Error('Archive not available');
+        const entries = await resp.json();
+        if (!Array.isArray(entries) || entries.length === 0) {
+          archiveContainer.innerHTML = '<p style="color:#666;"><em>No archived signals found.</em></p>';
+          archiveLoaded = true;
+          return;
+        }
+        const list = document.createElement('div');
+        list.style.display = 'grid'; list.style.gap = '0.75rem';
+        entries.forEach(item => {
+          const card = document.createElement('div');
+          card.style.border = '1px solid #e3e3e3'; card.style.padding = '0.75rem'; card.style.borderRadius = '8px'; card.style.background = '#fff';
+          const title = document.createElement('h4'); title.style.margin = '0 0 0.25rem 0';
+          title.textContent = `${item.origin && item.origin.emoji ? item.origin.emoji + ' ' : ''}${item.title || item.id}`;
+          const meta = document.createElement('div'); meta.style.fontSize = '0.85rem'; meta.style.color = '#666'; meta.style.marginBottom = '0.5rem';
+          const ts = item.ts_utc ? new Date(item.ts_utc).toLocaleString() : (item.date || '');
+          meta.textContent = `${ts} — ${item.rating || 'normal'}`;
+          const summary = document.createElement('p'); summary.style.margin = '0 0 0.5rem 0'; summary.textContent = item.summary || '';
+          const details = document.createElement('details'); const summaryEl = document.createElement('summary'); summaryEl.textContent = 'More'; details.appendChild(summaryEl);
+          const payloadPre = document.createElement('pre'); payloadPre.style.whiteSpace = 'pre-wrap'; payloadPre.style.margin = '0.5rem 0 0 0'; payloadPre.style.padding = '0.5rem'; payloadPre.style.background = '#f7f9fb'; payloadPre.style.borderRadius = '6px'; payloadPre.textContent = JSON.stringify(item.payload || {}, null, 2);
+          details.appendChild(payloadPre);
+          card.appendChild(title); card.appendChild(meta); card.appendChild(summary); card.appendChild(details);
+          list.appendChild(card);
+        });
+        archiveContainer.innerHTML = ''; archiveContainer.appendChild(list); archiveLoaded = true;
+      } catch (err) {
+        archiveContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load archive: ${err.message}</em></p>`;
+      }
+    });
+
+    // --- Progress (funnel) renderer ---
+    const progressToggle = document.getElementById('progress-toggle');
+    const progressContainer = document.getElementById('progress-container');
+    let progressLoaded = false;
+    progressToggle && progressToggle.addEventListener('click', async () => {
+      const expanded = progressToggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        progressContainer.style.display = 'none';
+        progressToggle.textContent = 'Show progress';
+        progressToggle.setAttribute('aria-expanded', 'false');
+        return;
+      }
+      progressContainer.style.display = 'block';
+      progressToggle.textContent = 'Hide progress';
+      progressToggle.setAttribute('aria-expanded', 'true');
+      if (progressLoaded) return;
+      progressContainer.innerHTML = '<p><em>Loading progress data...</em></p>';
+      try {
+        const resp = await fetch('./signals/funnel_progress.json');
+        if (!resp.ok) throw new Error('Progress data not available');
+        const doc = await resp.json();
+        const trainings = doc.trainings || {};
+        const keys = Object.keys(trainings);
+        if (keys.length === 0) {
+          progressContainer.innerHTML = '<p style="color:#666;"><em>No progress data found.</em></p>';
+          progressLoaded = true; return;
+        }
+        const grid = document.createElement('div'); grid.style.display = 'grid'; grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))'; grid.style.gap = '0.75rem';
+        keys.forEach(k => {
+          const t = trainings[k];
+          const card = document.createElement('div'); card.style.border = '1px solid #e3e3e3'; card.style.padding = '0.75rem'; card.style.borderRadius = '8px'; card.style.background = '#fff';
+          const title = document.createElement('h4'); title.style.margin = '0 0 0.25rem 0'; title.textContent = t.title || k;
+          const meta = document.createElement('div'); meta.style.fontSize = '0.85rem'; meta.style.color = '#666'; meta.style.marginBottom = '0.5rem';
+          const rawPercent = (typeof t.percent_complete === 'number' || typeof t.percent_complete === 'string') ? Number(t.percent_complete) : null;
+          let displayPercent = null; if (rawPercent !== null && !isNaN(rawPercent)) displayPercent = rawPercent > 1 ? rawPercent : rawPercent * 100;
+          const percentText = displayPercent !== null ? (Math.round(displayPercent * 100) / 100) + '%' : '—';
+          const totalSteps = t.steps_total || 0; meta.textContent = `${ totalSteps } • ${ percentText }`;
+          const last = document.createElement('div'); const target = (typeof t.control_flow_target === 'number') ? t.control_flow_target : 150; const percentDisplay = (displayPercent !== null && !isNaN(displayPercent)) ? (Math.round(displayPercent * 10) / 10) + '%' : percentText; title.textContent = `${t.title || k} — Target: ${target} — ${percentDisplay}`;
+          last.style.fontSize = '0.85rem'; last.style.color = '#888'; last.style.marginBottom = '0.5rem'; last.textContent = t.last_activity ? `Last: ${new Date(t.last_activity).toLocaleDateString()}` : '';
+          const progressBarWrap = document.createElement('div'); progressBarWrap.style.background = '#f1f5f8'; progressBarWrap.style.height = '10px'; progressBarWrap.style.borderRadius = '999px'; progressBarWrap.style.overflow = 'hidden';
+          const progressBar = document.createElement('div'); progressBar.style.height = '100%'; const barPercent = displayPercent !== null ? Math.min(Math.max(displayPercent, 0), 100) : 0; progressBar.style.width = `${barPercent}%`; progressBar.style.background = '#4CAF50'; progressBarWrap.appendChild(progressBar);
+          const details = document.createElement('details'); const summaryEl = document.createElement('summary'); summaryEl.textContent = 'Steps'; details.appendChild(summaryEl);
+          const stepsList = document.createElement('ul'); stepsList.style.margin = '0.5rem 0 0 1rem'; (t.steps || []).forEach(s => { const li = document.createElement('li'); const stepName = (s && (s.step_id_name || s.title || s.id || s.step_id)) || String(s); const count = s && (s.count || s.count === 0) ? `(${s.count})` : ''; const status = s && s.status ? ` ${s.status}` : ''; li.textContent = `${stepName} ${count}${status}`.trim(); stepsList.appendChild(li); }); details.appendChild(stepsList);
+          card.appendChild(title); card.appendChild(meta); card.appendChild(last); card.appendChild(progressBarWrap); card.appendChild(details); grid.appendChild(card);
+        });
+        progressContainer.innerHTML = ''; progressContainer.appendChild(grid); progressLoaded = true;
+      } catch (err) {
+        progressContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load progress: ${err.message}</em></p>`;
+      }
+    });
+
+    // --- README renderer using marked + DOMPurify ---
+    const readmeToggle = document.getElementById('readme-toggle');
+    const readmeContainer = document.getElementById('readme-container');
+    async function loadReadme() {
+      try {
+        const resp = await fetch('./README.md');
+        if (!resp.ok) throw new Error('README not available');
+        let md = await resp.text();
+        let html = md;
+        if (window.marked && typeof window.marked.parse === 'function') html = marked.parse(md);
+        if (window.DOMPurify && typeof DOMPurify.sanitize === 'function') html = DOMPurify.sanitize(html);
+        else html = '<pre>' + html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>';
+        readmeContainer.innerHTML = html;
+      } catch (err) {
+        readmeContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load README: ${err.message}</em></p>`;
+      }
+    }
+    readmeToggle && readmeToggle.addEventListener('click', async () => {
+      const expanded = readmeToggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        readmeContainer.style.display = 'none'; readmeToggle.textContent = 'Show README'; readmeToggle.setAttribute('aria-expanded', 'false'); return;
+      }
+      readmeContainer.style.display = 'block'; readmeToggle.textContent = 'Hide README'; readmeToggle.setAttribute('aria-expanded', 'true');
+      if (!readmeContainer.dataset.loaded) { await loadReadme(); readmeContainer.dataset.loaded = '1'; }
+    });
+
+    // initial load of the firm latest signal
+    loadSignalData();
+  </script>
+</body>
+</html>
