@@ -22,7 +22,7 @@
     <!-- Minimal model setup: a single development button and README toggle -->
     <p>
       <button id="model-btn" class="cta" type="button">Model in Development</button>
-      <button id="readme-toggle" type="button" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Project README</button>
+  <button id="readme-toggle" type="button" aria-expanded="false" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Project README</button>
     </p>
     <div id="readme-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
   </header>
@@ -206,9 +206,14 @@
     readmeToggle && readmeToggle.addEventListener('click', async () => {
       const expanded = readmeToggle.getAttribute('aria-expanded') === 'true';
       if (expanded) {
-        readmeContainer.style.display = 'none'; readmeToggle.textContent = 'Show README'; readmeToggle.setAttribute('aria-expanded', 'false'); return;
+        readmeContainer.style.display = 'none';
+        readmeToggle.textContent = 'Show Project README';
+        readmeToggle.setAttribute('aria-expanded', 'false');
+        return;
       }
-      readmeContainer.style.display = 'block'; readmeToggle.textContent = 'Hide README'; readmeToggle.setAttribute('aria-expanded', 'true');
+      readmeContainer.style.display = 'block';
+      readmeToggle.textContent = 'Hide Project README';
+      readmeToggle.setAttribute('aria-expanded', 'true');
       if (!readmeContainer.dataset.loaded) { await loadReadme(); readmeContainer.dataset.loaded = '1'; }
     });
 
