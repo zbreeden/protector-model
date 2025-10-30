@@ -1,0 +1,6 @@
+id,title,steps_total,percent_complete,last_activity,notes
+resting_heart_rate,Resting Heart Rate,14,9.3333,2025-10-27,Consistent replication of resting heart rate readings
+heart_rate_variability,Heart Rate Variability,14,9.3333,2025-10-27,Consistent replication of heart rate variability readings
+breathing_rate,Breathing Rate,14,9.3333,2025-10-27,Consistent replication of breathing rate readings
+daily_blood_pressure,Daily Blood Pressure,6,4.0,2025-10-27,Consistent replication of daily blood pressure readings
+daily_weight_tracking,Daily Weight Tracking,20,13.3333,2025-10-27,Consistent replication of daily weight readings

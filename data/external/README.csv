@@ -1,0 +1,9 @@
+file,rows,size_bytes
+customer.csv,5001,773123
+account.csv,7432,509400
+device.csv,7840,1031368
+merchant.csv,3001,210084
+login_event.csv,10767,1180092
+txn.csv,45118,6292212
+case_link.csv,286,2969
+case_alert.csv,286,29355

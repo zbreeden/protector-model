@@ -1,0 +1,13 @@
+{
+  "n_customers": 5000,
+  "n_accounts_per_customer_mean": 1.2,
+  "n_devices_per_customer_mean": 1.3,
+  "txn_days": 60,
+  "txns_per_day_mean": 2500,
+  "fraud_rate": 0.005,
+  "geo_mismatch_rate": 0.02,
+  "low_rep_device_rate": 0.04,
+  "high_amount_rate": 0.03,
+  "channels": ["card_present","ecommerce","ach","wire"],
+  "countries": ["US","CA","GB","DE","IN"]
+}

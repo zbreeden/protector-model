@@ -1,0 +1,34 @@
+{
+  "account.customer_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "login_event.customer_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "login_event.device_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "txn.account_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "txn.customer_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "txn.merchant_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "txn.device_id": {
+    "count_missing_values": 0,
+    "examples": []
+  },
+  "case_link.txn_id": {
+    "count_missing_values": 0,
+    "examples": []
+  }
+}
