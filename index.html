@@ -61,10 +61,13 @@
     <!-- Two README renderers: header shows data/external/fraud.md (small model README);
          footer shows protector-model/README.md (the full module README) -->
 
-    <!-- Footer README toggle: shows the module's root README.md -->
-    <section style="margin-top:1.25rem;">
-      <button id="readme-toggle" type="button" aria-expanded="false" style="padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show README</button>
-      <div id="readme-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
+    <!-- Footer README: module root README.md (matches Evaluator UI) -->
+    <section>
+      <h2>📘 README</h2>
+      <div style="margin-top: 0.5rem;">
+        <button id="readme-toggle" aria-expanded="false" style="padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer;">Show README</button>
+      </div>
+      <div id="readme-container" style="margin-top: 1rem; display: none; background: #fff; padding: 0.75rem; border-radius: 6px; border:1px solid #eee;"></div>
     </section>
   </main>
   
