@@ -19,14 +19,12 @@
 <body>
   <header>
     <h1>🛡️ Protector Model</h1>
-    <p>The Firm is the guardian</p>
-    <nav>
-      <a href="https://zbreeden.github.io/FourTwentyAnalytics/">← Back to Hub</a> |
-      <a href="https://github.com/zbreeden/protector-model">Repository</a> |
-      <a href="https://github.com/zbreeden/FourTwentyAnalytics">Hub Source</a>
-    </nav>
-        <p><a class="cta" href="./model.html">Open Model →</a></p>
-    
+    <!-- Minimal model setup: a single development button and README toggle -->
+    <p>
+      <button id="model-btn" class="cta" type="button">Model in Development</button>
+      <button id="readme-toggle" type="button" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Project README</button>
+    </p>
+    <div id="readme-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
   </header>
   
   <main>
@@ -59,13 +57,7 @@
       <div id="progress-container" style="margin-top: 1rem; display: none;"></div>
     </section>
 
-    <section>
-      <h2>📘 README</h2>
-      <div style="margin-top: 0.5rem;">
-        <button id="readme-toggle" aria-expanded="false" style="padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer;">Show README</button>
-      </div>
-      <div id="readme-container" style="margin-top: 1rem; display: none; background: #fff; padding: 0.75rem; border-radius: 6px; border:1px solid #eee;"></div>
-    </section>
+    <!-- README is rendered from the header toggle (shows ./data/external/fraud.md) -->
   </main>
   
   <footer>
