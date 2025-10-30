@@ -22,9 +22,10 @@
     <!-- Minimal model setup: a single development button and README toggle -->
     <p>
       <button id="model-btn" class="cta" type="button">Model in Development</button>
-  <button id="readme-toggle" type="button" aria-expanded="false" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Project README</button>
+      <!-- Header toggle: shows the model's small README stored in data/external (fraud.md) -->
+      <button id="readme-external-toggle" type="button" aria-expanded="false" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Model README</button>
     </p>
-    <div id="readme-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
+    <div id="readme-external-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
   </header>
   
   <main>
@@ -57,7 +58,14 @@
       <div id="progress-container" style="margin-top: 1rem; display: none;"></div>
     </section>
 
-    <!-- README is rendered from the header toggle (shows ./data/external/fraud.md) -->
+    <!-- Two README renderers: header shows data/external/fraud.md (small model README);
+         footer shows protector-model/README.md (the full module README) -->
+
+    <!-- Footer README toggle: shows the module's root README.md -->
+    <section style="margin-top:1.25rem;">
+      <button id="readme-toggle" type="button" aria-expanded="false" style="padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show README</button>
+      <div id="readme-container" style="margin-top:0.75rem; display:none; background:#fff; padding:0.75rem; border-radius:6px; border:1px solid #eee; max-height:60vh; overflow:auto;"></div>
+    </section>
   </main>
   
   <footer>
@@ -186,7 +194,38 @@
       }
     });
 
-    // --- README renderer using marked + DOMPurify ---
+    // --- Header: small model README (data/external/fraud.md) ---
+    const readmeExternalToggle = document.getElementById('readme-external-toggle');
+    const readmeExternalContainer = document.getElementById('readme-external-container');
+    async function loadExternalReadme() {
+      try {
+        const resp = await fetch('./data/external/fraud.md');
+        if (!resp.ok) throw new Error('External README not available');
+        let md = await resp.text();
+        let html = md;
+        if (window.marked && typeof window.marked.parse === 'function') html = marked.parse(md);
+        if (window.DOMPurify && typeof DOMPurify.sanitize === 'function') html = DOMPurify.sanitize(html);
+        else html = '<pre>' + html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>';
+        readmeExternalContainer.innerHTML = html;
+      } catch (err) {
+        readmeExternalContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load model README: ${err.message}</em></p>`;
+      }
+    }
+    readmeExternalToggle && readmeExternalToggle.addEventListener('click', async () => {
+      const expanded = readmeExternalToggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        readmeExternalContainer.style.display = 'none';
+        readmeExternalToggle.textContent = 'Show Model README';
+        readmeExternalToggle.setAttribute('aria-expanded', 'false');
+        return;
+      }
+      readmeExternalContainer.style.display = 'block';
+      readmeExternalToggle.textContent = 'Hide Model README';
+      readmeExternalToggle.setAttribute('aria-expanded', 'true');
+      if (!readmeExternalContainer.dataset.loaded) { await loadExternalReadme(); readmeExternalContainer.dataset.loaded = '1'; }
+    });
+
+    // --- Footer: module root README (protector-model/README.md) ---
     const readmeToggle = document.getElementById('readme-toggle');
     const readmeContainer = document.getElementById('readme-container');
     async function loadReadme() {
@@ -207,12 +246,12 @@
       const expanded = readmeToggle.getAttribute('aria-expanded') === 'true';
       if (expanded) {
         readmeContainer.style.display = 'none';
-        readmeToggle.textContent = 'Show Project README';
+        readmeToggle.textContent = 'Show README';
         readmeToggle.setAttribute('aria-expanded', 'false');
         return;
       }
       readmeContainer.style.display = 'block';
-      readmeToggle.textContent = 'Hide Project README';
+      readmeToggle.textContent = 'Hide README';
       readmeToggle.setAttribute('aria-expanded', 'true');
       if (!readmeContainer.dataset.loaded) { await loadReadme(); readmeContainer.dataset.loaded = '1'; }
     });
