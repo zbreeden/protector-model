@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggle.type = 'button';
     toggle.setAttribute('aria-pressed', 'false');
     toggle.setAttribute('data-src', './data/external/fraud.md');
-    toggle.textContent = 'Show Project Document';
+    toggle.textContent = 'Show Project README';
     parent.appendChild(toggle);
   }
 
