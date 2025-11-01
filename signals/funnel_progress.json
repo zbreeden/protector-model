@@ -539,6 +539,7 @@
       "last_activity": "2025-10-31",
       "status": "🌋",
       "notes": "Consistent replication of daily blood pressure readings.",
+      "in_control": false,
       "steps": [
         {
           "id": "bp_01",
@@ -642,6 +643,7 @@
       "last_activity": "2025-10-31",
       "status": "🔥",
       "notes": "Consistent replication of daily weight readings.",
+      "in_control": false,
       "steps": [
         {
           "id": "wt_01",
