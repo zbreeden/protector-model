@@ -191,9 +191,10 @@
               title.style.margin = '0 0 0.25rem 0';
               title.textContent = t.title || k;
 
-              // Target line (bold) e.g. "3 per day"
+              // Target line (bold) e.g. "3 average"
               const targetLine = document.createElement('div');
-              const targetVal = (typeof t.steps_target === 'number' || (typeof t.steps_target === 'string' && t.steps_target.trim() !== '')) ? t.steps_target : '—';
+              // treat steps_target as a string only (do not coerce numbers)
+              const targetVal = (typeof t.steps_target !== 'undefined' && t.steps_target !== null && String(t.steps_target).trim() !== '') ? String(t.steps_target) : '—';
               targetLine.innerHTML = `<strong>${targetVal} average</strong>`;
               targetLine.style.marginBottom = '0.25rem';
 
