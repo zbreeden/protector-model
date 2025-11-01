@@ -191,7 +191,7 @@
               title.style.margin = '0 0 0.25rem 0';
               title.textContent = t.title || k;
 
-              // Target line (bold) e.g. "3 average"
+              // Target line (bold) e.g. "16 bpm average"
               const targetLine = document.createElement('div');
               // treat steps_target as a string only (do not coerce numbers)
               const targetVal = (typeof t.steps_target !== 'undefined' && t.steps_target !== null && String(t.steps_target).trim() !== '') ? String(t.steps_target) : '—';
@@ -204,7 +204,7 @@
               meta.style.color = '#666';
               meta.style.marginBottom = '0.5rem';
               const totalSteps = (typeof t.steps_total === 'number') ? t.steps_total : (t.steps_total || 0);
-              const metric = (typeof t.steps_metric !== 'undefined' && t.steps_metric !== null) ? t.steps_metric : '—';
+              const metric = (typeof t.steps_average_metric !== 'undefined' && t.steps_average_metric !== null) ? t.steps_average_metric : '—';
               const inControl = (typeof t.in_control !== 'undefined' && t.in_control !== null) ? String(t.in_control) : '—';
               meta.textContent = `${ totalSteps } - ${ metric } - ${ inControl }`;
 
