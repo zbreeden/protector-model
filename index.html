@@ -146,11 +146,11 @@
       }
     });
 
-    // --- Progress (funnel) renderer ---
+     // Progress handling
     const progressToggle = document.getElementById('progress-toggle');
     const progressContainer = document.getElementById('progress-container');
     let progressLoaded = false;
-    progressToggle && progressToggle.addEventListener('click', async () => {
+    progressToggle.addEventListener('click', async () => {
       const expanded = progressToggle.getAttribute('aria-expanded') === 'true';
       if (expanded) {
         progressContainer.style.display = 'none';
@@ -161,39 +161,99 @@
       progressContainer.style.display = 'block';
       progressToggle.textContent = 'Hide progress';
       progressToggle.setAttribute('aria-expanded', 'true');
-      if (progressLoaded) return;
-      progressContainer.innerHTML = '<p><em>Loading progress data...</em></p>';
-      try {
-        const resp = await fetch('./signals/funnel_progress.json');
-        if (!resp.ok) throw new Error('Progress data not available');
-        const doc = await resp.json();
-        const trainings = doc.trainings || {};
-        const keys = Object.keys(trainings);
-        if (keys.length === 0) {
-          progressContainer.innerHTML = '<p style="color:#666;"><em>No progress data found.</em></p>';
-          progressLoaded = true; return;
+      if (!progressLoaded) {
+        progressContainer.innerHTML = '<p><em>Loading progress data...</em></p>';
+        try {
+          const resp = await fetch('./signals/funnel_progress.json');
+          if (!resp.ok) throw new Error('Progress data not available');
+          const doc = await resp.json();
+          const trainings = doc.trainings || {};
+          const keys = Object.keys(trainings);
+          if (keys.length === 0) {
+            progressContainer.innerHTML = '<p style="color:#666;"><em>No progress data found.</em></p>';
+            progressLoaded = true;
+            return;
+          }
+          const grid = document.createElement('div');
+          grid.style.display = 'grid';
+          grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+          grid.style.gap = '0.75rem';
+          keys.forEach(k => {
+            const t = trainings[k];
+              const card = document.createElement('div');
+              card.style.border = '1px solid #e3e3e3';
+              card.style.padding = '0.75rem';
+              card.style.borderRadius = '8px';
+              card.style.background = '#fff';
+
+              // Title
+              const title = document.createElement('h4');
+              title.style.margin = '0 0 0.25rem 0';
+              title.textContent = t.title || k;
+
+              // Target line (bold) e.g. "3 per day"
+              const targetLine = document.createElement('div');
+              const targetVal = (typeof t.steps_target === 'number' || (typeof t.steps_target === 'string' && t.steps_target.trim() !== '')) ? t.steps_target : '—';
+              targetLine.innerHTML = `<strong>${targetVal} per day</strong>`;
+              targetLine.style.marginBottom = '0.25rem';
+
+              // Small shaded meta line: steps_total - steps_metric - in_control
+              const meta = document.createElement('div');
+              meta.style.fontSize = '0.85rem';
+              meta.style.color = '#666';
+              meta.style.marginBottom = '0.5rem';
+              const totalSteps = (typeof t.steps_total === 'number') ? t.steps_total : (t.steps_total || 0);
+              const metric = (typeof t.steps_metric !== 'undefined' && t.steps_metric !== null) ? t.steps_metric : '—';
+              const inControl = (typeof t.in_control !== 'undefined' && t.in_control !== null) ? String(t.in_control) : '—';
+              meta.textContent = `${ totalSteps } - ${ metric } - ${ inControl }`;
+
+              // Last activity
+              const last = document.createElement('div');
+              last.style.fontSize = '0.85rem';
+              last.style.color = '#888';
+              last.style.marginBottom = '0.5rem';
+              last.textContent = t.last_activity ? `Last: ${new Date(t.last_activity).toLocaleDateString()}` : '';
+
+              // Steps details
+              const details = document.createElement('details');
+              const summaryEl = document.createElement('summary');
+              summaryEl.textContent = 'Steps';
+              details.appendChild(summaryEl);
+              const stepsList = document.createElement('ul');
+              stepsList.style.margin = '0.5rem 0 0 1rem';
+              (t.steps || []).forEach(s => {
+                const li = document.createElement('li');
+                const stepName = (s && (s.step_id_name || s.title || s.id || s.step_id)) || String(s);
+                const hasCount = s && (typeof s.count !== 'undefined' && s.count !== null);
+                const count = hasCount ? ` (${s.count})` : '';
+                const status = s && s.status ? ` ${s.status}` : '';
+                li.textContent = `${stepName}${count}${status}`.trim();
+                // keep last_activity per-step if present by adding a small muted suffix
+                if (s && s.last_activity) {
+                  const lastSmall = document.createElement('span');
+                  lastSmall.style.color = '#888';
+                  lastSmall.style.marginLeft = '0.5rem';
+                  lastSmall.style.fontSize = '0.9rem';
+                  lastSmall.textContent = `Last: ${new Date(s.last_activity).toLocaleDateString()}`;
+                  li.appendChild(lastSmall);
+                }
+                stepsList.appendChild(li);
+              });
+              details.appendChild(stepsList);
+
+              card.appendChild(title);
+              card.appendChild(targetLine);
+              card.appendChild(meta);
+              card.appendChild(last);
+              card.appendChild(details);
+              grid.appendChild(card);
+          });
+          progressContainer.innerHTML = '';
+          progressContainer.appendChild(grid);
+          progressLoaded = true;
+        } catch (err) {
+          progressContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load progress: ${err.message}</em></p>`;
         }
-        const grid = document.createElement('div'); grid.style.display = 'grid'; grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))'; grid.style.gap = '0.75rem';
-        keys.forEach(k => {
-          const t = trainings[k];
-          const card = document.createElement('div'); card.style.border = '1px solid #e3e3e3'; card.style.padding = '0.75rem'; card.style.borderRadius = '8px'; card.style.background = '#fff';
-          const title = document.createElement('h4'); title.style.margin = '0 0 0.25rem 0'; title.textContent = t.title || k;
-          const meta = document.createElement('div'); meta.style.fontSize = '0.85rem'; meta.style.color = '#666'; meta.style.marginBottom = '0.5rem';
-          const rawPercent = (typeof t.percent_complete === 'number' || typeof t.percent_complete === 'string') ? Number(t.percent_complete) : null;
-          let displayPercent = null; if (rawPercent !== null && !isNaN(rawPercent)) displayPercent = rawPercent > 1 ? rawPercent : rawPercent * 100;
-          const percentText = displayPercent !== null ? (Math.round(displayPercent * 100) / 100) + '%' : '—';
-          const totalSteps = t.steps_total || 0; meta.textContent = `${ totalSteps } • ${ percentText }`;
-          const last = document.createElement('div'); const target = (typeof t.control_flow_target === 'number') ? t.control_flow_target : 150; const percentDisplay = (displayPercent !== null && !isNaN(displayPercent)) ? (Math.round(displayPercent * 10) / 10) + '%' : percentText; title.textContent = `${t.title || k} — Target: ${target} — ${percentDisplay}`;
-          last.style.fontSize = '0.85rem'; last.style.color = '#888'; last.style.marginBottom = '0.5rem'; last.textContent = t.last_activity ? `Last: ${new Date(t.last_activity).toLocaleDateString()}` : '';
-          const progressBarWrap = document.createElement('div'); progressBarWrap.style.background = '#f1f5f8'; progressBarWrap.style.height = '10px'; progressBarWrap.style.borderRadius = '999px'; progressBarWrap.style.overflow = 'hidden';
-          const progressBar = document.createElement('div'); progressBar.style.height = '100%'; const barPercent = displayPercent !== null ? Math.min(Math.max(displayPercent, 0), 100) : 0; progressBar.style.width = `${barPercent}%`; progressBar.style.background = '#4CAF50'; progressBarWrap.appendChild(progressBar);
-          const details = document.createElement('details'); const summaryEl = document.createElement('summary'); summaryEl.textContent = 'Steps'; details.appendChild(summaryEl);
-          const stepsList = document.createElement('ul'); stepsList.style.margin = '0.5rem 0 0 1rem'; (t.steps || []).forEach(s => { const li = document.createElement('li'); const stepName = (s && (s.step_id_name || s.title || s.id || s.step_id)) || String(s); const count = s && (s.count || s.count === 0) ? `(${s.count})` : ''; const status = s && s.status ? ` ${s.status}` : ''; li.textContent = `${stepName} ${count}${status}`.trim(); stepsList.appendChild(li); }); details.appendChild(stepsList);
-          card.appendChild(title); card.appendChild(meta); card.appendChild(last); card.appendChild(progressBarWrap); card.appendChild(details); grid.appendChild(card);
-        });
-        progressContainer.innerHTML = ''; progressContainer.appendChild(grid); progressLoaded = true;
-      } catch (err) {
-        progressContainer.innerHTML = `<p style="color:#b00;"><em>Unable to load progress: ${err.message}</em></p>`;
       }
     });
 
