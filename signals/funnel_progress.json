@@ -4,14 +4,14 @@
     "resting_heart_rate": {
       "id": "resting_heart_rate",
       "title": "Resting Heart Rate",
-      "steps_total": 20,
-      "steps_total_metric": 1212,
-      "steps_average_metric": 60.6,
-      "steps_target": "Target - 60 bpm average",
-      "last_activity": "2025-11-02",
+      "steps_total": 19,
+      "steps_total_metric": 1149,
+      "steps_average_metric": 60.47,
+      "steps_target": "60 bpm",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of resting heart rate readings.",
-      "in_control": "😭",
+      "in_control": "🤩",
       "steps": [
         {
           "id": "rhh_01",
@@ -183,26 +183,17 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-01"
-        },
-        {
-          "id": "rhh_20",
-          "title": "Resting Heart Rate Logging",
-          "metric:" 63,
-          "metric_unit": "bpm",
-          "count": null,
-          "status": "🔥",
-          "last_activity": "2025-11-02",
         }
       ]
     },
     "heart_rate_variability": {
       "id": "heart_rate_variability",
       "title": "Heart Rate Variability",
-      "steps_total": 20,
-      "steps_total_metric": 3129,
-      "steps_average_metric": 156.45,
-      "steps_target": "Target - 180 ms average",
-      "last_activity": "2025-11-02",
+      "steps_total": 19,
+      "steps_total_metric": 2994,
+      "steps_average_metric": 157.58,
+      "steps_target": "180 ms",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of heart rate variability readings.",
       "in_control": "😭",
@@ -377,28 +368,20 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-01"
-        },
-        {
-          "id": "hrv_20",
-          "title": "Resting Heart Rate Variability Logging",
-          "metric": 135,
-          "metric_unit": "ms",
-          "count": null,
-          "status": "🔥",
-          "last_activity": "2025-11-02"
+        }
       ]
     },
     "breathing_rate": {
       "id": "breathing_rate",
       "title": "Breathing Rate",
-      "steps_total": 20,
-      "steps_total_metric": 358,
-      "steps_average_metric": 17.9,
-      "steps_target": "Target - 16 br/min average",
-      "last_activity": "2025-11-02",
+      "steps_total": 19,
+      "steps_total_metric": 340,
+      "steps_average_metric": 17.89,
+      "steps_target": "16 br/min",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of breathing rate readings.",
-      "in_control": "😭",
+      "in_control": "🤩",
       "steps": [
         {
           "id": "br_01",
@@ -570,15 +553,7 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-01"
-        },
-        {
-          "id": "br_20",
-          "title": "Resting Breathing Rate Logging",
-          "metric": 18,
-          "metric_unit": "br/min",
-          "count": null,
-          "status": "🔥",
-          "last_activity": "2025-11-02"
+        }
       ]
     },
     "daily_blood_pressure": {
@@ -587,7 +562,7 @@
       "steps_total": 11,
       "steps_total_metric": "1499/1077",
       "steps_average_metric": "136.27/97.91",
-      "steps_target": "Target - 130/90 mmHg average",
+      "steps_target": "130/90 mmHg",
       "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of daily blood pressure readings.",
@@ -700,7 +675,7 @@
       "steps_total": 25,
       "steps_total_metric": 4883,
       "steps_average_metric": 195.32,
-      "steps_target": "Target - 175 lb average",
+      "steps_target": "175 lbs",
       "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of daily weight readings.",
@@ -937,16 +912,13 @@
     "model_development_protector": {
       "id": "model_development_protector",
       "title": "Quantifying the Trust Gap",
-      "steps_total": 2,
-      "steps_target": "Target - Completed Project",
-      "steps_average_metric": "20% complete",
+      "steps_total": 10,
       "steps_completed": [
         "model_question_definition",
         "data_collection_sourcing"
       ],
       "percent_complete": 20.000,
       "last_activity": "2025-10-31",
-      "in_control": "😭",
       "notes": "Tracks the progress of model development through various stages (e.g. naming, question_definition, data_collection/sourcing, exploration, etc.).",
       "steps": [
         {
