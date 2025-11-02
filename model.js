@@ -36,3 +36,34 @@ async function load() {
 }
 
 load();
+
+  async function loadCodeSnippets() {
+  try {
+    const res = await fetch("./fraud.py", { cache: "no-store" });
+    if (!res.ok) throw new Error("fraud.py not found");
+    const txt = await res.text();
+
+    const grab = (re) => {
+      const m = txt.match(re);
+      return m ? m[0].trim() : "—";
+    };
+
+    // Heuristics: adjust if your function names differ
+    const cleaning = grab(/def\s+clean_data[\s\S]*?(?=^def\s|\Z)/m);
+    const regression = grab(/LogisticRegression[\s\S]*?classification_report\([\s\S]*?\)\n/m);
+    const exports = grab(/joblib\.dump[\s\S]*?(baseline_metrics\.json|transactions_with_scores\.(parquet|csv))[\s\S]*?\n/m);
+
+    document.getElementById("code-cleaning").textContent = cleaning;
+    document.getElementById("code-regression").textContent = regression;
+    document.getElementById("code-exports").textContent = exports;
+  } catch (e) {
+    document.getElementById("code-cleaning").textContent =
+      "Could not load fraud.py (is it in the same folder as model.html?)";
+    document.getElementById("code-regression").textContent = "—";
+    document.getElementById("code-exports").textContent = "—";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadCodeSnippets();
+});
