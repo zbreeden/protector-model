@@ -195,7 +195,7 @@
               const targetLine = document.createElement('div');
               // treat steps_target as a string only (do not coerce numbers)
               const targetVal = (typeof t.steps_target !== 'undefined' && t.steps_target !== null && String(t.steps_target).trim() !== '') ? String(t.steps_target) : '—';
-              targetLine.innerHTML = `<strong>${targetVal}</strong>`;
+              targetLine.innerHTML = `<strong>${targetVal} average</strong>`;
               targetLine.style.marginBottom = '0.25rem';
 
               // Small shaded meta line: steps_total - steps_metric - in_control
