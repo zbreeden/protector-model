@@ -4,14 +4,14 @@
     "resting_heart_rate": {
       "id": "resting_heart_rate",
       "title": "Resting Heart Rate",
-      "steps_total": 18,
-      "steps_total_metric": 1086,
-      "steps_average_metric": 60.33,
+      "steps_total": 19,
+      "steps_total_metric": 1149,
+      "steps_average_metric": 60.47,
       "steps_target": "60 bpm",
-      "last_activity": "2025-10-31",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of resting heart rate readings.",
-      "in_control": false,
+      "in_control": "🤩",
       "steps": [
         {
           "id": "rhh_01",
@@ -174,20 +174,29 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-10-31"
+        },
+        {
+          "id": "rhh_19",
+          "title": "Resting Heart Rate Logging",
+          "metric": 63,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-01"
         }
       ]
     },
     "heart_rate_variability": {
       "id": "heart_rate_variability",
       "title": "Heart Rate Variability",
-      "steps_total": 18,
-      "steps_total_metric": 2799,
-      "steps_average_metric": 155.5,
+      "steps_total": 19,
+      "steps_total_metric": 2994,
+      "steps_average_metric": 157.58,
       "steps_target": "180 ms",
-      "last_activity": "2025-10-31",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of heart rate variability readings.",
-      "in_control": false,
+      "in_control": "😭",
       "steps": [
         {
           "id": "hrv_01",
@@ -350,20 +359,29 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-10-31"
+        },
+        {
+          "id": "hrv_19",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 195,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-01"
         }
       ]
     },
     "breathing_rate": {
       "id": "breathing_rate",
       "title": "Breathing Rate",
-      "steps_total": 18,
-      "steps_total_metric": 322,
+      "steps_total": 19,
+      "steps_total_metric": 340,
       "steps_average_metric": 17.89,
       "steps_target": "16 br/min",
-      "last_activity": "2025-10-31",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of breathing rate readings.",
-      "in_control": false,
+      "in_control": "🤩",
       "steps": [
         {
           "id": "br_01",
@@ -526,20 +544,29 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-10-31"
+        },
+        {
+          "id": "br_19",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 18,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-01"
         }
       ]
     },
     "daily_blood_pressure": {
       "id": "daily_blood_pressure",
       "title": "Daily Blood Pressure",
-      "steps_total": 10,
-      "steps_total_metric": "1361/984",
-      "steps_average_metric": "136.1/98.4",
+      "steps_total": 11,
+      "steps_total_metric": "1499/1077",
+      "steps_average_metric": "136.27/97.91",
       "steps_target": "130/90 mmHg",
-      "last_activity": "2025-10-31",
-      "status": "🌋",
+      "last_activity": "2025-11-01",
+      "status": "🔥",
       "notes": "Consistent replication of daily blood pressure readings.",
-      "in_control": false,
+      "in_control": "😭",
       "steps": [
         {
           "id": "bp_01",
@@ -630,20 +657,29 @@
           "count": null,
           "status": "🌋",
           "last_activity": "2025-10-31"
+        },
+        {
+          "id": "bp_11",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "138/93",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-01"
         }
       ]
     },
     "daily_weight_tracking": {
       "id": "daily_weight_tracking",
       "title": "Daily Weight Tracking",
-      "steps_total": 24,
-      "steps_total_metric": 4689,
-      "steps_average_metric": 195.38,
+      "steps_total": 25,
+      "steps_total_metric": 4883,
+      "steps_average_metric": 195.32,
       "steps_target": "175 lbs",
-      "last_activity": "2025-10-31",
+      "last_activity": "2025-11-01",
       "status": "🔥",
       "notes": "Consistent replication of daily weight readings.",
-      "in_control": false,
+      "in_control": "😭",
       "steps": [
         {
           "id": "wt_01",
@@ -860,8 +896,91 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-10-31"
+        },
+        {
+          "id": "wt_25",
+          "title": "Daily Weight Logging",
+          "metric": 192,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-01"
         }
 
+      ]
+    },
+    "model_development_protector": {
+      "id": "model_development_protector",
+      "title": "Quantifying the Trust Gap",
+      "steps_total": 10,
+      "steps_completed": [
+        "model_question_definition",
+        "data_collection_sourcing"
+      ],
+      "percent_complete": 20.000,
+      "last_activity": "2025-10-31",
+      "notes": "Tracks the progress of model development through various stages (e.g. naming, question_definition, data_collection/sourcing, exploration, etc.).",
+      "steps": [
+        {
+          "id": "model_question_definition",
+          "title": "How do behavioral anomalies — spending spikes, device reuse, or location drift — shape the probability of fraud?",
+          "completed": true,
+          "last_activity": "2025-10-30"
+        },
+        {
+          "id": "data_collection_sourcing",
+          "title": "Kaggle dataset - Credit Card Fraud Detection (https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)",
+          "completed": true,
+          "last_activity": "2025-10-31"
+        },
+        {
+          "id": "data_cleaning_preprocessing",
+          "title": "Clean the collected data to remove any inconsistencies or errors",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "data_normalizing_transforming",
+          "title": "Normalize and transform the data to ensure it is in a suitable format for modeling",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "data_exploration_analysis",
+          "title": "Explore the data to identify patterns, trends, and relationships that may be relevant to fraud detection",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "data_enhancement_feature_engineering",
+          "title": "Enhance the dataset by creating new features or variables that may improve model performance",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "data_visualization_reporting",
+          "title": "Visualize the data using charts, graphs, and other visualizations to communicate findings effectively",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "model_building",
+          "title": "Build predictive models using statistical or machine learning techniques to identify potential fraud",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "model_evaluation_validation",
+          "title": "Evaluate and validate the models to assess their performance and reliability",
+          "completed": false,
+          "last_activity": null
+        },
+        {
+          "id": "storytelling_presentation",
+          "title": "Present the findings and insights from the analysis in a clear and compelling manner",
+          "completed": false,
+          "last_activity": null
+        }
       ]
     }
   }
