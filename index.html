@@ -21,7 +21,7 @@
     <h1>🛡️ Protector Model</h1>
     <!-- Minimal model setup: a single development button and README toggle -->
     <p>
-      <button id="model-btn" class="cta" type="button">Model in Development</button>
+      <button id="model-btn" class="cta" type="button">Fraud Model</button>
       <!-- Header toggle: shows the model's small README stored in data/external (fraud.md) -->
       <button id="readme-external-toggle" type="button" aria-expanded="false" style="margin-left:.5rem; padding:.45rem .75rem; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer;">Show Model README</button>
     </p>
@@ -195,7 +195,7 @@
               const targetLine = document.createElement('div');
               // treat steps_target as a string only (do not coerce numbers)
               const targetVal = (typeof t.steps_target !== 'undefined' && t.steps_target !== null && String(t.steps_target).trim() !== '') ? String(t.steps_target) : '—';
-              targetLine.innerHTML = `<strong>${targetVal} average</strong>`;
+              targetLine.innerHTML = `<strong>${targetVal}</strong>`;
               targetLine.style.marginBottom = '0.25rem';
 
               // Small shaded meta line: steps_total - steps_metric - in_control

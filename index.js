@@ -1,6 +1,11 @@
 // Minimal protector-model script: model dev button only
 document.addEventListener('DOMContentLoaded', () => {
   const modelBtn = document.getElementById('model-btn');
+  if (modelBtn) {
+    modelBtn.addEventListener("click", () => {
+      window.open("./model.html", "_blank");
+    });
+  }
 
   // Model button: when clicked, simply show the text "Model in Development" inline
   if (modelBtn) {

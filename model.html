@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Fraud Model KPIs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./model.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Fraud Model — KPIs</h1>
+      <p class="subtle">Snapshot of baseline metrics and threshold.</p>
+    </header>
+
+    <section id="kpis" class="kpis">
+      <div class="card">
+        <div class="label">Precision</div>
+        <div id="precision" class="value">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Recall</div>
+        <div id="recall" class="value">—</div>
+      </div>
+      <div class="card">
+        <div class="label">F1</div>
+        <div id="f1" class="value">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Threshold</div>
+        <div id="threshold" class="value">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Samples</div>
+        <div id="nsamples" class="value">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Timestamp</div>
+        <div id="ts" class="value small">—</div>
+      </div>
+    </section>
+
+    <section class="note">
+      <p>Target: tune threshold to meet business precision/recall goals. These are baseline metrics at the saved threshold.</p>
+    </section>
+  </main>
+
+  <script src="./model.js"></script>
+</body>
+</html>
