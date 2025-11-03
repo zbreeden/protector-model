@@ -76,3 +76,18 @@ load();
 }
 
 document.addEventListener("DOMContentLoaded", loadCodeSnippets);
+
+async function loadStats() {
+  try {
+    const res = await fetch("./data/external/creditcard_descriptives.csv");
+    const text = await res.text();
+    const rows = text.trim().split("\n").map(r => r.split(","));
+    const table = document.getElementById("desc-table");
+    table.innerHTML = rows.map((r,i) =>
+      `<tr>${r.map((c,j)=>`<${i===0?'th':'td'}>${c}</${i===0?'th':'td'}>`).join("")}</tr>`
+    ).join("");
+  } catch (e) {
+    console.warn("Couldn't load descriptive stats:", e);
+  }
+}
+loadStats();
