@@ -1,106 +1,118 @@
 # The Protector — Quantifying the Trust Gap
 
-**Purpose**  
+## Purpose
+
 This project demonstrates how data analytics can expose the fine line between trust and risk.  
-Using a public Kaggle dataset (such as the *Credit Card Fraud Detection* dataset), the model shows how behavioral anomalies — spending spikes, device reuse, or location drift — shape the probability of fraud.  
-The focus isn’t on policing transactions, but on explaining why trust breaks down.
+Using a public Kaggle dataset (**Credit Card Fraud Detection**), the model explains how behavioral anomalies — spending spikes, device reuse, or timing drift — shape the probability of fraud.  
+The intent isn’t to police transactions, but to clarify when and why trust breaks down.
 
 ---
 
 ## 1. Executive Overview
 
 Fraud analytics lives in tension: too much protection slows customers down, too little invites loss.  
-The goal here is to measure that tension in data — to quantify *risk lift* while preserving user experience.  
-Through Python modeling and Power BI visualization, the project turns raw transactions into a clear narrative of how risk grows and where intervention pays off.
+The goal is to measure that tension — to quantify risk lift while preserving experience.  
 
-Deliverables include:
+Through a reproducible Python model and a Power BI dashboard, the Protector Model turns raw transactions into a transparent story: how risk grows, where detection pays off, and what trade-offs define “enough” protection.
 
-- Python-based data prep and modeling pipeline  
-- Power BI dashboard with interactive what-if scenarios  
-- One-page executive brief connecting the analysis to business outcomes  
+**Deliverables include:**
+
+- `fraud.py` — Python pipeline for data cleaning, model training, scoring, and artifact export  
+- `consumer_protection.pbix` — Power BI dashboard visualizing fraud probabilities and trade-offs  
+- `signals/baseline_metrics.json` — live KPI snapshot for the model’s performance  
+- `model.html` — lightweight UI for viewing the signal metrics  
+- `executive_brief.pdf` — one-page narrative connecting model insight to operational outcomes  
 
 ---
 
 ## 2. Business Context & Data
 
-Fraud prevention is ultimately about trust management. Every transaction is a signal of intent; some signals just arrive distorted.  
-To ground this analysis, the project uses an open Kaggle dataset such as the **Credit Card Fraud Detection** dataset, containing anonymized transaction records with fraud labels.
+Fraud prevention is trust management at scale.  
+Each transaction is a behavioral signal — some signals just arrive distorted.  
 
-### Key variables
+The analysis uses the **Credit Card Fraud Detection** dataset (284,807 records, 0.17% fraud), containing anonymized numerical features (V1–V28), transaction amount, and a binary *Class* label.
 
-- Transaction amount, timestamp, and anonymized features  
-- Fraud indicator (`is_fraud`)  
-- Derived features: velocity, device reuse frequency, amount deviation, and time-of-day patterns  
+**Key fields and derived metrics:**
 
-Rather than simulate data, the analysis builds clarity from an existing public source — reshaping it into views that mirror real-world domains (`Customer`, `Time`, `Transaction`).  
-This logical modeling enables clean visual storytelling in Power BI without needing a full relational backend.
+- `Amount`, `Time`, `V1–V28`, `Class`
+- Derived: transaction velocity, normalized amount, probability score (`proba`)
+
+**Outputs:**
+
+- `creditcard_clean.parquet` (clean data)
+- `transactions_with_scores.parquet` (scored data with model probabilities)
 
 ---
 
 ## 3. Analytical Approach
 
 **Phase 1 — Structuring the Data**  
-Normalize fields, engineer behavioral metrics, and create logical dimension views for Power BI (e.g., customer, time, transaction).
+Deduplicate, cast types, scale continuous fields, and export reproducible Parquet files.
 
 **Phase 2 — Exploring Patterns**  
-Visualize fraud concentration by transaction size, daypart, and behavior velocity. Identify the conditions under which normal activity starts to drift toward risk.
+Use Power BI visuals to surface fraud density across amount, time of day, and velocity outliers.
 
 **Phase 3 — Modeling for Insight**  
-Train a transparent model (logistic regression or XGBoost) to estimate fraud probability.  
-Use SHAP or feature-importance analysis to interpret what drives risk.  
-Simulate different cutoff thresholds to visualize the trade-off between fraud capture and false positives.
+Train a balanced logistic regression baseline to estimate fraud probability.  
+Tune and interpret precision/recall trade-offs through threshold adjustment.
+
+**Phase 4 — Signaling and Monitoring**  
+Export live KPIs to JSON (`signals/baseline_metrics.json`) and visualize them through `model.html`.  
+Each model run updates the signal file, giving a lightweight “heartbeat” for ongoing monitoring.
 
 ---
 
 ## 4. Dashboard & Visualization
 
-The Power BI report frames the analysis as a story rather than a static report:
+The `consumer_protection.pbix` dashboard reframes fraud modeling as a trust story:
 
-- **Overview:** KPIs on fraud rate, exposure, and false-positive ratio  
-- **Drill-Down:** Filters by merchant, region, or device profile  
-- **Simulation:** What-if sliders to adjust detection sensitivity and preview operational outcomes  
+- **Overview** – KPIs on fraud rate, recall, and precision  
+- **Risk Simulation** – What-if slider for threshold tuning  
+- **Behavioral Patterns** – Amount and time distributions segmented by fraud probability  
+- **Trust Balance** – Visualization of false positives vs. fraud caught  
 
-Each page builds on the last — moving from overview to understanding to action.
+Each page walks stakeholders from detection to decision: when the model raises the flag, what does that cost or save?
 
 ---
 
 ## 5. Expected Outcomes
 
-- Small segments of customers or devices account for the majority of fraud events (Pareto effect)  
-- Transaction velocity and cross-device activity emerge as dominant predictors  
-- Interactive dashboards help non-technical stakeholders explore how rule adjustments change exposure  
+Fraud remains rare but concentrated: <1% of transactions, often clustered by velocity or amount.  
+The baseline model captures ~87% of known fraud cases with ~6% precision (default 0.5 threshold).  
+Raising the detection threshold can reach ~90% precision at the cost of recall — a visual, adjustable trade-off in Power BI.  
 
-The intent is not just prediction accuracy, but **decision transparency** — showing how data explains the behavior beneath the numbers.
+**The takeaway:** protective action is tunable, not binary.
 
 ---
 
-## 6. Reflective Narrative — From Confusion to Clarity
+## 6. Reflective Narrative — From Code to Clarity
 
-I treat analytics as translation work: turning noise into signal, uncertainty into narrative.  
-Fraud modeling, like any trust system, starts in confusion — disconnected events, scattered anomalies.  
-My process builds coherence piece by piece:  
+Analytics is translation work — from confusion to coherence.  
+This model doesn’t just classify; it narrates how trust erodes, step by step.
 
-1. Structure the data clearly.  
-2. Visualize patterns until they reveal storylines.  
-3. Communicate insights in plain language that prompts action.  
+**The workflow:**
+> Structure → Model → Signal → Story
 
-The value lies in the clarity, not the cleverness.
+Each stage yields transparency: a pipeline you can rerun, a dashboard you can explore, and a one-page brief you can read without touching the code.
 
 ---
 
 ## 7. Artifacts
 
-- `fraud_model.ipynb` — Python notebook for data prep, feature engineering, modeling, and interpretability  
-- `fraud_dashboard.pbix` — Power BI dashboard using a logical star schema for narrative exploration  
-- `fraud_data_manifest.csv` — documentation of dataset source, engineered features, and lineage  
-- `executive_brief.pdf` — concise narrative connecting technical findings to operational recommendations  
+| Type | Artifact | Description |
+|------|-----------|-------------|
+| Pipeline | `fraud.py` | Complete Python workflow for data prep, modeling, and export |
+| Dashboard | `consumer_protection.pbix` | Interactive Power BI dashboard for fraud probability and threshold tuning |
+| Signals | `signals/baseline_metrics.json` | Model KPI snapshot (precision, recall, F1, timestamp) |
+| UI | `model.html / model.css / model.js` | Front-end viewer for KPI JSON |
+| Outputs | `creditcard_clean.parquet / transactions_with_scores.parquet` | Clean and scored data files |
+| Brief | `executive_brief.pdf` | Non-technical narrative linking model results to business risk decisions |
 
 ---
 
 ## 8. Reproducibility & Ethics
 
-- Uses open, anonymized Kaggle data; no real PII.  
-- Random seeds ensure deterministic results for consistent demos.  
-- All outputs are transparent, reproducible, and designed for educational demonstration.  
-
----
+- Based on open, anonymized Kaggle data (no PII).  
+- Deterministic seeds for consistent scoring.  
+- Transparent artifacts: every output versioned and inspectable.  
+- **Educational use only** — designed to illustrate risk communication, not operational fraud screening.
