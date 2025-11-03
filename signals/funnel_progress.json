@@ -4,11 +4,11 @@
     "resting_heart_rate": {
       "id": "resting_heart_rate",
       "title": "Resting Heart Rate",
-      "steps_total": 20,
-      "steps_total_metric": 1212,
-      "steps_average_metric": 60.6,
+      "steps_total": 21,
+      "steps_total_metric": 1268,
+      "steps_average_metric": 60.38,
       "steps_target": "60 bpm",
-      "last_activity": "2025-11-02",
+      "last_activity": "2025-11-03",
       "status": "🔥",
       "notes": "Consistent replication of resting heart rate readings.",
       "in_control": "😭",
@@ -192,17 +192,26 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-02"
+        },
+        {
+          "id": "rhh_21",
+          "title": "Resting Heart Rate Logging",
+          "metric": 56,
+          "metric_unit": "bpm",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-03"
         }
       ]
     },
     "heart_rate_variability": {
       "id": "heart_rate_variability",
       "title": "Heart Rate Variability",
-      "steps_total": 20,
-      "steps_total_metric": 3129,
-      "steps_average_metric": 156.45,
+      "steps_total": 21,
+      "steps_total_metric": 3263,
+      "steps_average_metric": 155.38,
       "steps_target": "180 ms",
-      "last_activity": "2025-11-02",
+      "last_activity": "2025-11-03",
       "status": "🔥",
       "notes": "Consistent replication of heart rate variability readings.",
       "in_control": "😭",
@@ -386,17 +395,26 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-02"
+        },
+        {
+          "id": "hrv_21",
+          "title": "Resting Heart Rate Variability Logging",
+          "metric": 134,
+          "metric_unit": "ms",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-03"
         }
       ]
     },
     "breathing_rate": {
       "id": "breathing_rate",
       "title": "Breathing Rate",
-      "steps_total": 20,
-      "steps_total_metric": 358,
-      "steps_average_metric": 17.9,
+      "steps_total": 21,
+      "steps_total_metric": 377,
+      "steps_average_metric": 17.95,
       "steps_target": "18 br/min",
-      "last_activity": "2025-11-02",
+      "last_activity": "2025-11-03",
       "status": "🔥",
       "notes": "Consistent replication of breathing rate readings.",
       "in_control": "🤩",
@@ -580,17 +598,26 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-02"
+        },
+        {
+          "id": "br_21",
+          "title": "Resting Breathing Rate Logging",
+          "metric": 19,
+          "metric_unit": "br/min",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-03"
         }
       ]
     },
     "daily_blood_pressure": {
       "id": "daily_blood_pressure",
       "title": "Daily Blood Pressure",
-      "steps_total": 12,
-      "steps_total_metric": "1624/1171",
-      "steps_average_metric": "135.33/97.58",
+      "steps_total": 13,
+      "steps_total_metric": "1763/1274",
+      "steps_average_metric": "135.62/98.0",
       "steps_target": "130/90 mmHg",
-      "last_activity": "2025-11-02",
+      "last_activity": "2025-11-03",
       "status": "🔥",
       "notes": "Consistent replication of daily blood pressure readings.",
       "in_control": "😭",
@@ -702,17 +729,26 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-02"
+        },
+        {
+          "id": "bp_13",
+          "title": "Daily Blood Pressure Logging",
+          "metric": "139/103",
+          "metric_unit": "mmHg",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-03"
         }
       ]
     },
     "daily_weight_tracking": {
       "id": "daily_weight_tracking",
       "title": "Daily Weight Tracking",
-      "steps_total": 26,
-      "steps_total_metric": 5079,
-      "steps_average_metric": 195.35,
+      "steps_total": 27,
+      "steps_total_metric": 5273,
+      "steps_average_metric": 195.30,
       "steps_target": "175 lbs",
-      "last_activity": "2025-11-02",
+      "last_activity": "2025-11-03",
       "status": "🔥",
       "notes": "Consistent replication of daily weight readings.",
       "in_control": "😭",
@@ -950,6 +986,15 @@
           "count": null,
           "status": "🔥",
           "last_activity": "2025-11-02"
+        },
+        {
+          "id": "wt_27",
+          "title": "Daily Weight Logging",
+          "metric": 194,
+          "metric_unit": "lbs",
+          "count": null,
+          "status": "🔥",
+          "last_activity": "2025-11-03"
         }
       ]
     },
