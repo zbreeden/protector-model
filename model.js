@@ -38,32 +38,41 @@ async function load() {
 load();
 
   async function loadCodeSnippets() {
-  try {
-    const res = await fetch("./fraud.py", { cache: "no-store" });
-    if (!res.ok) throw new Error("fraud.py not found");
-    const txt = await res.text();
+  const res = await fetch("./fraud.py", { cache: "no-store" });
+  const txt = await res.text();
 
-    const grab = (re) => {
-      const m = txt.match(re);
-      return m ? m[0].trim() : "—";
-    };
+  const grab = (re) => {
+    const m = txt.match(re);
+    return m ? m[0].trim() : "";
+  };
 
-    // Heuristics: adjust if your function names differ
-    const cleaning = grab(/def\s+clean_data[\s\S]*?(?=^def\s|\Z)/m);
-    const regression = grab(/LogisticRegression[\s\S]*?classification_report\([\s\S]*?\)\n/m);
-    const exports = grab(/joblib\.dump[\s\S]*?(baseline_metrics\.json|transactions_with_scores\.(parquet|csv))[\s\S]*?\n/m);
+  // 1) Regression (works already for you)
+  const regression = grab(/LogisticRegression[\s\S]*?classification_report\([\s\S]*?\)\n/m);
 
-    document.getElementById("code-cleaning").textContent = cleaning;
-    document.getElementById("code-regression").textContent = regression;
-    document.getElementById("code-exports").textContent = exports;
-  } catch (e) {
-    document.getElementById("code-cleaning").textContent =
-      "Could not load fraud.py (is it in the same folder as model.html?)";
-    document.getElementById("code-regression").textContent = "—";
-    document.getElementById("code-exports").textContent = "—";
-  }
+  // 2) Exports (works already for you)
+  const exportsBlock = grab(/joblib\.dump[\s\S]*?(baseline_metrics\.json|transactions_with_scores\.(parquet|csv))[\s\S]*?\n/m);
+
+  // 3) Cleaning — try multiple strategies
+  let cleaning =
+    // a) Function named clean_data(...)
+    grab(/def\s+clean_data[\s\S]*?(?=^def\s|\Z)/m)
+    // b) Section header with "Cleaning"
+    || grab(/^[ \t]*#.*Cleaning[\s\S]*?(?=^\s*#\s*[-=]{3,}|^def\s|\Z)/m)
+    // c) Keyword window around drop_duplicates / RobustScaler
+    || (function () {
+      const i = txt.search(/drop_duplicates|RobustScaler|to_parquet/);
+      if (i === -1) return "";
+      const start = Math.max(0, i - 800);   // ~20–30 lines before
+      const end   = Math.min(txt.length, i + 1200); // ~30–40 lines after
+      return txt.slice(start, end).trim();
+    })();
+
+  if (!cleaning) cleaning = "Could not auto-detect cleaning block. Consider adding markers (see Option B).";
+
+  // Paint to the UI
+  document.getElementById("code-cleaning").textContent = cleaning || "—";
+  document.getElementById("code-regression").textContent = regression || "—";
+  document.getElementById("code-exports").textContent = exportsBlock || "—";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadCodeSnippets();
-});
+document.addEventListener("DOMContentLoaded", loadCodeSnippets);
