@@ -1,0 +1,20 @@
+{
+  "baseline": {
+    "precision": 0.057,
+    "recall": 0.874,
+    "f1": 0.107,
+    "threshold": 0.5,
+    "n_samples": 56746
+  },
+  "points": [
+    { "threshold": 0.1, "precision": 0.025, "recall": 0.985, "tp": 490, "fp": 18900, "tn": 37000, "fn": 7 },
+    { "threshold": 0.2, "precision": 0.033, "recall": 0.960, "tp": 478, "fp": 13800, "tn": 42100, "fn": 19 },
+    { "threshold": 0.3, "precision": 0.043, "recall": 0.925, "tp": 461, "fp": 10400, "tn": 45500, "fn": 36 },
+    { "threshold": 0.4, "precision": 0.052, "recall": 0.895, "tp": 447, "fp": 8200, "tn": 47700, "fn": 50 },
+    { "threshold": 0.5, "precision": 0.057, "recall": 0.874, "tp": 437, "fp": 7300, "tn": 48600, "fn": 60 },
+    { "threshold": 0.6, "precision": 0.065, "recall": 0.835, "tp": 417, "fp": 6400, "tn": 49500, "fn": 80 },
+    { "threshold": 0.7, "precision": 0.078, "recall": 0.760, "tp": 380, "fp": 5200, "tn": 50700, "fn": 117 },
+    { "threshold": 0.8, "precision": 0.095, "recall": 0.670, "tp": 335, "fp": 4200, "tn": 51700, "fn": 162 },
+    { "threshold": 0.9, "precision": 0.120, "recall": 0.520, "tp": 260, "fp": 3200, "tn": 52700, "fn": 237 }
+  ]
+}

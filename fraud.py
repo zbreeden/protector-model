@@ -80,47 +80,65 @@ desc.to_csv(export_path, index=True) # export descriptives to CSV
 print(f"Descriptive statistics exported to {export_path.resolve()}") # confirm export path
 
 # -----------------------------------------
-# 6) Basic Univariate Plots
+# 6) Basic Univariate Plots (UI-friendly exports)
 # -----------------------------------------
+from pathlib import Path
+import matplotlib.pyplot as plt
 
-sample = df.sample(n=min(100_000, len(df)), random_state=42) if len(df) > 100_000 else df # sample for plotting if too large
+# Where to save images (keep consistent with your UI paths)
+PLOT_DIR = CSV_PATH.parent  # e.g., .../protector-model/data/external
+PLOT_DIR.mkdir(parents=True, exist_ok=True)
 
-# 6.1) Plot distribution of 'Amount' column
-plt.figure()
-sample['Amount'].plot(kind='hist', bins=50, alpha=0.8)
-plt.title("Transaction Amount — Distribution")
-plt.xlabel("Amount")
-plt.ylabel("Frequency")
-plt.show()
+# Helper to export crisp PNGs (no transparency; high DPI)
+def save_figure(fig, name: str):
+    out = PLOT_DIR / f"{name}.png"  # use .png for web
+    fig.savefig(
+        out,
+        dpi=300,               # crisp text in UI
+        bbox_inches="tight",   # trims extra margins
+        facecolor="white",     # solid background (no alpha)
+        edgecolor="none"
+    )
+    plt.close(fig)             # free memory / avoid overlaps
+    print(f"Saved plot -> {out.resolve()}")
 
-export_path = CSV_PATH.parent / "amount_distribution.png" # define export path for plot
-plt.savefig(export_path) # save plot
-print(f"Amount distribution plot saved to {export_path.resolve()}") # confirm export path
+# Sample for plotting if very large
+sample = df.sample(n=min(100_000, len(df)), random_state=42) if len(df) > 100_000 else df
 
-# 6.2) Plot distribution of 'Time' column
-plt.figure()
-sample['Time'].plot(kind='hist', bins=50, alpha=0.8)
-plt.title("Transaction Time — Distribution")
-plt.xlabel("Time")
-plt.ylabel("Frequency")
-plt.show()
+# 6.1) Amount distribution
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.hist(sample["Amount"], bins=50, alpha=0.9)
+ax.set_title("Transaction Amount — Distribution")
+ax.set_xlabel("Amount")
+ax.set_ylabel("Frequency")
+ax.grid(True, alpha=0.25)
+save_figure(fig, "amount_distribution")  # writes .../amount_distribution.png
 
-export_path = CSV_PATH.parent / "time_distribution.png" # define export path for plot
-plt.savefig(export_path) # save plot
-print(f"Time distribution plot saved to {export_path.resolve()}") # confirm export path
+# 6.2) Time distribution (if present)
+if "Time" in sample.columns:
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.hist(sample["Time"], bins=50, alpha=0.9)
+    ax.set_title("Transaction Time — Distribution")
+    ax.set_xlabel("Time (seconds since first tx)")
+    ax.set_ylabel("Frequency")
+    ax.grid(True, alpha=0.25)
+    save_figure(fig, "time_distribution")
 
-# 6.3) Plot distribution of 'Class' column
+# 6.3) Class distribution
 if "Class" in df.columns:
-    plt.figure()
-    sample['Class'].value_counts().sort_index().plot(kind='bar', alpha=0.8)
-    plt.title("Transaction Class — Distribution")
-    plt.xlabel("Class")
-    plt.ylabel("Count")
-    plt.show()
+    counts = sample["Class"].value_counts().sort_index()
+    # materialize counts as a concrete NumPy int array to avoid ExtensionArray typing issues
+    heights = counts.to_numpy().astype(int)
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.bar(counts.index.astype(str), heights, alpha=0.9)
+    ax.set_title("Transaction Class — Distribution")
+    ax.set_xlabel("Class")
+    ax.set_ylabel("Count")
+    for i, v in enumerate(heights):
+        ax.text(i, int(v), f"{int(v):,}", ha="center", va="bottom", fontsize=9)
+    ax.grid(True, axis="y", alpha=0.25)
+    save_figure(fig, "class_distribution")
 
-    export_path = CSV_PATH.parent / "class_distribution.png" # define export path for plot
-    plt.savefig(export_path) # save plot
-    print(f"Class distribution plot saved to {export_path.resolve()}") # confirm export path
 
 # -----------------------------------------
 # 7) Quick Correlation Peek (subset)
@@ -222,22 +240,32 @@ joblib.dump(model, MODEL_PATH)
 print(f"Saved baseline model -> {MODEL_PATH.resolve()}")
 
 # ---- Optional: export probabilities for Power BI threshold demo ----
-# Comment this block out if you don't need it.
+from pathlib import Path
+
 try:
     proba = model.predict_proba(X_test)[:, 1]
     scored = X_test.copy()
     scored["Class"] = y_test.values
     scored["proba"] = proba
-    # Parquet is compact/fast; fallback to CSV if pyarrow not installed.
+
+    # Define output paths
+    SCORED_PATH = Path(CSV_PATH.parent / "transactions_with_scores.parquet")
+    CSV_EXPORT_PATH = SCORED_PATH.with_suffix(".csv")
+
+    # Try Parquet first (compact, faster)
     try:
         scored.to_parquet(SCORED_PATH, index=False)
         print(f"Saved scored transactions -> {SCORED_PATH.resolve()}")
     except Exception as e:
-        csv_path = SCORED_PATH.with_suffix(".csv")
-        scored.to_csv(csv_path, index=False)
-        print(f"Parquet unavailable, wrote CSV -> {csv_path.resolve()}  ({e})")
+        print(f"Parquet export failed ({e}). Skipping to CSV fallback.")
+
+    # Always export CSV for Power BI
+    scored.to_csv(CSV_EXPORT_PATH, index=False)
+    print(f"Saved scored transactions CSV -> {CSV_EXPORT_PATH.resolve()}")
+
 except Exception as e:
-    print("Skipped probability export (predict_proba unavailable for this solver or model).", e)
+    print("Skipped probability export (predict_proba unavailable).", e)
+
 
 # -----------------------------------------
 # Export simple KPI metrics

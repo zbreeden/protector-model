@@ -91,3 +91,20 @@ async function loadStats() {
   }
 }
 loadStats();
+
+// Prefetch threshold demo on hover for snappier UX (best-effort, non-blocking)
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    document.querySelectorAll('a.btn').forEach(a => {
+      a.addEventListener('mouseover', () => {
+        try {
+          if (!a.dataset.prefetched) {
+            // best-effort fetch; ignore errors (e.g., file:// restrictions)
+            fetch(a.href, { cache: 'no-store' }).catch(() => {});
+            a.dataset.prefetched = '1';
+          }
+        } catch (e) { /* ignore */ }
+      }, { passive: true });
+    });
+  } catch (e) { /* ignore */ }
+});
